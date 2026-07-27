@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+body {
+  background: #0A0F1A;
+  color: white;
+}
+
+button, a, [role="button"], input[type="submit"], input[type="button"] {
+  cursor: pointer;
+}
+
+.glass-card {
+  background: rgba(10, 15, 26, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Cybersecurity-flavored ambient background: faint grid + scanline sweep */
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(47, 87, 239, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 87, 239, 0.08) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+}
+
+.cyber-scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgba(13, 202, 240, 0.06) 50%, transparent 100%);
+  background-size: 100% 200%;
+  animation: scan-sweep 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scan-sweep {
+  0% { background-position: 0 -100%; }
+  100% { background-position: 0 200%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cyber-scanline::after {
+    animation: none;
+  }
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 35px rgba(0, 240, 255, 0.5);
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #00F0FF 0%, #38BDF8 50%, #00F0FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 25px rgba(0, 240, 255, 0.7));
+}
+
+.text-gradient-violet {
+  background: linear-gradient(135deg, #F472B6 0%, #C664FF 50%, #E066FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 25px rgba(224, 102, 255, 0.7));
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #FFE259 0%, #FFA751 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+}
+
+.logo-bright-white {
+  filter: brightness(0) invert(1) drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+}
+
+.logo-bright-blue {
+  filter: brightness(0) invert(1) sepia(100%) hue-rotate(170deg) saturate(800%) brightness(1.3) contrast(110%) drop-shadow(0 0 20px rgba(13, 202, 240, 0.7));
+}
+
+.logo-bright-gold {
+  filter: brightness(0) invert(1) sepia(100%) hue-rotate(5deg) saturate(800%) brightness(1.2) contrast(110%) drop-shadow(0 0 20px rgba(255, 215, 0, 0.7));
+}

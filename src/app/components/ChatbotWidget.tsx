@@ -7,9 +7,11 @@ import {
   PaperAirplaneIcon, 
   SparklesIcon,
   UserIcon,
-  CpuChipIcon
+  CpuChipIcon,
+  Cog6ToothIcon
 } from '@heroicons/react/24/outline';
 import { useModals } from './site-modals';
+import { TrainingTrigger } from './interactive-buttons';
 
 type Message = {
   id: string;
@@ -132,12 +134,17 @@ export default function ChatbotWidget() {
                 <p className="text-xs text-gray-400">Security & Training Assistant</p>
               </div>
             </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-1.5 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
-            >
-              <XMarkIcon className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-1">
+              <TrainingTrigger className="p-1.5 rounded-full hover:bg-white/10 text-gray-400 hover:text-[#00F0FF] transition-colors cursor-pointer" title="Manage AI Training Data">
+                <Cog6ToothIcon className="w-5 h-5" />
+              </TrainingTrigger>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer"
+              >
+                <XMarkIcon className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
           {/* Messages Area */}

@@ -64,3 +64,20 @@ export function TrackTrigger({
     </button>
   );
 }
+
+export function TrainingTrigger({
+  className,
+  title,
+  children,
+}: {
+  className?: string;
+  title?: string;
+  children: ReactNode;
+}) {
+  const { openTraining } = useModals();
+  return (
+    <button onClick={openTraining} className={className} title={title}>
+      {children}
+    </button>
+  );
+}

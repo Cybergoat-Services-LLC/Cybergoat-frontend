@@ -12,73 +12,71 @@ import RevealOnScroll from './RevealOnScroll';
 import { ContactTrigger, SignInTrigger, AssessmentTrigger, TrackTrigger } from './interactive-buttons';
 
 export const HeroSection = () => (
-  <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-36 overflow-hidden bg-[#0A0F1A] cyber-grid cyber-scanline">
-    {/* High-Impact Ambient Radial Glow */}
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] opacity-40 pointer-events-none">
-      <div className="absolute inset-0 bg-gradient-to-r from-[#2F57EF] via-[#00F0FF] to-[#C664FF] blur-[140px] rounded-full mix-blend-screen opacity-50" />
+  <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-20 overflow-hidden bg-[#0A0F1A] cyber-grid cyber-scanline">
+    {/* Subtle High-Tech Ambient Glow */}
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[450px] opacity-35 pointer-events-none">
+      <div className="absolute inset-0 bg-gradient-to-r from-[#2F57EF] via-[#00F0FF] to-[#C664FF] blur-[120px] rounded-full mix-blend-screen opacity-40" />
     </div>
 
     <div className="container mx-auto px-6 relative z-10 text-center">
       <RevealOnScroll>
-        {/* High-Converting Partner Pill Badge */}
-        <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-[#00F0FF]/40 bg-[#00F0FF]/10 text-[#00F0FF] text-sm font-bold mb-8 backdrop-blur-md shadow-[0_0_25px_rgba(0,240,255,0.25)]">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00F0FF] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00F0FF]"></span>
-          </span>
-          EC-Council Authorized Reseller &amp; Training Partner
+        {/* Sleek Cyber Security Partner Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-semibold mb-6 backdrop-blur-md shadow-sm">
+          <span className="font-mono text-[11px] text-[#00F0FF]/80 uppercase tracking-wider">[AUTH_PARTNER]</span>
+          <span className="w-1 h-1 rounded-full bg-[#00F0FF] animate-pulse"></span>
+          <span>EC-Council Authorized Reseller &amp; Training Partner</span>
         </div>
 
-        {/* High-Contrast Luminous Headline */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.1] mb-8 max-w-5xl mx-auto drop-shadow-2xl">
+        {/* Refined High-Contrast Crisp Headline (Un-bloated) */}
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.15] mb-6 max-w-4xl mx-auto">
           Ready to level-up your{' '}
-          <span className="text-gradient-cyan font-black">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] via-[#38BDF8] to-[#00F0FF] font-extrabold">
             cybersecurity
           </span>{' '}
           and{' '}
-          <span className="text-gradient-violet font-black">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C664FF] via-[#E066FF] to-[#F472B6] font-extrabold">
             privacy
           </span>{' '}
           expertise?
         </h1>
 
-        <p className="text-lg md:text-2xl text-gray-300 font-medium mb-4 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
+        <p className="text-base sm:text-lg text-gray-300 font-medium mb-3 max-w-2xl mx-auto leading-relaxed">
           Personalized training programs meticulously crafted to align your current skills
           with your future career ambitions. Earn industry-recognized certifications that
-          validate your proficiency in the field.
+          validate your proficiency.
         </p>
 
-        <p className="text-base md:text-lg text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-xs sm:text-sm text-gray-400 mb-8 max-w-xl mx-auto leading-relaxed">
           Choose from flexible learning formats, including online courses, in-person
           workshops, or intensive bootcamps.
         </p>
 
-        {/* Ultimate Sales Strategy Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-3xl mx-auto">
-          <AssessmentTrigger className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#FFE259] via-[#00F0FF] to-[#2F57EF] text-black font-black text-base rounded-full hover:shadow-[0_0_40px_rgba(0,240,255,0.6)] hover:scale-105 transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xl">
-            <SparklesIcon className="w-5 h-5 text-black" /> Evaluate Skill Gap
+        {/* Sleek Cybersecurity Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3.5 justify-center items-center max-w-2xl mx-auto">
+          <AssessmentTrigger className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] hover:scale-[1.02] transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg">
+            <SparklesIcon className="w-4 h-4 text-black" /> Evaluate Skill Gap (2-Min Free)
           </AssessmentTrigger>
           <a
             href="#courses"
-            className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#2F57EF] to-[#C664FF] text-white font-bold text-base rounded-full hover:shadow-[0_0_35px_rgba(198,100,255,0.5)] hover:scale-105 transition-all cursor-pointer shadow-xl"
+            className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-[#2F57EF] to-[#C664FF] text-white font-bold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(198,100,255,0.4)] hover:scale-[1.02] transition-all cursor-pointer shadow-lg"
           >
             Explore Courses
           </a>
-          <ContactTrigger className="w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-[#00F0FF] text-[#00F0FF] font-bold text-base rounded-full hover:bg-[#00F0FF] hover:text-black transition-all cursor-pointer shadow-lg">
+          <ContactTrigger className="w-full sm:w-auto px-7 py-3.5 bg-transparent border border-[#00F0FF]/40 text-[#00F0FF] font-bold text-xs uppercase tracking-wider rounded-full hover:bg-[#00F0FF]/10 transition-all cursor-pointer">
             Contact Advisor
           </ContactTrigger>
         </div>
 
         {/* Reseller Accreditation Trust Banner */}
-        <div className="mt-16 pt-8 border-t border-white/10 flex flex-wrap justify-center items-center gap-8 opacity-80">
-          <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
-            Authorized Training Partner For:
+        <div className="mt-12 pt-6 border-t border-white/10 flex flex-wrap justify-center items-center gap-6 opacity-85">
+          <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-gray-400">
+            Official Certification Alignment:
           </span>
-          <div className="flex items-center gap-6">
-            <Image src="/ec-council-logo.jpeg" alt="EC-Council Partner" width={110} height={44} className="rounded brightness-110 contrast-125" />
-            <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-white/5 border border-white/10 text-white">ISACA Aligned</span>
-            <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-white/5 border border-white/10 text-white">IAPP Privacy</span>
-            <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-white/5 border border-white/10 text-white">ISC2 Framework</span>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <Image src="/ec-council-logo.jpeg" alt="EC-Council Partner" width={100} height={40} className="rounded brightness-110 contrast-125 object-contain" />
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">ISACA Aligned</span>
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">IAPP Privacy</span>
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">ISC2 Framework</span>
           </div>
         </div>
       </RevealOnScroll>

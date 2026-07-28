@@ -1,0 +1,48 @@
+{
+  "companyInfo": {
+    "name": "CyberGOAT Services LLC",
+    "accreditation": "Official EC-Council Authorized Reseller & Training Partner",
+    "address": "Dubai Silicon Oasis, DSO-IFZA, Digital Park, Building A1, Dubai, UAE (Makani: A1)",
+    "phone": "+971 55 184 6786",
+    "email": "admin@cybergoat.ae",
+    "website": "https://www.cybergoat.ae"
+  },
+  "qaPairs": [
+    {
+      "id": "1",
+      "category": "EC-Council",
+      "question": "Does CyberGOAT provide official EC-Council exam vouchers?",
+      "answer": "Yes! As an official EC-Council Authorized Reseller and Training Partner, CyberGOAT provides official EC-Council exam vouchers, official courseware, and hands-on iLabs access with every EC-Council course (CEH v12, C|CISO, CHFI, CND, CPENT)."
+    },
+    {
+      "id": "2",
+      "category": "EC-Council",
+      "question": "What is included in the CEH v12 training program?",
+      "answer": "The CEH v12 (Certified Ethical Hacker) program includes 40 hours of instructor-led live training, official EC-Council iLabs access for 6 months, official EC-Council courseware, and 1 official CEH exam voucher."
+    },
+    {
+      "id": "3",
+      "category": "Privacy",
+      "question": "Which data privacy certifications do you offer?",
+      "answer": "We offer IAPP CIPP/E (Certified Information Privacy Professional/Europe), CIPM (Certified Information Privacy Manager), DPO (Data Protection Officer) Training, and compliance workshops on EU GDPR, UAE PDPL, and DESC ISR."
+    },
+    {
+      "id": "4",
+      "category": "Location & Contact",
+      "question": "Where is CyberGOAT located in Dubai?",
+      "answer": "CyberGOAT is located in Dubai Silicon Oasis (DSO-IFZA), Digital Park, Building A1, Dubai, UAE. You can reach our team directly at +971 55 184 6786 or admin@cybergoat.ae."
+    },
+    {
+      "id": "5",
+      "category": "Formats",
+      "question": "What training formats are available?",
+      "answer": "We offer 3 flexible learning formats: 1) Online Live Interactive Sessions, 2) In-Person Dubai Bootcamps at our training center, and 3) Custom Corporate Enterprise Team Upskilling."
+    },
+    {
+      "id": "6",
+      "category": "Executive",
+      "question": "What is the C|CISO course and who should take it?",
+      "answer": "The C|CISO (Certified Chief Information Security Officer) program is designed for senior security executives and IT leaders covering Governance, Risk Management, Audit, and Executive Leadership. Includes official C|CISO voucher."
+    }
+  ]
+}

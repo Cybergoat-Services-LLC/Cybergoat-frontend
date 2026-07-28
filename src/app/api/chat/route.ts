@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getKnowledgeBase, searchKnowledge } from '@/app/lib/knowledge';
 
 const SYSTEM_INSTRUCTION = `
 You are the official CyberGOAT AI Security & Training Assistant for CyberGOAT Services LLC (cybergoat.ae).
@@ -10,20 +11,28 @@ Your job is to assist users with inquiries regarding:
 3. Data Privacy & Regulatory Compliance: IAPP CIPP/E, CIPM, DPO Training, EU GDPR, UAE PDPL, and DESC ISR Frameworks.
 4. Flexible Formats: Online Live Interactive, In-Person Dubai Bootcamps, and Enterprise Corporate Upskilling.
 
-Be professional, concise, encouraging, and advise users to book a direct consultation or connect via WhatsApp at +971 55 184 6786.
+Always prioritize the custom trained Knowledge Base Q&A provided in the prompt context. Be professional, concise, encouraging, and advise users to book a direct consultation or connect via WhatsApp at +971 55 184 6786.
 `;
 
 export async function POST(req: NextRequest) {
   try {
-    const { message, history } = await req.json();
+    const { message } = await req.json();
 
     if (!message || typeof message !== 'string') {
       return NextResponse.json({ error: 'Message parameter is required' }, { status: 400 });
     }
 
+    // 1. Search Custom Knowledge Base for trained Q&A matches
+    const customContext = searchKnowledge(message);
+
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
+      // If direct exact match found in Knowledge Base, return it immediately!
+      if (customContext) {
+        return NextResponse.json({ reply: customContext, source: 'knowledge-base' });
+      }
+
       // Graceful fallback response when GEMINI_API_KEY is not configured yet
       let fallbackText = "I can certainly help you with that! CyberGOAT provides personalized training tracks across EC-Council (CEH, C|CISO, CHFI), ISACA (CISA, CISM), IAPP Privacy, and custom DevSecOps.";
       const lower = message.toLowerCase();
@@ -39,6 +48,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ reply: fallbackText, source: 'fallback' });
     }
 
+    // Combine system prompt with custom trained Q&A context
+    const fullPrompt = `${SYSTEM_INSTRUCTION}
+
+=== CUSTOM TRAINED KNOWLEDGE BASE CONTEXT ===
+${customContext || 'No specific Q&A override found for this question.'}
+=============================================
+
+User Question: ${message}`;
+
     // Secure server-side call to Google Gemini REST API
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
@@ -49,7 +67,7 @@ export async function POST(req: NextRequest) {
           contents: [
             {
               role: 'user',
-              parts: [{ text: `${SYSTEM_INSTRUCTION}\n\nUser Question: ${message}` }],
+              parts: [{ text: fullPrompt }],
             },
           ],
         }),
@@ -57,8 +75,9 @@ export async function POST(req: NextRequest) {
     );
 
     if (!response.ok) {
-      const errText = await response.text();
-      console.error('Gemini API Error:', errText);
+      if (customContext) {
+        return NextResponse.json({ reply: customContext, source: 'knowledge-base-fallback' });
+      }
       return NextResponse.json(
         { reply: 'CyberGOAT AI is currently updating knowledge. Please connect with our admissions advisor on WhatsApp (+971 55 184 6786).' },
         { status: 200 }
@@ -67,10 +86,10 @@ export async function POST(req: NextRequest) {
 
     const data = await response.json();
     const candidateReply =
-      data.candidates?.[0]?.content?.parts?.[0]?.text ||
+      data.candidates?.[0]?.content?.parts?.[0]?.text || customContext ||
       'Our team will be happy to assist you! Please book a consultation or connect on WhatsApp.';
 
-    return NextResponse.json({ reply: candidateReply, source: 'gemini' });
+    return NextResponse.json({ reply: candidateReply, source: 'gemini+kb' });
   } catch (error) {
     console.error('API Handler Error:', error);
     return NextResponse.json(

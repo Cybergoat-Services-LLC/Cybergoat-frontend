@@ -483,8 +483,11 @@ export const Footer = () => (
           <span>Dubai, UAE</span>
         </div>
       </div>
-      <div className="border-t border-white/5 pt-8 text-center text-gray-600 text-sm">
-        <p>© 2026 CyberGOAT Services LLC. All rights reserved. EC-Council Authorized Reseller &amp; Training Partner.</p>
+      <div className="border-t border-white/5 pt-8 text-center text-gray-500 text-xs space-y-3">
+        <p className="text-[11px] text-gray-400 max-w-4xl mx-auto leading-relaxed opacity-75">
+          <strong>Trademark &amp; Accreditation Disclaimer:</strong> CyberGOAT Services LLC is an official <strong>EC-Council Authorized Reseller &amp; Training Partner</strong>. EC-Council®, CEH®, C|CISO®, CHFI®, CND®, CPENT®, CSA®, CTIA®, CCSE® are registered trademarks of EC-Council. CIPP/E®, CIPM®, and IAPP® are registered trademarks of the International Association of Privacy Professionals. CISA®, CISM®, CRISC® are registered trademarks of ISACA. CISSP® is a registered trademark of ISC2. Third-party privacy and certification training tracks delivered by CyberGOAT are independent exam preparation masterclasses and regulatory compliance framework alignment programs.
+        </p>
+        <p>© 2026 CyberGOAT Services LLC. All rights reserved. Dubai Silicon Oasis, Dubai, UAE.</p>
       </div>
     </div>
   </footer>

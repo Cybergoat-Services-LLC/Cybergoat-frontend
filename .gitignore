@@ -36,3 +36,11 @@ next-env.d.ts
 # repository separation
 /backend-reference
 /v1-backup-snapshot
+
+# GCP Service Account Keys
+gcp-key.json
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+

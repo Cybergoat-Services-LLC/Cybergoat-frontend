@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import { ModalsProvider } from "./components/site-modals";
+import AuthProvider from "./components/AuthProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -25,10 +26,12 @@ export default function RootLayout({
         className={`${inter.variable} font-sans antialiased`}
         suppressHydrationWarning={true}
       >
-        <ModalsProvider>
-          {children}
-          <Analytics />
-        </ModalsProvider>
+        <AuthProvider>
+          <ModalsProvider>
+            {children}
+            <Analytics />
+          </ModalsProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -59,43 +59,62 @@ ${customContext || 'No specific Q&A override found for this question.'}
 
 User Question: ${message}`;
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: 'user',
-              parts: [{ text: fullPrompt }],
-            },
-          ],
-        }),
-      }
-    );
+    // AbortController timeout (6 seconds max) to guarantee ultra-fast response
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-    if (!response.ok) {
-      if (customContext) {
-        return NextResponse.json({ reply: customContext, source: 'knowledge-base-fallback' });
-      }
-      return NextResponse.json(
-        { reply: 'CyberGOAT AI is currently updating knowledge. Please connect with our admissions advisor on WhatsApp (+971 55 184 6786).' },
-        { status: 200 }
+    let response;
+    try {
+      response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
+          body: JSON.stringify({
+            contents: [
+              {
+                role: 'user',
+                parts: [{ text: fullPrompt }],
+              },
+            ],
+          }),
+        }
       );
+      clearTimeout(timeoutId);
+    } catch (fetchErr) {
+      clearTimeout(timeoutId);
+      console.warn('Gemini API fetch timeout or error, serving intelligent fallback:', fetchErr);
     }
 
-    const data = await response.json();
-    const candidateReply =
-      data.candidates?.[0]?.content?.parts?.[0]?.text || customContext ||
-      'Our team will be happy to assist you! Please book a consultation or connect on WhatsApp.';
+    if (response && response.ok) {
+      const data = await response.json();
+      const candidateReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (candidateReply) {
+        return NextResponse.json({ reply: candidateReply, source: 'gemini+kb' });
+      }
+    }
 
-    return NextResponse.json({ reply: candidateReply, source: 'gemini+kb' });
+    // Intelligent Dynamic CyberGOAT Fallback Response (0s latency, 100% uptime)
+    if (customContext) {
+      return NextResponse.json({ reply: customContext, source: 'knowledge-base-fallback' });
+    }
+
+    const lower = message.toLowerCase();
+    let smartReply = "Hello! I am CyberGOAT AI. CyberGOAT Services LLC is an official EC-Council Authorized Reseller & Training Partner in Dubai Silicon Oasis, UAE.\n\nWe offer official training & vouchers for **CEH v12, C|CISO, CHFI v11, CND, CPENT**, as well as ISACA (CISA/CISM) and Data Privacy (CIPP/E, CIPM, GDPR).\n\nHow can I help you today? You can also connect directly with our admissions advisor on WhatsApp at **+971 55 184 6786**.";
+
+    if (lower.includes('awake') || lower.includes('active') || lower.includes('hello') || lower.includes('hi')) {
+      smartReply = "Yes, I am fully active and online 24/7! I am your CyberGOAT AI Security & Training Assistant. How can I help you with your EC-Council certifications or data privacy training goals today?";
+    } else if (lower.includes('pricing') || lower.includes('cost') || lower.includes('fee') || lower.includes('voucher')) {
+      smartReply = "Our official EC-Council certification packages (CEH v12, C|CISO, CHFI) include **official EC-Council courseware, 6 months of hands-on iLabs, and the official exam voucher**. Please connect on WhatsApp (+971 55 184 6786) for exact pricing and current promotional offers!";
+    }
+
+    return NextResponse.json({ reply: smartReply, source: 'smart-fallback' });
   } catch (error) {
     console.error('API Handler Error:', error);
     return NextResponse.json(
-      { reply: 'Thank you for your inquiry. Please reach out to admin@cybergoat.ae or +971 55 184 6786 for instant assistance.' },
-      { status: 500 }
+      { reply: 'Thank you for contacting CyberGOAT Services LLC. Please reach out to admin@cybergoat.ae or +971 55 184 6786 on WhatsApp for instant assistance.' },
+      { status: 200 }
     );
   }
 }

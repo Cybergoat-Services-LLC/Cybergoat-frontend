@@ -72,7 +72,7 @@ export const TRACK_DETAILS: Record<string, TrackDetail> = {
     duration: '60 Hours (6 Weeks)',
     level: 'Advanced',
     includesVoucher: false,
-    certs: ['CISA (ISACA)', 'CISM (ISACA)', 'CRISC (ISACA)', 'CISSP (ISC2)', 'CIPP/E (IAPP)'],
+    certs: ['CISA (ISACA)', 'CISM (ISACA)', 'CRISC (ISACA)', 'CISSP (ISC2)', 'CIPP/E (Data Privacy)'],
     modules: [
       'Module 1: Information Systems Auditing & Internal Controls',
       'Module 2: Enterprise Risk Management (ERM) & ISO 27001 Alignment',

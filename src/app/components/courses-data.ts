@@ -6,7 +6,7 @@ export type CourseItem = {
   duration?: string;
   level?: 'Beginner' | 'Intermediate' | 'Advanced' | 'Executive';
   includesVoucher?: boolean;
-  category?: 'EC-Council' | 'ISACA' | 'IAPP' | 'ISC2' | 'Fundamentals' | 'Advanced' | 'Governance' | 'Privacy';
+  category?: 'EC-Council' | 'ISACA' | 'ISC2' | 'Fundamentals' | 'Advanced' | 'Governance' | 'Privacy';
 };
 
 export const TRAINING_PROGRAMS: CourseItem[] = [
@@ -201,22 +201,22 @@ export const CERTIFICATIONS: CourseItem[] = [
   },
   {
     title: 'CIPP/E',
-    description: 'Certified Information Privacy Professional/Europe — IAPP European Data Protection Credential.',
+    description: 'Certified Information Privacy Professional/Europe — European Data Protection & GDPR Credential.',
     image: '/cg-assets/certifications/CIPPE.jpeg',
-    tag: 'IAPP',
+    tag: 'Privacy',
     duration: '30 Hours',
     level: 'Advanced',
     includesVoucher: false,
-    category: 'IAPP',
+    category: 'Privacy',
   },
   {
     title: 'CIPM',
-    description: 'Certified Information Privacy Manager — IAPP Privacy Program Governance Credential.',
+    description: 'Certified Information Privacy Manager — Data Protection Program Governance Credential.',
     image: '/cg-assets/certifications/CIPM.jpeg',
-    tag: 'IAPP',
+    tag: 'Privacy',
     duration: '30 Hours',
     level: 'Advanced',
     includesVoucher: false,
-    category: 'IAPP',
+    category: 'Privacy',
   },
 ];

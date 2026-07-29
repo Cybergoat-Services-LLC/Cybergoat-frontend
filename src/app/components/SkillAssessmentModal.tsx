@@ -433,7 +433,7 @@ export default function SkillAssessmentModal({
 
                 {results.isPrivacy && (
                   <p className="text-xs text-gray-400 pt-1">
-                    Aligned with IAPP CIPP/E, CIPM, and international privacy framework compliance standards.
+                    Aligned with CIPP/E, CIPM, EU GDPR, and UAE PDPL compliance standards.
                   </p>
                 )}
               </div>

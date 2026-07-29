@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import { ModalsProvider } from "./components/site-modals";
 
@@ -24,7 +25,10 @@ export default function RootLayout({
         className={`${inter.variable} font-sans antialiased`}
         suppressHydrationWarning={true}
       >
-        <ModalsProvider>{children}</ModalsProvider>
+        <ModalsProvider>
+          {children}
+          <Analytics />
+        </ModalsProvider>
       </body>
     </html>
   );

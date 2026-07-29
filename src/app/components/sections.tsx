@@ -75,7 +75,7 @@ export const HeroSection = () => (
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Image src="/ec-council-logo.jpeg" alt="EC-Council Partner" width={100} height={40} className="rounded brightness-110 contrast-125 object-contain" />
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">ISACA Aligned</span>
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">IAPP Privacy</span>
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">Data Privacy &amp; GDPR</span>
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">ISC2 Framework</span>
           </div>
         </div>
@@ -405,7 +405,7 @@ const TESTIMONIALS = [
   },
   {
     quote:
-      'CyberGOAT’s GRC and IAPP Privacy training provided clear, actionable insights for navigating complex regulatory frameworks like GDPR and UAE ISR.',
+      'CyberGOAT’s GRC and Data Privacy training provided clear, actionable insights for navigating complex regulatory frameworks like GDPR and UAE ISR.',
     name: 'Anonymous',
     role: 'GRC & Privacy Specialist',
   },

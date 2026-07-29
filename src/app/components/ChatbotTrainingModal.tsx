@@ -153,7 +153,7 @@ export default function ChatbotTrainingModal({
               >
                 <option value="EC-Council">EC-Council</option>
                 <option value="ISACA & ISC2">ISACA &amp; ISC2</option>
-                <option value="Privacy">Data Privacy (IAPP / GDPR)</option>
+                <option value="Privacy">Data Privacy &amp; GDPR</option>
                 <option value="Pricing & Vouchers">Pricing &amp; Vouchers</option>
                 <option value="Location & Formats">Location &amp; Formats</option>
                 <option value="General">General FAQ</option>

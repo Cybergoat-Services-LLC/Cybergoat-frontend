@@ -8,7 +8,7 @@ CyberGOAT is an official EC-Council Authorized Reseller & Training Partner based
 Your job is to assist users with inquiries regarding:
 1. EC-Council Certifications: CEH v12, C|CISO, CHFI v11, CND v2, CPENT/LPT, CSA, CTIA, CCSE. Emphasize that CyberGOAT provides official training alongside official EC-Council exam vouchers, official courseware, and hands-on iLabs.
 2. ISACA & ISC2 Certifications: CISA, CISM, CRISC, CISSP.
-3. Data Privacy & Regulatory Compliance: IAPP CIPP/E, CIPM, DPO Training, EU GDPR, UAE PDPL, and DESC ISR Frameworks.
+3. Data Privacy & Regulatory Compliance: CIPP/E, CIPM, DPO Training, EU GDPR, UAE PDPL, and DESC ISR Frameworks.
 4. Flexible Formats: Online Live Interactive, In-Person Dubai Bootcamps, and Enterprise Corporate Upskilling.
 
 Always prioritize the custom trained Knowledge Base Q&A provided in the prompt context. Be professional, concise, encouraging, and advise users to book a direct consultation or connect via WhatsApp at +971 55 184 6786.
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       }
 
       // Graceful fallback response when GEMINI_API_KEY is not configured yet
-      let fallbackText = "I can certainly help you with that! CyberGOAT provides personalized training tracks across EC-Council (CEH, C|CISO, CHFI), ISACA (CISA, CISM), IAPP Privacy, and custom DevSecOps.";
+      let fallbackText = "I can certainly help you with that! CyberGOAT provides personalized training tracks across EC-Council (CEH, C|CISO, CHFI), ISACA (CISA, CISM), Data Privacy & Compliance, and custom DevSecOps.";
       const lower = message.toLowerCase();
 
       if (lower.includes('consult') || lower.includes('corporate') || lower.includes('book')) {

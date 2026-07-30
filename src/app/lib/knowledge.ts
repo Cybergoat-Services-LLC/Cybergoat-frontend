@@ -22,10 +22,16 @@ export type KnowledgeBase = {
 
 const KNOWLEDGE_FILE = path.join(process.cwd(), 'src', 'app', 'data', 'knowledge-base.json');
 
+let memoryKBCache: KnowledgeBase | null = null;
+
 export function getKnowledgeBase(): KnowledgeBase {
+  if (memoryKBCache) {
+    return memoryKBCache;
+  }
+
   try {
     if (!fs.existsSync(KNOWLEDGE_FILE)) {
-      return {
+      memoryKBCache = {
         companyInfo: {
           name: "CyberGOAT Services LLC",
           accreditation: "Official EC-Council Authorized Reseller & Training Partner",
@@ -36,11 +42,13 @@ export function getKnowledgeBase(): KnowledgeBase {
         },
         qaPairs: []
       };
+      return memoryKBCache;
     }
     const data = fs.readFileSync(KNOWLEDGE_FILE, 'utf-8');
-    return JSON.parse(data);
+    memoryKBCache = JSON.parse(data);
+    return memoryKBCache!;
   } catch (err) {
-    console.error('Error reading knowledge base:', err);
+    console.error('Error reading knowledge base file, serving memory default:', err);
     return {
       companyInfo: {
         name: "CyberGOAT Services LLC",
@@ -56,6 +64,7 @@ export function getKnowledgeBase(): KnowledgeBase {
 }
 
 export function saveKnowledgeBase(kb: KnowledgeBase) {
+  memoryKBCache = kb; // Update in-memory state immediately for instant serverless availability
   try {
     const dir = path.dirname(KNOWLEDGE_FILE);
     if (!fs.existsSync(dir)) {
@@ -63,7 +72,7 @@ export function saveKnowledgeBase(kb: KnowledgeBase) {
     }
     fs.writeFileSync(KNOWLEDGE_FILE, JSON.stringify(kb, null, 2), 'utf-8');
   } catch (err) {
-    console.error('Error saving knowledge base:', err);
+    console.warn('Notice: Serverless read-only filesystem detected (Vercel Production). Knowledge updated in-memory for session.', err);
   }
 }
 

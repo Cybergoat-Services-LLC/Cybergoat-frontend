@@ -16,8 +16,40 @@ Your job is to assist users with inquiries regarding:
 Always prioritize the custom trained Knowledge Base Q&A provided in the prompt context. Be professional, concise, encouraging, and advise users to book a direct consultation or connect via WhatsApp at +971 55 184 6786.
 `;
 
+// Simple sliding-window IP Rate Limiter (10 requests per minute per IP)
+const rateLimitMap = new Map<string, { count: number; startTime: number }>();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 10;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(ip);
+
+  if (!record) {
+    rateLimitMap.set(ip, { count: 1, startTime: now });
+    return false;
+  }
+
+  if (now - record.startTime > RATE_LIMIT_WINDOW_MS) {
+    rateLimitMap.set(ip, { count: 1, startTime: now });
+    return false;
+  }
+
+  record.count += 1;
+  return record.count > MAX_REQUESTS_PER_WINDOW;
+}
+
 export async function POST(req: NextRequest) {
   try {
+    // Check IP Rate Limiting
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || req.headers.get('x-real-ip') || '127.0.0.1';
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { reply: 'You have reached the maximum message limit. Please wait 1 minute before sending another query, or contact us on WhatsApp (+971 55 184 6786).' },
+        { status: 429 }
+      );
+    }
+
     const { message } = await req.json();
 
     if (!message || typeof message !== 'string') {

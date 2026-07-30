@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Modal from './Modal';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { KeyIcon, UserIcon, ArrowRightOnRectangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 
 const LMS_LOGIN_URL = 'https://lms.cybergoat.ae/login';
@@ -14,38 +14,7 @@ export default function SignInModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const { data: session, status } = useSession();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const handleCredentialsSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password) return;
-
-    setLoading(true);
-    setErrorMsg('');
-
-    try {
-      const res = await signIn('credentials', {
-        email,
-        password,
-        redirect: false
-      });
-
-      if (res?.error) {
-        setErrorMsg('Invalid student email or password.');
-      } else {
-        onClose();
-      }
-    } catch (err) {
-      console.error('Sign in error:', err);
-      setErrorMsg('An error occurred during authentication.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data: session } = useSession();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={session?.user ? "CyberGOAT Student Profile" : "Access CyberGOAT Platform"}>
@@ -89,54 +58,9 @@ export default function SignInModal({
       ) : (
         <div className="space-y-5">
           <p className="text-xs text-gray-400">
-            Sign in to access your EC-Council, ISACA &amp; Privacy courseware kits, hands-on iLabs, and certification progress.
+            CyberGOAT courses and your learning dashboard live on our LMS platform.
+            Continue with Google or LinkedIn to sign in or create an account.
           </p>
-
-          {errorMsg && (
-            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold">
-              {errorMsg}
-            </div>
-          )}
-
-          <form onSubmit={handleCredentialsSubmit} className="space-y-3.5">
-            <div>
-              <label className="block text-xs font-semibold text-gray-400 mb-1">Student Email Address</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="student@cybergoat.ae"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-gray-400 mb-1">Password</label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF]"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(0,240,255,0.5)] transition-all cursor-pointer shadow-lg"
-            >
-              {loading ? 'Authenticating...' : 'Sign In with Credentials'}
-            </button>
-          </form>
-
-          <div className="relative border-t border-white/10 pt-4 text-center">
-            <span className="text-[11px] text-gray-500 uppercase tracking-widest bg-[#0A0F1A] px-2 -top-2.5 relative">
-              Or Enterprise OAuth SSO
-            </span>
-          </div>
 
           <div className="space-y-2">
             <a
@@ -152,6 +76,17 @@ export default function SignInModal({
                 <path fill="#EA4335" d="M12 4.75c1.76 0 3.34.6 4.58 1.79l3.43-3.43C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.28 6.6l4.01 3.1C6.23 6.86 8.88 4.75 12 4.75z" />
               </svg>
               Continue with Google Workspace SSO
+            </a>
+            <a
+              href={LMS_LOGIN_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full items-center justify-center gap-3 rounded-full bg-[#0A66C2] hover:bg-[#0958A8] px-6 py-2.5 text-xs font-bold text-white transition-colors"
+            >
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z" />
+              </svg>
+              Continue with LinkedIn
             </a>
           </div>
         </div>

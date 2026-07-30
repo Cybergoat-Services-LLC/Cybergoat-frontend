@@ -1,16 +1,19 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  XMarkIcon, 
-  PlusIcon, 
-  TrashIcon, 
-  SparklesIcon, 
-  BookOpenIcon, 
+import {
+  XMarkIcon,
+  PlusIcon,
+  TrashIcon,
+  SparklesIcon,
+  BookOpenIcon,
   CheckCircleIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
+  LockClosedIcon
 } from '@heroicons/react/24/outline';
 import { QAPair } from '@/app/lib/knowledge';
+
+const ADMIN_KEY_STORAGE = 'cg_admin_key';
 
 export default function ChatbotTrainingModal({
   isOpen,
@@ -19,6 +22,9 @@ export default function ChatbotTrainingModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
+  const [adminKey, setAdminKey] = useState('');
+  const [keyInput, setKeyInput] = useState('');
+  const [authError, setAuthError] = useState('');
   const [qaPairs, setQaPairs] = useState<QAPair[]>([]);
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
@@ -27,9 +33,15 @@ export default function ChatbotTrainingModal({
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
-  const fetchKnowledge = async () => {
+  const fetchKnowledge = async (key: string) => {
     try {
-      const res = await fetch('/api/knowledge');
+      const res = await fetch('/api/knowledge', { headers: { 'x-admin-key': key } });
+      if (res.status === 401) {
+        setAuthError('Invalid admin key.');
+        setAdminKey('');
+        sessionStorage.removeItem(ADMIN_KEY_STORAGE);
+        return;
+      }
       const data = await res.json();
       if (data.qaPairs) {
         setQaPairs(data.qaPairs);
@@ -41,9 +53,22 @@ export default function ChatbotTrainingModal({
 
   useEffect(() => {
     if (isOpen) {
-      fetchKnowledge();
+      const stored = sessionStorage.getItem(ADMIN_KEY_STORAGE);
+      if (stored) {
+        setAdminKey(stored);
+        fetchKnowledge(stored);
+      }
     }
   }, [isOpen]);
+
+  const handleUnlock = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!keyInput.trim()) return;
+    setAuthError('');
+    sessionStorage.setItem(ADMIN_KEY_STORAGE, keyInput);
+    setAdminKey(keyInput);
+    fetchKnowledge(keyInput);
+  };
 
   const handleAddTrainingItem = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +78,7 @@ export default function ChatbotTrainingModal({
     try {
       const res = await fetch('/api/knowledge', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
         body: JSON.stringify({ question, answer, category }),
       });
       const data = await res.json();
@@ -62,7 +87,7 @@ export default function ChatbotTrainingModal({
         setAnswer('');
         setSuccessMsg('Q&A Training Item Added Successfully!');
         setTimeout(() => setSuccessMsg(''), 3000);
-        fetchKnowledge();
+        fetchKnowledge(adminKey);
       }
     } catch (err) {
       console.error('Error adding Q&A training item:', err);
@@ -73,9 +98,12 @@ export default function ChatbotTrainingModal({
 
   const handleDeleteItem = async (id: string) => {
     try {
-      const res = await fetch(`/api/knowledge?id=${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/knowledge?id=${id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-key': adminKey },
+      });
       if (res.ok) {
-        fetchKnowledge();
+        fetchKnowledge(adminKey);
       }
     } catch (err) {
       console.error('Error deleting Q&A pair:', err);
@@ -83,6 +111,45 @@ export default function ChatbotTrainingModal({
   };
 
   if (!isOpen) return null;
+
+  if (!adminKey) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto">
+        <div className="relative w-full max-w-sm bg-[#0A0F1A] border border-white/10 rounded-3xl p-8 shadow-2xl glass-card space-y-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-white font-extrabold">
+              <LockClosedIcon className="w-5 h-5 text-[#00F0FF]" /> Admin Access Required
+            </div>
+            <button onClick={onClose} className="p-1.5 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer">
+              <XMarkIcon className="w-5 h-5" />
+            </button>
+          </div>
+          <p className="text-xs text-gray-400">
+            Enter the admin key to manage the AI chatbot&apos;s knowledge base.
+          </p>
+          {authError && (
+            <p className="text-xs font-bold text-red-400">{authError}</p>
+          )}
+          <form onSubmit={handleUnlock} className="space-y-3">
+            <input
+              type="password"
+              autoFocus
+              value={keyInput}
+              onChange={(e) => setKeyInput(e.target.value)}
+              placeholder="Admin key"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF]"
+            />
+            <button
+              type="submit"
+              className="w-full py-2.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs rounded-full hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all cursor-pointer"
+            >
+              Unlock
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   const filteredPairs = qaPairs.filter(
     (item) =>

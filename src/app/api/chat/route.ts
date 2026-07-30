@@ -56,6 +56,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Message parameter is required' }, { status: 400 });
     }
 
+    if (message.length > 500) {
+      return NextResponse.json(
+        { reply: 'Your query exceeds the maximum length of 500 characters. Please shorten your question or reach out on WhatsApp (+971 55 184 6786).' },
+        { status: 400 }
+      );
+    }
+
     // 1. Search Custom Knowledge Base for trained Q&A matches
     const customContext = searchKnowledge(message);
 

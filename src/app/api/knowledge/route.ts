@@ -1,14 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getKnowledgeBase, saveKnowledgeBase, QAPair } from '@/app/lib/knowledge';
 
-// GET /api/knowledge: Returns all custom trained Q&A pairs
-export async function GET() {
+function isAuthorized(req: NextRequest): boolean {
+  const adminKey = process.env.ADMIN_API_KEY;
+  if (!adminKey) return false;
+  const provided = req.headers.get('x-admin-key');
+  return provided === adminKey;
+}
+
+// GET /api/knowledge: Returns all custom trained Q&A pairs (admin only)
+export async function GET(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   const kb = getKnowledgeBase();
   return NextResponse.json(kb);
 }
 
-// POST /api/knowledge: Adds a new custom Q&A training item
+// POST /api/knowledge: Adds a new custom Q&A training item (admin only)
 export async function POST(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     const { question, answer, category } = await req.json();
 
@@ -35,8 +48,11 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// DELETE /api/knowledge?id=123: Deletes a trained Q&A pair by ID
+// DELETE /api/knowledge?id=123: Deletes a trained Q&A pair by ID (admin only)
 export async function DELETE(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');

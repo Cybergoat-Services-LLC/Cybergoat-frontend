@@ -135,9 +135,6 @@ export default function ChatbotWidget() {
               </div>
             </div>
             <div className="flex items-center gap-1">
-              <TrainingTrigger className="p-1.5 rounded-full hover:bg-white/10 text-gray-400 hover:text-[#00F0FF] transition-colors cursor-pointer" title="Manage AI Training Data">
-                <Cog6ToothIcon className="w-5 h-5" />
-              </TrainingTrigger>
               <button
                 onClick={() => setIsOpen(false)}
                 className="p-1.5 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer"

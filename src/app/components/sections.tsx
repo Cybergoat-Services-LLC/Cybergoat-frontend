@@ -28,7 +28,7 @@ export const HeroSection = () => (
         </div>
 
         {/* Refined High-Contrast Crisp Headline (Un-bloated) */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.15] mb-6 max-w-4xl mx-auto">
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tighter leading-[0.90] mb-6 max-w-4xl mx-auto">
           Ready to level-up your{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] via-[#38BDF8] to-[#00F0FF] font-extrabold">
             cybersecurity

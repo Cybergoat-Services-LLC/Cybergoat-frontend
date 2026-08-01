@@ -41,38 +41,38 @@ export const HeroSection = () => (
         </h1>
 
         {/* High-Contrast Executive Sales Sub-Headline */}
-        <p className="text-lg sm:text-xl text-gray-100 font-semibold mb-8 max-w-3xl mx-auto leading-relaxed tracking-wide">
-          Master Enterprise Cyber Defense, Digital Forensics &amp; Executive Security Leadership with Dubai’s Premier <span className="text-[#00F0FF] font-bold">EC-Council Authorized Partner</span>.
+        <p className="text-xl sm:text-2xl text-white font-bold mb-8 max-w-3xl mx-auto leading-relaxed tracking-wide drop-shadow-md">
+          Master Enterprise Cyber Defense, Digital Forensics &amp; Executive Security Leadership with Dubai’s Premier <span className="text-[#00F0FF] font-extrabold underline decoration-[#00F0FF]/40 underline-offset-4">EC-Council Authorized Partner</span>.
         </p>
 
         {/* 3 High-Impact Cyber Sales Value Pillar Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-10 text-left">
-          <div className="p-4 rounded-xl border border-[#00F0FF]/25 bg-[#00F0FF]/5 backdrop-blur-md hover:border-[#00F0FF]/50 transition-all group">
-            <div className="flex items-center gap-2 mb-2 text-[#00F0FF] font-bold text-sm">
+          <div className="p-5 rounded-xl border border-[#00F0FF]/40 bg-[#0A1628]/90 backdrop-blur-xl hover:border-[#00F0FF] transition-all shadow-lg hover:shadow-[0_0_20px_rgba(0,240,255,0.25)] group">
+            <div className="flex items-center gap-2 mb-2 text-[#00F0FF] font-extrabold text-sm uppercase tracking-wider">
               <ShieldCheckIcon className="w-5 h-5 text-[#00F0FF]" />
               <span>Official EC-Council Vouchers</span>
             </div>
-            <p className="text-xs text-gray-300 leading-relaxed">
+            <p className="text-xs text-gray-200 font-medium leading-relaxed">
               Direct official exam vouchers, courseware &amp; global certification pathways for CHFI, C|CISO &amp; CEH.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl border border-[#C664FF]/25 bg-[#C664FF]/5 backdrop-blur-md hover:border-[#C664FF]/50 transition-all group">
-            <div className="flex items-center gap-2 mb-2 text-[#C664FF] font-bold text-sm">
-              <CpuChipIcon className="w-5 h-5 text-[#C664FF]" />
+          <div className="p-5 rounded-xl border border-[#C664FF]/40 bg-[#160D28]/90 backdrop-blur-xl hover:border-[#C664FF] transition-all shadow-lg hover:shadow-[0_0_20px_rgba(198,100,255,0.25)] group">
+            <div className="flex items-center gap-2 mb-2 text-[#E066FF] font-extrabold text-sm uppercase tracking-wider">
+              <CpuChipIcon className="w-5 h-5 text-[#E066FF]" />
               <span>Live Cyber Range Labs</span>
             </div>
-            <p className="text-xs text-gray-300 leading-relaxed">
+            <p className="text-xs text-gray-200 font-medium leading-relaxed">
               100% hands-on attack &amp; defense simulation labs, real-world threat vectors, and active incident response.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl border border-[#2F57EF]/25 bg-[#2F57EF]/5 backdrop-blur-md hover:border-[#2F57EF]/50 transition-all group">
-            <div className="flex items-center gap-2 mb-2 text-[#38BDF8] font-bold text-sm">
+          <div className="p-5 rounded-xl border border-[#38BDF8]/40 bg-[#091E2A]/90 backdrop-blur-xl hover:border-[#38BDF8] transition-all shadow-lg hover:shadow-[0_0_20px_rgba(56,189,248,0.25)] group">
+            <div className="flex items-center gap-2 mb-2 text-[#38BDF8] font-extrabold text-sm uppercase tracking-wider">
               <BuildingOffice2Icon className="w-5 h-5 text-[#38BDF8]" />
               <span>Dubai Campus &amp; Online</span>
             </div>
-            <p className="text-xs text-gray-300 leading-relaxed">
+            <p className="text-xs text-gray-200 font-medium leading-relaxed">
               In-person sessions at Dubai Silicon Oasis, live interactive instructor-led virtual classes, or bootcamps.
             </p>
           </div>

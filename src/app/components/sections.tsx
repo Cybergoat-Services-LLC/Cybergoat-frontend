@@ -19,7 +19,7 @@ export const HeroSection = () => (
     </div>
 
     <div className="container mx-auto px-6 relative z-10 text-center">
-      <div className="animate-hero-fade">
+      <div>
         {/* Sleek Cyber Security Partner Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-semibold mb-6 backdrop-blur-md shadow-sm">
           <span className="font-mono text-[11px] text-[#00F0FF]/80 uppercase tracking-wider">[AUTH_PARTNER]</span>

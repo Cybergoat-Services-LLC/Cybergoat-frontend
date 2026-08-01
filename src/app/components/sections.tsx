@@ -12,7 +12,10 @@ import RevealOnScroll from './RevealOnScroll';
 import { ContactTrigger, SignInTrigger, AssessmentTrigger, TrackTrigger } from './interactive-buttons';
 
 export const HeroSection = () => (
-  <section className="relative pt-36 pb-20 lg:pt-48 lg:pb-24 overflow-hidden bg-[#0A0F1A] cyber-grid cyber-scanline">
+  <section className="relative pt-36 pb-20 lg:pt-48 lg:pb-24 overflow-hidden bg-[#0A0F1A]">
+    {/* Cyber Grid & Scanline Background Isolated (Zero Mask Interference) */}
+    <div className="absolute inset-0 cyber-grid cyber-scanline pointer-events-none" />
+
     {/* Subtle High-Tech Ambient Glow */}
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[450px] opacity-35 pointer-events-none">
       <div className="absolute inset-0 bg-gradient-to-r from-[#2F57EF] via-[#00F0FF] to-[#C664FF] blur-[120px] rounded-full mix-blend-screen opacity-40" />

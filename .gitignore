@@ -44,3 +44,6 @@ gcp-key.json
 !package-lock.json
 !tsconfig.json
 
+
+.vercel
+.env*

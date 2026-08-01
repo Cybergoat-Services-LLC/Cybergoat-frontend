@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/lib/authOptions';
-import { getKnowledgeBase, searchKnowledge } from '@/app/lib/knowledge';
+import { searchKnowledge } from '@/app/lib/knowledge';
+import { Redis } from '@upstash/redis';
 
 const SYSTEM_INSTRUCTION = `
 You are the official CyberGOAT AI Security & Training Assistant for CyberGOAT Services LLC (cybergoat.ae).
@@ -16,34 +15,27 @@ Your job is to assist users with inquiries regarding:
 Always prioritize the custom trained Knowledge Base Q&A provided in the prompt context. Be professional, concise, encouraging, and advise users to book a direct consultation or connect via WhatsApp at +971 55 184 6786.
 `;
 
-// Simple sliding-window IP Rate Limiter (10 requests per minute per IP)
-const rateLimitMap = new Map<string, { count: number; startTime: number }>();
-const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+// Fixed-window IP rate limiter (10 requests per minute per IP), backed by Redis
+// so the limit is actually shared across serverless instances instead of each
+// instance keeping its own in-memory counter that resets on cold start.
+const redis = Redis.fromEnv();
+const RATE_LIMIT_WINDOW_SECONDS = 60;
 const MAX_REQUESTS_PER_WINDOW = 10;
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const record = rateLimitMap.get(ip);
-
-  if (!record) {
-    rateLimitMap.set(ip, { count: 1, startTime: now });
-    return false;
+async function isRateLimited(ip: string): Promise<boolean> {
+  const key = `cybergoat:chat_rate_limit:${ip}`;
+  const count = await redis.incr(key);
+  if (count === 1) {
+    await redis.expire(key, RATE_LIMIT_WINDOW_SECONDS);
   }
-
-  if (now - record.startTime > RATE_LIMIT_WINDOW_MS) {
-    rateLimitMap.set(ip, { count: 1, startTime: now });
-    return false;
-  }
-
-  record.count += 1;
-  return record.count > MAX_REQUESTS_PER_WINDOW;
+  return count > MAX_REQUESTS_PER_WINDOW;
 }
 
 export async function POST(req: NextRequest) {
   try {
     // Check IP Rate Limiting
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || req.headers.get('x-real-ip') || '127.0.0.1';
-    if (isRateLimited(ip)) {
+    if (await isRateLimited(ip)) {
       return NextResponse.json(
         { reply: 'You have reached the maximum message limit. Please wait 1 minute before sending another query, or contact us on WhatsApp (+971 55 184 6786).' },
         { status: 429 }
@@ -64,7 +56,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 1. Search Custom Knowledge Base for trained Q&A matches
-    const customContext = searchKnowledge(message);
+    const customContext = await searchKnowledge(message);
 
     const apiKey = process.env.GEMINI_API_KEY;
 

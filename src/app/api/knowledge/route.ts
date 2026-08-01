@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  const kb = getKnowledgeBase();
+  const kb = await getKnowledgeBase();
   return NextResponse.json(kb);
 }
 
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Question and Answer are required' }, { status: 400 });
     }
 
-    const kb = getKnowledgeBase();
+    const kb = await getKnowledgeBase();
 
     const newPair: QAPair = {
       id: Date.now().toString(),
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     };
 
     kb.qaPairs.push(newPair);
-    saveKnowledgeBase(kb);
+    await saveKnowledgeBase(kb);
 
     return NextResponse.json({ success: true, item: newPair });
   } catch (err) {
@@ -61,9 +61,9 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: 'ID parameter is required' }, { status: 400 });
     }
 
-    const kb = getKnowledgeBase();
+    const kb = await getKnowledgeBase();
     kb.qaPairs = kb.qaPairs.filter((item) => item.id !== id);
-    saveKnowledgeBase(kb);
+    await saveKnowledgeBase(kb);
 
     return NextResponse.json({ success: true });
   } catch (err) {

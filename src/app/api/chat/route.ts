@@ -1,6 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { searchKnowledge } from '@/app/lib/knowledge';
 import { Redis } from '@upstash/redis';
+import { GoogleGenAI } from '@google/genai';
+
+const VERTEX_PROJECT = process.env.GOOGLE_VERTEX_PROJECT;
+const VERTEX_LOCATION = process.env.GOOGLE_VERTEX_LOCATION || 'us-central1';
+
+// Cached at module scope so warm serverless instances reuse the same client
+// (and its underlying OAuth token) instead of re-authenticating on every
+// request - that handshake alone was adding several seconds per call.
+let cachedVertexClient: GoogleGenAI | null | undefined;
+
+function getVertexClient() {
+  if (cachedVertexClient !== undefined) return cachedVertexClient;
+
+  const credentialsJson = process.env.GOOGLE_VERTEX_CREDENTIALS;
+  if (!credentialsJson || !VERTEX_PROJECT) {
+    cachedVertexClient = null;
+    return cachedVertexClient;
+  }
+
+  const credentials = JSON.parse(credentialsJson);
+  cachedVertexClient = new GoogleGenAI({
+    vertexai: true,
+    project: VERTEX_PROJECT,
+    location: VERTEX_LOCATION,
+    googleAuthOptions: { credentials },
+  });
+  return cachedVertexClient;
+}
 
 const SYSTEM_INSTRUCTION = `
 You are the official CyberGOAT AI Security & Training Assistant for CyberGOAT Services LLC (cybergoat.ae).
@@ -58,15 +86,15 @@ export async function POST(req: NextRequest) {
     // 1. Search Custom Knowledge Base for trained Q&A matches
     const customContext = await searchKnowledge(message);
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const vertexClient = getVertexClient();
 
-    if (!apiKey) {
+    if (!vertexClient) {
       // If direct exact match found in Knowledge Base, return it immediately!
       if (customContext) {
         return NextResponse.json({ reply: customContext, source: 'knowledge-base' });
       }
 
-      // Graceful fallback response when GEMINI_API_KEY is not configured yet
+      // Graceful fallback response when Vertex AI is not configured yet
       let fallbackText = "I can certainly help you with that! CyberGOAT provides personalized training tracks across EC-Council (CEH, C|CISO, CHFI), ISACA (CISA, CISM), Data Privacy & Compliance, and custom DevSecOps.";
       const lower = message.toLowerCase();
 
@@ -90,40 +118,26 @@ ${customContext || 'No specific Q&A override found for this question.'}
 
 User Question: ${message}`;
 
-    // AbortController timeout (6 seconds max) to guarantee ultra-fast response
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 6000);
-
-    let response;
+    // 10-second timeout to guarantee a bounded response even if Vertex AI hangs.
+    // The SDK doesn't accept a fetch-style AbortSignal, so race it manually.
+    let candidateReply: string | undefined;
     try {
-      response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({
-            contents: [
-              {
-                role: 'user',
-                parts: [{ text: fullPrompt }],
-              },
-            ],
-          }),
-        }
-      );
-      clearTimeout(timeoutId);
-    } catch (fetchErr) {
-      clearTimeout(timeoutId);
-      console.warn('Gemini API fetch timeout or error, serving intelligent fallback:', fetchErr);
+      const result = await Promise.race([
+        vertexClient.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: fullPrompt,
+        }),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('Vertex AI call timed out')), 10000)
+        ),
+      ]);
+      candidateReply = result.text;
+    } catch (vertexErr) {
+      console.warn('Vertex AI call failed or timed out, serving intelligent fallback:', vertexErr);
     }
 
-    if (response && response.ok) {
-      const data = await response.json();
-      const candidateReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (candidateReply) {
-        return NextResponse.json({ reply: candidateReply, source: 'gemini+kb' });
-      }
+    if (candidateReply) {
+      return NextResponse.json({ reply: candidateReply, source: 'gemini+kb' });
     }
 
     // Intelligent Dynamic CyberGOAT Fallback Response (0s latency, 100% uptime)

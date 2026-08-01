@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { searchKnowledge } from '@/app/lib/knowledge';
-import { Redis } from '@upstash/redis';
+import { isRateLimited, getClientIp } from '@/app/lib/rateLimit';
 import { GoogleGenAI } from '@google/genai';
 
 const VERTEX_PROJECT = process.env.GOOGLE_VERTEX_PROJECT;
@@ -43,27 +43,11 @@ Your job is to assist users with inquiries regarding:
 Always prioritize the custom trained Knowledge Base Q&A provided in the prompt context. Be professional, concise, encouraging, and advise users to book a direct consultation or connect via WhatsApp at +971 55 184 6786.
 `;
 
-// Fixed-window IP rate limiter (10 requests per minute per IP), backed by Redis
-// so the limit is actually shared across serverless instances instead of each
-// instance keeping its own in-memory counter that resets on cold start.
-const redis = Redis.fromEnv();
-const RATE_LIMIT_WINDOW_SECONDS = 60;
-const MAX_REQUESTS_PER_WINDOW = 10;
-
-async function isRateLimited(ip: string): Promise<boolean> {
-  const key = `cybergoat:chat_rate_limit:${ip}`;
-  const count = await redis.incr(key);
-  if (count === 1) {
-    await redis.expire(key, RATE_LIMIT_WINDOW_SECONDS);
-  }
-  return count > MAX_REQUESTS_PER_WINDOW;
-}
-
 export async function POST(req: NextRequest) {
   try {
     // Check IP Rate Limiting
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || req.headers.get('x-real-ip') || '127.0.0.1';
-    if (await isRateLimited(ip)) {
+    const ip = getClientIp(req);
+    if (await isRateLimited('chat', ip, 10, 60)) {
       return NextResponse.json(
         { reply: 'You have reached the maximum message limit. Please wait 1 minute before sending another query, or contact us on WhatsApp (+971 55 184 6786).' },
         { status: 429 }

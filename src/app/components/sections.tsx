@@ -40,16 +40,43 @@ export const HeroSection = () => (
           expertise?
         </h1>
 
-        <p className="text-base sm:text-lg text-gray-300 font-medium mb-3 max-w-2xl mx-auto leading-relaxed">
-          Personalized training programs meticulously crafted to align your current skills
-          with your future career ambitions. Earn industry-recognized certifications that
-          validate your proficiency.
+        {/* High-Contrast Executive Sales Sub-Headline */}
+        <p className="text-lg sm:text-xl text-gray-100 font-semibold mb-8 max-w-3xl mx-auto leading-relaxed tracking-wide">
+          Master Enterprise Cyber Defense, Digital Forensics &amp; Executive Security Leadership with Dubai’s Premier <span className="text-[#00F0FF] font-bold">EC-Council Authorized Partner</span>.
         </p>
 
-        <p className="text-xs sm:text-sm text-gray-400 mb-8 max-w-xl mx-auto leading-relaxed">
-          Choose from flexible learning formats, including online courses, in-person
-          workshops, or intensive bootcamps.
-        </p>
+        {/* 3 High-Impact Cyber Sales Value Pillar Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-10 text-left">
+          <div className="p-4 rounded-xl border border-[#00F0FF]/25 bg-[#00F0FF]/5 backdrop-blur-md hover:border-[#00F0FF]/50 transition-all group">
+            <div className="flex items-center gap-2 mb-2 text-[#00F0FF] font-bold text-sm">
+              <ShieldCheckIcon className="w-5 h-5 text-[#00F0FF]" />
+              <span>Official EC-Council Vouchers</span>
+            </div>
+            <p className="text-xs text-gray-300 leading-relaxed">
+              Direct official exam vouchers, courseware &amp; global certification pathways for CHFI, C|CISO &amp; CEH.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl border border-[#C664FF]/25 bg-[#C664FF]/5 backdrop-blur-md hover:border-[#C664FF]/50 transition-all group">
+            <div className="flex items-center gap-2 mb-2 text-[#C664FF] font-bold text-sm">
+              <CpuChipIcon className="w-5 h-5 text-[#C664FF]" />
+              <span>Live Cyber Range Labs</span>
+            </div>
+            <p className="text-xs text-gray-300 leading-relaxed">
+              100% hands-on attack &amp; defense simulation labs, real-world threat vectors, and active incident response.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl border border-[#2F57EF]/25 bg-[#2F57EF]/5 backdrop-blur-md hover:border-[#2F57EF]/50 transition-all group">
+            <div className="flex items-center gap-2 mb-2 text-[#38BDF8] font-bold text-sm">
+              <BuildingOffice2Icon className="w-5 h-5 text-[#38BDF8]" />
+              <span>Dubai Campus &amp; Online</span>
+            </div>
+            <p className="text-xs text-gray-300 leading-relaxed">
+              In-person sessions at Dubai Silicon Oasis, live interactive instructor-led virtual classes, or bootcamps.
+            </p>
+          </div>
+        </div>
 
         {/* Sleek Cybersecurity Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3.5 justify-center items-center max-w-2xl mx-auto">

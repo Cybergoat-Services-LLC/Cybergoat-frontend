@@ -63,6 +63,21 @@ button, a, [role="button"], input[type="submit"], input[type="button"] {
   filter: drop-shadow(0 0 25px rgba(0, 240, 255, 0.7));
 }
 
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-fade {
+  animation: heroFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .text-gradient-violet {
   background: linear-gradient(135deg, #F472B6 0%, #C664FF 50%, #E066FF 100%);
   -webkit-background-clip: text;

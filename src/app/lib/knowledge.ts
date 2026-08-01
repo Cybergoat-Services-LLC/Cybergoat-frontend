@@ -1,5 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import { Redis } from '@upstash/redis';
 
 export type QAPair = {
   id: string;
@@ -20,64 +19,38 @@ export type KnowledgeBase = {
   qaPairs: QAPair[];
 };
 
-const KNOWLEDGE_FILE = path.join(process.cwd(), 'src', 'app', 'data', 'knowledge-base.json');
+const KB_KEY = 'cybergoat:knowledge_base';
 
-let memoryKBCache: KnowledgeBase | null = null;
+const DEFAULT_KB: KnowledgeBase = {
+  companyInfo: {
+    name: "CyberGOAT Services LLC",
+    accreditation: "Official EC-Council Authorized Reseller & Training Partner",
+    address: "Dubai Silicon Oasis, DSO-IFZA, Building A1, Dubai, UAE",
+    phone: "+971 55 184 6786",
+    email: "admin@cybergoat.ae",
+    website: "https://www.cybergoat.ae"
+  },
+  qaPairs: []
+};
 
-export function getKnowledgeBase(): KnowledgeBase {
-  if (memoryKBCache) {
-    return memoryKBCache;
-  }
+const redis = Redis.fromEnv();
 
+export async function getKnowledgeBase(): Promise<KnowledgeBase> {
   try {
-    if (!fs.existsSync(KNOWLEDGE_FILE)) {
-      memoryKBCache = {
-        companyInfo: {
-          name: "CyberGOAT Services LLC",
-          accreditation: "Official EC-Council Authorized Reseller & Training Partner",
-          address: "Dubai Silicon Oasis, DSO-IFZA, Building A1, Dubai, UAE",
-          phone: "+971 55 184 6786",
-          email: "admin@cybergoat.ae",
-          website: "https://www.cybergoat.ae"
-        },
-        qaPairs: []
-      };
-      return memoryKBCache;
-    }
-    const data = fs.readFileSync(KNOWLEDGE_FILE, 'utf-8');
-    memoryKBCache = JSON.parse(data);
-    return memoryKBCache!;
+    const kb = await redis.get<KnowledgeBase>(KB_KEY);
+    return kb ?? DEFAULT_KB;
   } catch (err) {
-    console.error('Error reading knowledge base file, serving memory default:', err);
-    return {
-      companyInfo: {
-        name: "CyberGOAT Services LLC",
-        accreditation: "Official EC-Council Authorized Reseller & Training Partner",
-        address: "Dubai Silicon Oasis, DSO-IFZA, Building A1, Dubai, UAE",
-        phone: "+971 55 184 6786",
-        email: "admin@cybergoat.ae",
-        website: "https://www.cybergoat.ae"
-      },
-      qaPairs: []
-    };
+    console.error('Error reading knowledge base from Redis, serving default:', err);
+    return DEFAULT_KB;
   }
 }
 
-export function saveKnowledgeBase(kb: KnowledgeBase) {
-  memoryKBCache = kb; // Update in-memory state immediately for instant serverless availability
-  try {
-    const dir = path.dirname(KNOWLEDGE_FILE);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    fs.writeFileSync(KNOWLEDGE_FILE, JSON.stringify(kb, null, 2), 'utf-8');
-  } catch (err) {
-    console.warn('Notice: Serverless read-only filesystem detected (Vercel Production). Knowledge updated in-memory for session.', err);
-  }
+export async function saveKnowledgeBase(kb: KnowledgeBase): Promise<void> {
+  await redis.set(KB_KEY, kb);
 }
 
-export function searchKnowledge(userQuery: string): string {
-  const kb = getKnowledgeBase();
+export async function searchKnowledge(userQuery: string): Promise<string> {
+  const kb = await getKnowledgeBase();
   const lower = userQuery.toLowerCase().trim();
 
   // 1. Direct Q&A Match

@@ -47,4 +47,22 @@ return [
         'spreadsheet_id' => env('GOOGLE_SHEETS_SPREADSHEET_ID'),
     ],
 
+    'vertex_ai' => [
+        // Same service account as GCS/Sheets/Calendar - needs roles/aiplatform.user
+        // granted on it too (same scoped-service-account pattern used everywhere else).
+        'key_file' => env('GOOGLE_CLOUD_KEY_FILE'),
+        'project_id' => env('GOOGLE_VERTEX_PROJECT_ID'),
+        'location' => env('GOOGLE_VERTEX_LOCATION', 'us-central1'),
+    ],
+
+    'google_calendar' => [
+        // Requires domain-wide delegation granted to this service account in
+        // the Workspace Admin Console (Security > API Controls > Domain-wide
+        // Delegation) for scope https://www.googleapis.com/auth/calendar.events
+        // - a one-time manual step only a Workspace super admin can do.
+        'key_file' => env('GOOGLE_CLOUD_KEY_FILE'),
+        'impersonate_email' => env('GOOGLE_CALENDAR_IMPERSONATE_EMAIL'),
+        'calendar_id' => env('GOOGLE_CALENDAR_ID', 'primary'),
+    ],
+
 ];

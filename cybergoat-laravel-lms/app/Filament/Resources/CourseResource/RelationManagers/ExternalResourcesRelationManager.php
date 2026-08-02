@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\CourseResource\RelationManagers;
 
+use App\Services\ContentGeneratorService;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -31,7 +33,30 @@ class ExternalResourcesRelationManager extends RelationManager
                     ->maxLength(2048),
                 Forms\Components\Textarea::make('description')
                     ->maxLength(1000)
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->hintAction(
+                        Forms\Components\Actions\Action::make('generateDescription')
+                            ->label('Generate with AI')
+                            ->icon('heroicon-o-sparkles')
+                            ->action(function (Forms\Get $get, Forms\Set $set) {
+                                if (blank($get('provider')) || blank($get('title'))) {
+                                    Notification::make()->title('Fill in provider and title first')->warning()->send();
+
+                                    return;
+                                }
+
+                                try {
+                                    $draft = app(ContentGeneratorService::class)
+                                        ->generateExternalResourceDescription($get('provider'), $get('title'));
+                                } catch (\Throwable $e) {
+                                    Notification::make()->title('Could not generate a description')->body($e->getMessage())->danger()->send();
+
+                                    return;
+                                }
+
+                                $set('description', $draft);
+                            })
+                    ),
                 Forms\Components\TextInput::make('sort')
                     ->numeric()
                     ->default(0),

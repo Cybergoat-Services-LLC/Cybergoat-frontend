@@ -5,13 +5,13 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CourseResource\Pages;
 use App\Filament\Resources\CourseResource\RelationManagers;
 use App\Models\Course;
+use App\Services\ContentGeneratorService;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CourseResource extends Resource
 {
@@ -44,7 +44,36 @@ class CourseResource extends Resource
                     ->required(),
                 Forms\Components\Textarea::make('description')
                     ->required()
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->rows(6)
+                    ->hintAction(
+                        Forms\Components\Actions\Action::make('generateDescription')
+                            ->label('Generate with AI')
+                            ->icon('heroicon-o-sparkles')
+                            ->form([
+                                Forms\Components\TextInput::make('key_points')
+                                    ->label('Key points to include')
+                                    ->required()
+                                    ->placeholder('e.g. hands-on iLabs, official exam voucher, 40 hours, beginner-friendly'),
+                            ])
+                            ->modalDescription('Drafts a description into the field below - review and edit it, then Save as normal. Nothing is saved automatically.')
+                            ->action(function (array $data, Forms\Get $get, Forms\Set $set) {
+                                try {
+                                    $draft = app(ContentGeneratorService::class)->generateCourseDescription(
+                                        courseTitle: $get('title') ?: 'this course',
+                                        keyPoints: $data['key_points'],
+                                        vendor: $get('vendor'),
+                                        level: $get('level'),
+                                    );
+                                } catch (\Throwable $e) {
+                                    Notification::make()->title('Could not generate a description')->body($e->getMessage())->danger()->send();
+
+                                    return;
+                                }
+
+                                $set('description', $draft);
+                            })
+                    ),
                 Forms\Components\Toggle::make('is_official_voucher_included')
                     ->label('Includes official exam voucher')
                     ->required(),
@@ -99,11 +128,12 @@ class CourseResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            // No delete here, bulk or otherwise - a course with real enrollment/
+            // invoice history is DB-protected from deletion anyway (restrict, not
+            // cascade), but a clean refusal to offer the button beats a raw SQL
+            // error if someone tries. Delete a genuinely-unused test course via
+            // tinker instead, as a deliberate action.
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array

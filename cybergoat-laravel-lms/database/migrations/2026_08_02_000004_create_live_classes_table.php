@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->string('topic');
             $table->enum('type', ['dubai_campus', 'live_virtual'])->default('live_virtual');
-            $table->string('location_or_link')->default('Dubai Silicon Oasis Campus / Zoom');
+            $table->string('location_or_link')->default('Dubai Silicon Oasis Campus / Google Meet');
             $table->dateTime('scheduled_at');
             $table->integer('duration_minutes')->default(120);
             $table->timestamps();

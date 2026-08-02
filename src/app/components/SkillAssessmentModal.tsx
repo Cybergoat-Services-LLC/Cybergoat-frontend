@@ -1,16 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { 
-  XMarkIcon, 
-  SparklesIcon, 
-  ArrowRightIcon, 
+import {
+  XMarkIcon,
+  SparklesIcon,
+  ArrowRightIcon,
   ArrowLeftIcon,
   CheckCircleIcon,
   ChartBarIcon,
   GlobeAltIcon,
-  AcademicCapIcon,
-  ShieldCheckIcon,
   LightBulbIcon,
   ChevronRightIcon,
   CheckBadgeIcon
@@ -131,8 +129,8 @@ export default function SkillAssessmentModal({
     let recommendedTrack = 'EC-Council CEH v12 (Certified Ethical Hacker)';
     let isEcCouncil = false;
     let ecCouncilCourses: string[] = [];
-    let geoFramework = isGCC ? 'DESC ISR & UAE PDPL Privacy Laws' : isEU ? 'EU GDPR & DORA Compliance' : 'NIST 800-53 & ISO 27001';
-    let peerPercentile = isExecutive ? '88th Percentile' : '74th Percentile';
+    const geoFramework = isGCC ? 'DESC ISR & UAE PDPL Privacy Laws' : isEU ? 'EU GDPR & DORA Compliance' : 'NIST 800-53 & ISO 27001';
+    const peerPercentile = isExecutive ? '88th Percentile' : '74th Percentile';
 
     if (isPrivacy) {
       // Privacy stream remains standard IAPP / GDPR / PDPL

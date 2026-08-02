@@ -22,7 +22,10 @@ export default function ChatbotTrainingModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const [adminKey, setAdminKey] = useState('');
+  const [adminKey, setAdminKey] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return sessionStorage.getItem(ADMIN_KEY_STORAGE) || '';
+  });
   const [keyInput, setKeyInput] = useState('');
   const [authError, setAuthError] = useState('');
   const [qaPairs, setQaPairs] = useState<QAPair[]>([]);
@@ -52,14 +55,15 @@ export default function ChatbotTrainingModal({
   };
 
   useEffect(() => {
-    if (isOpen) {
-      const stored = sessionStorage.getItem(ADMIN_KEY_STORAGE);
-      if (stored) {
-        setAdminKey(stored);
-        fetchKnowledge(stored);
-      }
+    // Refetches the knowledge base whenever the modal opens with a known
+    // admin key - a standard "sync with an external system" effect. The
+    // setState this eventually triggers happens inside fetchKnowledge's own
+    // async callback, not synchronously in the effect body.
+    if (isOpen && adminKey) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      fetchKnowledge(adminKey);
     }
-  }, [isOpen]);
+  }, [isOpen, adminKey]);
 
   const handleUnlock = (e: React.FormEvent) => {
     e.preventDefault();

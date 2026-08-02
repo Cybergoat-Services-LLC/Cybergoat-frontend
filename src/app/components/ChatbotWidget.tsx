@@ -1,17 +1,14 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { 
-  ChatBubbleLeftRightIcon, 
-  XMarkIcon, 
-  PaperAirplaneIcon, 
+import {
+  ChatBubbleLeftRightIcon,
+  XMarkIcon,
+  PaperAirplaneIcon,
   SparklesIcon,
   UserIcon,
   CpuChipIcon,
-  Cog6ToothIcon
 } from '@heroicons/react/24/outline';
-import { useModals } from './site-modals';
-import { TrainingTrigger } from './interactive-buttons';
 
 type Message = {
   id: string;
@@ -41,7 +38,8 @@ export default function ChatbotWidget() {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { openContact } = useModals();
+  const nextMessageId = useRef(1);
+  const generateMessageId = () => (++nextMessageId.current).toString();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -58,7 +56,7 @@ export default function ChatbotWidget() {
     if (!query.trim()) return;
 
     const userMsg: Message = {
-      id: Date.now().toString(),
+      id: generateMessageId(),
       sender: 'user',
       text: query,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -80,7 +78,7 @@ export default function ChatbotWidget() {
         'Thank you for reaching out! Please connect with our admissions advisor on WhatsApp (+971 55 184 6786).';
 
       const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
+        id: generateMessageId(),
         sender: 'bot',
         text: botResponse,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -90,7 +88,7 @@ export default function ChatbotWidget() {
     } catch (err) {
       console.error('Chat error:', err);
       const errorMsg: Message = {
-        id: (Date.now() + 1).toString(),
+        id: generateMessageId(),
         sender: 'bot',
         text: 'Connection update in progress. Please reach out to admin@cybergoat.ae or +971 55 184 6786.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),

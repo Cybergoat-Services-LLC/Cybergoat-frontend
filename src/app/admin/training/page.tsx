@@ -1,13 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  SparklesIcon, 
-  KeyIcon, 
-  PlusIcon, 
-  TrashIcon, 
+import {
+  SparklesIcon,
+  KeyIcon,
+  PlusIcon,
+  TrashIcon,
   MagnifyingGlassIcon,
-  ArrowPathIcon,
   ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 
@@ -19,7 +18,10 @@ type QAPair = {
 };
 
 export default function AdminTrainingPage() {
-  const [adminKey, setAdminKey] = useState('');
+  const [adminKey, setAdminKey] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return sessionStorage.getItem('cybergoat_admin_key') || '';
+  });
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [qaPairs, setQaPairs] = useState<QAPair[]>([]);
   const [loading, setLoading] = useState(false);
@@ -29,14 +31,6 @@ export default function AdminTrainingPage() {
   const [newAnswer, setNewAnswer] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
-
-  useEffect(() => {
-    const savedKey = sessionStorage.getItem('cybergoat_admin_key');
-    if (savedKey) {
-      setAdminKey(savedKey);
-      fetchQAs(savedKey);
-    }
-  }, []);
 
   const fetchQAs = async (keyToUse: string) => {
     setLoading(true);
@@ -54,12 +48,22 @@ export default function AdminTrainingPage() {
       setQaPairs(data.qaPairs || []);
       setIsUnlocked(true);
       sessionStorage.setItem('cybergoat_admin_key', keyToUse);
-    } catch (err) {
+    } catch {
       setErrorMsg('Failed to load training data.');
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // One-time check: auto-unlock if a key from a previous session is still
+    // valid. The setState this triggers happens inside fetchQAs's own async
+    // callback, not synchronously in the effect body.
+    if (adminKey) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      fetchQAs(adminKey);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleUnlock = (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,7 +100,7 @@ export default function AdminTrainingPage() {
       setNewAnswer('');
       fetchQAs(adminKey);
       setTimeout(() => setSuccessMsg(''), 4000);
-    } catch (err) {
+    } catch {
       setErrorMsg('Error connecting to server.');
     } finally {
       setLoading(false);
@@ -116,7 +120,7 @@ export default function AdminTrainingPage() {
       } else {
         setErrorMsg('Failed to delete Q&A pair.');
       }
-    } catch (err) {
+    } catch {
       setErrorMsg('Error connecting to server.');
     } finally {
       setLoading(false);

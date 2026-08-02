@@ -23,20 +23,15 @@ type TrackLead = {
 };
 
 export default function AdminLeadsPage() {
-  const [adminKey, setAdminKey] = useState('');
+  const [adminKey, setAdminKey] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    return sessionStorage.getItem('cybergoat_admin_key') || '';
+  });
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [leads, setLeads] = useState<TrackLead[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-
-  useEffect(() => {
-    const savedKey = sessionStorage.getItem('cybergoat_admin_key');
-    if (savedKey) {
-      setAdminKey(savedKey);
-      fetchLeads(savedKey);
-    }
-  }, []);
 
   const fetchLeads = async (keyToUse: string) => {
     setLoading(true);
@@ -54,12 +49,22 @@ export default function AdminLeadsPage() {
       setLeads(data.leads || []);
       setIsUnlocked(true);
       sessionStorage.setItem('cybergoat_admin_key', keyToUse);
-    } catch (err) {
+    } catch {
       setErrorMsg('Failed to load enrollment inquiries.');
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // One-time check: auto-unlock if a key from a previous session is still
+    // valid. The setState this triggers happens inside fetchLeads's own
+    // async callback, not synchronously in the effect body.
+    if (adminKey) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      fetchLeads(adminKey);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleUnlock = (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { 
   MagnifyingGlassIcon, 
   XMarkIcon, 
@@ -78,7 +78,7 @@ export default function CoursesGrid() {
   const { courseQuery, setCourseQuery } = useModals();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
-  const filterItem = (item: CourseItem) => {
+  const filterItem = useCallback((item: CourseItem) => {
     // Search query filter
     const q = courseQuery.toLowerCase().trim();
     const matchesQuery = !q || (
@@ -88,15 +88,15 @@ export default function CoursesGrid() {
     );
 
     // Category filter
-    const matchesCategory = selectedCategory === 'All' || 
+    const matchesCategory = selectedCategory === 'All' ||
       item.category === selectedCategory ||
       item.tag.toLowerCase().includes(selectedCategory.toLowerCase());
 
     return matchesQuery && matchesCategory;
-  };
+  }, [courseQuery, selectedCategory]);
 
-  const filteredPrograms = useMemo(() => TRAINING_PROGRAMS.filter(filterItem), [courseQuery, selectedCategory]);
-  const filteredCerts = useMemo(() => CERTIFICATIONS.filter(filterItem), [courseQuery, selectedCategory]);
+  const filteredPrograms = useMemo(() => TRAINING_PROGRAMS.filter(filterItem), [filterItem]);
+  const filteredCerts = useMemo(() => CERTIFICATIONS.filter(filterItem), [filterItem]);
   const totalResults = filteredPrograms.length + filteredCerts.length;
 
   return (

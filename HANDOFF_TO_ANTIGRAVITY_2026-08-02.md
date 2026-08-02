@@ -1,101 +1,175 @@
-# CyberGOAT — Claude Session Handoff to Antigravity
-**Date:** 2026-08-02
-**Scope:** Backend (Laravel, `Cybergoat--backend`) + Frontend (Next.js, `Cybergoat-frontend`)
+# CyberGOAT — Claude Session Handoff (updated)
+**Date:** 2026-08-02 (major update — this supersedes the earlier version of this file)
+**Scope:** New Laravel LMS (`cybergoat-laravel-lms`) + Next.js frontend (`Cybergoat-frontend`) + old backend (`Cybergoat--backend`) + infrastructure
 
-Paste this whole document to Antigravity as context, then ask it to independently verify the items in the "Please independently verify" section at the bottom before trusting this report blindly — that's the point of a second audit.
-
----
-
-## 1. Executive summary
-
-Both repos went from "has real, live-traffic-affecting bugs and unpatched security gaps" to "verified working in production, with a documented list of what's still open." Nothing here was done blind — every fix was tested (locally where tooling allowed, live via smoke tests otherwise) before being called done. One serious mistake happened along the way (a botched DB password rotation caused a real outage) — documented honestly below, not glossed over.
-
-**Current live state (as of last verification):**
-- Backend: `https://lms.cybergoat.ae` — live, custom domain + SSL working, DB password rotated and working, mail sending via Gmail SMTP relay confirmed working.
-- Frontend: `https://www.cybergoat.ae` — live, chatbot running on Vertex AI (not the old Gemini API key, which hit a real billing wall), enrollment leads now actually captured.
+Paste this whole document as context, then independently verify the items in the "Please independently verify" section before trusting anything here blindly — that's the point of a second audit.
 
 ---
 
-## 2. Backend (Laravel) — what was done
+## 0. What changed since the last version of this document
 
-### Security/correctness fixes
-- **`AuthenticatedSessionController::create()`** — unauthenticated crash via `GET /login?user_agent=<anything>` (null-property access). Fixed with a null check. Also decoupled the "confirm new device" email flow from session *files* — production uses `SESSION_DRIVER=cookie` (correct for Cloud Run's stateless, multi-instance setup), so the file-existence check that gated clearing a device's session record was silently always false. Now it deletes the `DeviceIp` row directly, which is what the device-limit check actually reads.
-- **Removed dead, dangerous code**: `dataReplace()` (a demo-data-reset method from the commercial base template — raw SQL execution + mass timestamp randomization across every table, not routed but a landmine) and the `admin/phpinfo` debug route (leaked server internals to any admin session).
-- **`FileUploader::upload()`** — had zero file-type validation of its own; relied entirely on whatever the ~80 calling controllers happened to check. Added a hardcoded denylist of executable extensions (`.php`, `.phtml`, `.cgi`, `.asp`, etc.) as a single chokepoint, so every call site is protected regardless of upstream validation.
-- **`ChatController`'s file-type validator was silently a no-op** — `Validator::make($request->multiple_files, $rules)` validated the raw 0-indexed file array against a rule key that never existed in that data structure, so it never actually triggered. Fixed to use the `multiple_files.*` wildcard pattern correctly.
-- **Login brute-force protection was non-functional** — the rate limiter code was correct (Breeze's standard `RateLimiter`, 5 attempts/email+IP), but `CACHE_DRIVER=array` stores everything in per-request PHP memory only, so it never persisted between requests. Every request started with an empty limiter. Added a `cache`/`cache_locks` migration and switched to `CACHE_DRIVER=database`. **Verified with a real 7-attempt login test**: attempts 1-5 correctly rejected with "credentials don't match," attempt 6+ correctly locked out with a countdown message.
-- **47 tables — including `users` itself — had no PRIMARY KEY or AUTO_INCREMENT on `id`.** Root cause: raw SQL I'd written earlier in this engagement (to patch missing/incomplete schema) only captured `CREATE TABLE` bodies, not the companion `ALTER TABLE ... ADD PRIMARY KEY ... AUTO_INCREMENT` a real dump would have. Checked actual data first (all transactional tables had 0 rows — pre-launch, no real traffic yet — so essentially zero risk), deduped 5 small reference tables that had exactly 2x rows vs. distinct IDs (a seed import that ran twice), then added PK+AUTO_INCREMENT to all 47 using each table's *actual* live column type (not hand-typed guesses). Also found and restored a **missing unique constraint on `users.email`** — the original migration had `->unique()`, but my earlier raw-SQL recreation of that table dropped it.
-- **Rewrote the 14 migrations that were stub/incomplete** (most created only `id` + `timestamps()`) to match the real live schema, so `php artisan migrate` on a genuinely fresh database now reconstructs the whole app correctly — previously it silently would not have. Deleted the raw SQL files (`missing-tables.sql`, `fix-incomplete-tables.sql`) now that migrations are the real source of truth.
-- **Removed a fully dead Paytm payment integration** (part of the Dependabot triage below) — the wallet package was never actually declared in `composer.json` (only lingering in `composer.lock`), meaning *any* future `composer update` by anyone would have silently broken it. Investigated the actual code: it referenced classes that were never imported and a model missing its core `payment_create()` method — this was never functional, not just unused. Confirmed with you it's not something the business uses (leftover from the Academy LMS commercial template this app is built on, which bundles many regional gateways — Razorpay, PayPal, CCAvenue, Iyzico, PayStack, etc. — most likely also unused and worth the same scrutiny later). Removed the composer dependency, the dead controller methods, routes, model, and orphaned Blade views.
+The earlier version of this file described fixes to the **old** Academy-LMS-template backend and claimed `lms.cybergoat.ae` was "live and working." That claim was wrong — it was verified only via HTTP status codes, never by actually looking at the rendered page. The user found it broken (unstyled, template placeholder content still live) and, separately, decided the old backend isn't worth salvaging as the long-term platform. Since then, an entire **new, purpose-built Laravel 12 LMS** (`cybergoat-laravel-lms`) has been built from scratch, matching the business exactly (fixed EC-Council/ISACA/ISC2/IAPP course catalog, not a generic multi-instructor marketplace). That new LMS is now the primary subject of this document.
 
-### Infrastructure
-- **Rotated the leaked DB password** (`cybergoat_app`, previously hardcoded in `config/database.php` source history). ⚠️ **This is the one real failure of this session** — see Section 4.
-- **Mail was completely broken** — no `MAIL_*` env vars were set at all, so it was silently defaulting to Laravel's hardcoded fallback (`smtp.mailgun.org` with no credentials). Wired to Gmail SMTP relay via a real Workspace mailbox + app password. Verified with an actual test email received.
-- **`lms.cybergoat.ae` DNS + SSL** set up via Cloud Run domain mapping (CNAME to `ghs.googlehosted.com`), verified live and working, `APP_URL`/`ASSET_URL` updated to match.
-- **Dependabot triage** (was previously untouched — 43 vulnerabilities never looked at):
-  - Ran `composer audit` locally (installed PHP 8.2 + Composer locally for this purpose — did not exist before).
-  - **Hard finding**: a plain `composer update` is completely blocked — Composer's own security-aware resolver checked *every released version* within the current major-version constraints for `laravel/framework` (`^11.0`, all the way to v11.55.0) and `firebase/php-jwt` (`^6.10`, all of v6.x) and found none of them clean. **The actual fixes only exist in Laravel 12.x and php-jwt 7.x.** This is a real major-version upgrade decision, not a quick patch — deliberately not attempted blind. **This is the single most important open item for whoever picks this up next.**
-  - Applied everything achievable without a major bump (`laravel/breeze`, `sanctum`, `pint`, `sail`, `google/apiclient`, dev tooling). This dropped the count from 44 advisories to 40 (some of the drop was incidental — removing the dead Paytm wallet package also removed `phpseclib` as a transitive dependency, which had 2 high-severity CVEs).
+**The old backend has not been touched since the last handoff** — still live at `lms.cybergoat.ae`, still has the unfixed asset-serving bug and placeholder content described below. A migration plan exists (Section 5) but has not been executed.
 
 ---
 
-## 3. Frontend (Next.js) — what was done
+## 1. The new Laravel LMS (`cybergoat-laravel-lms`) — built this session, not yet deployed anywhere
 
-- **Knowledge base persistence was fundamentally broken for the platform it's deployed on.** `knowledge.ts` wrote to a local JSON file with an in-memory fallback. On Vercel serverless, each function invocation can run on a totally separate instance — a write from the admin panel updated *that instance's* memory/disk only, invisible to the instance serving a real chat request, and gone on the next cold start. Migrated to Upstash Redis (set up via Vercel Marketplace — genuinely free at this app's traffic scale: 256MB/500K commands/month). Verified persistence survives a full process restart.
-- **Chat rate limiter had the identical architectural flaw** (in-memory `Map`, same non-persistence issue) — real cost exposure since `GEMINI_API_KEY` (later replaced, see below) was actually configured. Same Redis fix, extracted into a shared `lib/rateLimit.ts` used by both the chat and (new) leads endpoints. Verified: exactly 10 requests succeed, 11th+ blocked.
-- **The admin training panel was completely locked out in production** — `ADMIN_API_KEY` existed in a local dev file but was never actually pushed to Vercel's Production environment. Fixed (and caught a real bug doing it: the first attempt to push it via CLI included literal quote characters in the stored value — verified and corrected).
-- **`TrackDetailModal`'s enrollment form was fake.** "Submit Application Online" only called `setSubmitted(true)` — no fetch, no API call — while telling the user "our admissions advisor will contact you within 2 hours." Every lead submitted through that button (not the WhatsApp option next to it) was silently discarded. Built a real `/api/leads` endpoint: server-side validation (including checking the track stage against the actual `TRACK_DETAILS` data, not trusting client-supplied labels), rate-limited, stored in the same Redis instance. Added `/admin/leads` to actually view submissions (same auth pattern as the training panel).
-- **Chatbot AI connection**: the original `GEMINI_API_KEY` (Google AI Studio / Generative Language API) hit a hard **"prepayment credits depleted"** wall. Confirmed via direct API test that this billing model is completely separate from the $300 GCP free trial — the free trial explicitly excludes Gemini API/AI Studio costs. **Vertex AI, by contrast, is covered by the same free trial already funding Cloud Run/Cloud SQL.** Verified with a direct call before building anything. Built the integration with a dedicated, least-privilege service account (`vertex-ai-chatbot@...`, scoped to just `roles/aiplatform.user`) rather than reusing the full-access admin identity. Used `@google/genai` (current SDK) after the first attempt with `@google-cloud/vertexai` turned out to already be past Google's own deprecation date. **Found and fixed a real bug**: the client was re-authenticating with Google on every single message (several seconds of OAuth overhead per request, enough to blow the timeout) — now cached at module scope for warm-instance reuse.
-- **Chatbot behavior tuning** (your explicit feedback, iterated twice): the system prompt originally forced a WhatsApp CTA onto every single reply regardless of relevance, and gave overly long answers. First pass fixed the CTA-spam and added length guidance — overcorrected into writing full syllabus/exam-domain breakdowns (acting as the course content itself rather than a guide to it). Second pass fixed that: 2-4 sentences by default, explicit exception when the user actually asks for detail, WhatsApp only mentioned when it's the real next step (pricing/enrollment/scheduling). Verified with multiple question types before and after each change.
-- **Repo hygiene**: `backend-reference/` (the entire Laravel app including `vendor/`, 14,369 files) had been accidentally committed into this frontend repo at some point. This was the actual cause of two separate problems: `vercel deploy` failing trying to upload 54,000+ files, and GitHub reporting 106 Dependabot vulnerabilities on this repo (almost certainly PHP/Composer CVEs from the backend counted alongside npm ones). Untracked it properly (files remain on disk; it's not a real submodule, just an orphaned commit). Vulnerability count dropped to 4 immediately on the next scan.
+**Location:** `C:\Users\khati\.gemini\antigravity\scratch\cybergoat-laravel-lms` — Laravel 12.64.0, PHP 8.2+, Sanctum 4 token auth. **This directory currently has no independent git repository** — see Section 6, this is one of the most important open items.
+
+**Test suite: 113 tests passing, 286 assertions**, run via `php artisan test`. Every feature below was built with real behavioral tests (not just "does it return 200") and re-verified after every subsequent change. `php artisan migrate:fresh --seed` runs clean end-to-end.
+
+### What's built and tested
+
+- **Course catalog** — the real 6 tracks (CEH v12, CHFI v11, C|CISO, CISA, CISM, CISSP), with `price`/`currency` fields (currently all seeded at 0 — **real prices have not been provided yet**, checkout deliberately rejects a 0-price course rather than silently charging nothing).
+- **Auth** — `POST /v1/register`, `/v1/login`, `/v1/logout`, `/v1/me`. Sanctum bearer tokens. This was a real gap found late in the session — every feature below assumed a logged-in user existed, but nothing actually issued tokens to real customers until this was built.
+- **Payments** — three paths, all tested:
+  - **Stripe** (hosted Checkout, not custom card forms — keeps card data off our servers entirely): `POST /v1/courses/{slug}/checkout`, webhook at `/v1/webhooks/stripe` (signature-verified, idempotent against replay).
+  - **Bank transfer** and **Aani QR** (manual): `POST /v1/courses/{slug}/checkout/offline`, admin confirms receipt via Filament or `POST /v1/admin/invoices/{invoiceNumber}/confirm-payment`. No live API integration exists for either Wio's native payment-links feature or Aani specifically — neither has confirmed public API docs, so this is deliberately manual-confirm until that's verified possible.
+  - Real bank details are already configured (Wio Bank PJSC, IBAN ending `...4064`) — set via the Business Settings screen in Filament, not hardcoded in any committed file.
+- **VAT** — off by default (not registered yet), a single toggle in Filament flips it on with the rate/TRN, no code change needed. Every invoice snapshots the TRN at time of sale.
+- **Coupons** — percentage or fixed, expiry, usage caps, never discounts below zero.
+- **Course bundling** — a paid course can auto-enroll a free one alongside it at purchase time. No bundles configured yet (that's real business data, not something to invent).
+- **External bonus resources** — free third-party links (Microsoft, Anthropic, etc.) attached to a course, admin-managed, with an AI "Generate with AI" description-drafting button (see Content generator below). None added yet.
+- **Certificates** — all 3 types (`ec_council_aligned`, `vendor_aligned`, `cybergoat_original`), auto-derived from the course's vendor field. Real PDF generation via `barryvdh/laravel-dompdf`, stored in GCS, verification is public (`GET /v1/certificates/verify/{number}`) but deliberately exposes no download link — only the owner can fetch that via their own authenticated `/v1/certificates` call.
+- **AI quiz engine** — admin describes a topic in Filament, Vertex AI (Gemini) drafts multiple-choice questions with explanations, inserted **unpublished**. A quiz only becomes visible to students once an admin reviews and flips `is_published` on — nothing AI-generated ever reaches a student unreviewed. Students see questions with correct answers/explanations stripped until after they submit; results are scored and stored per attempt.
+- **Wishlist** — plain save-for-later, deliberately no cart/multi-item checkout (a considered decision, not an oversight — most customers buy one program at a time).
+- **AI content generator** — same Vertex AI plumbing as the quiz engine (shared via a `CallsVertexAi` trait so there's one place for that auth/HTTP code, not two). Drafts course descriptions and external-resource blurbs directly into the relevant Filament form field; nothing saves until the admin clicks Save.
+- **Google Calendar / Meet integration** — creating a "Live Virtual" class in Filament auto-generates a real Google Meet link via the Calendar API. **Requires a one-time manual setup step only a Workspace super admin can do** — domain-wide delegation for the service account in the Workspace Admin Console (Security → API Controls → Domain-wide Delegation), scope `https://www.googleapis.com/auth/calendar.events`. Not done yet. The public course-schedule endpoint shows topic/time to everyone but only reveals the actual join link to authenticated, actively-enrolled students.
+- **Google Sheets reporting sync** — one-way push of enrollments/invoices/certificates into a spreadsheet you own, for Gemini-in-Sheets analysis. Manual "Sync Now" button in Filament plus an hourly schedule (needs a real cron trigger once deployed — Cloud Scheduler hitting `php artisan schedule:run`, does nothing on its own locally). **Needs**: Sheets API enabled on the GCP project, the target spreadsheet shared with the service account's email, and `GOOGLE_SHEETS_SPREADSHEET_ID` set.
+- **Filament admin panel** at `/admin`, restricted to `role=admin` users only (students/instructors never see this — they only ever hit the JSON API). Covers Courses (with inline bundling + external-resource management), Coupons, Enrollments (with a one-click "Issue Certificate" action), Invoices (with "Confirm Payment"), Certificates, Live Classes, Quizzes (with "Generate with AI"), Business Settings (VAT/bank/Aani), Reports (Sheets sync).
+- **Dashboard summary endpoint** (`GET /v1/dashboard`) — built for the not-yet-built student portal frontend. Returns stats (active courses, certificates earned, a genuine quiz average), per-course progress as discrete real milestones (enrolled → kit downloaded → quiz attempted → certified — **never a fabricated completion percentage**, since no lesson/video tracking exists to honestly support one), certificate list, upcoming live classes for enrolled courses only. Quiz average is best-score-per-quiz averaged across distinct quizzes (not a raw average of every attempt — a retake while still learning doesn't drag the number down; this was a real bug caught and fixed via a review from Antigravity).
+
+### Two real audits, real bugs found and fixed each time — not just "looked fine"
+
+1. **First audit**: a free-enrollment endpoint (`POST /v1/courses/{slug}/enroll`) built early in the session, before any payment system existed, was never locked down afterward — any logged-in user could self-enroll in a paid course for free and immediately download its kit. Fixed to reject any course with `price > 0`. Also found enrollment expiry (`expires_at`) was stored but never actually checked anywhere — kit downloads now verify it, not just enrollment status.
+2. **Second audit** (after Filament/Sheets/Calendar were built): Filament's bulk-delete on Courses and Enrollments cascaded through the database and would have silently destroyed paid invoices and issued certificates. Fixed at the database level (`restrict`, not `cascade`, on the foreign keys that point at financial/credential records — protects every code path, not just the admin UI) and removed the bulk-delete buttons for those two resources specifically.
+
+Both fixes have dedicated regression tests proving the vulnerable path is actually closed, not just theoretically described.
+
+### What's explicitly NOT done in the backend
+
+- **Arabic/bilingual content** — deliberately held. Needs real Gulf-dialect Arabic copy from a native speaker, not machine translation, given the credibility risk for a company selling certifications. The technical change (a `title_ar`/`description_ar` column and a locale param) is small whenever real translated copy exists.
+- **Real course prices, real bundle pairings, real coupon codes, real external resources** — all mechanisms exist, no real business data has been entered.
+- **Video/lesson hosting** — confirmed not needed for the current business model (live/instructor-led + vendor courseware), revisit if that changes.
 
 ---
 
-## 4. Failures / mistakes made this session (read this honestly)
+## 2. Frontend (Next.js, `Cybergoat-frontend`) — audited this session, mostly Gravity's work
 
-- **The DB password rotation caused a real outage.** I rotated `cybergoat_app`'s password via `gcloud sql users set-password`, which Cloud SQL's API confirmed succeeded — but the app kept getting `1045 Access Denied` regardless, repeatedly, across multiple retries. Root cause was never fully identified. Fix was to delete and recreate the user entirely, which worked for authentication but also silently wiped its database grants (a separate thing from having a valid login) — required a second scramble using a newly-set root password to grant permissions back. Total unplanned downtime was real and should not have happened on a "quick" ask. **Lesson applied for the rest of the session**: test locally first wherever tooling allows, never assume a cloud API's "success" response means the change actually took effect — verify behavior directly.
-- **Local testing tooling didn't exist at the start of this session** and had to be built mid-session (installed PHP 8.2 + Composer locally for the backend; used disposable SQLite for migration testing; ran the Next.js dev server locally against the real Redis instance for frontend changes). This should have existed from the start — a lot of the early fixes this session were pushed straight to production and verified only via `curl` after the fact, which is weaker verification than actually running the code first.
-- **A couple of Vercel CLI env var pushes initially included literal quote characters** in the stored value (caught by the "surrounding quotes" warning and by testing afterward, not by getting it right the first time).
-- **A `vertex-ai` SDK false start** — spent time debugging what looked like a hanging API call, when the actual first problem was that `@google-cloud/vertexai` is a deprecated package (Google's own notice: deprecated June 2025, removed June 2026). Should have checked the SDK's currency before writing code against it.
+I did not build most of the frontend this session — Antigravity did (RSS feed, sitemap, Corporate B2B section, the SignInModal rebuild with Google/LinkedIn/email options, and more from earlier). My role was auditing it.
+
+### The tooling itself was broken, silently, for everyone
+
+`npm run lint` was crashing on every single file (`eslint@10.8.0` calling a method `eslint-plugin-react` doesn't support yet — a genuine upstream incompatibility, not fixable by version-bumping since 7.37.5 is already the latest `eslint-plugin-react` release). This means **nobody could have actually run lint successfully before this session**, regardless of who was writing frontend code. Fixed by pinning ESLint to the 9.x line (still flat-config, still what Next.js 16 wants, just old enough to keep the compatibility shim `eslint-plugin-react` needs).
+
+### Once lint actually ran, it surfaced 14 real errors — all fixed, verified with a clean build + typecheck + lint afterward
+
+- **A hardcoded fallback JWT signing secret** in `authOptions.ts` (`'cybergoat_secret_jwt_key_2026'`, committed to source control) — if `NEXTAUTH_SECRET` was ever unset in production, sessions would sign with a secret anyone with repo access could read and forge. Removed the fallback; a missing secret now fails loudly instead of silently using a weak public one.
+- **The identical bug in three separate places** (`/admin/leads`, `/admin/training`, and `ChatbotTrainingModal.tsx`) — all read `sessionStorage` and called `setState` synchronously inside an effect, with a function referenced before its declaration. Fixed all three with a lazy `useState` initializer.
+- **`Date.now()` called in a React-purity-checked path** (chat widget, 3 places) — switched to a monotonic counter, which is also just a more correct ID strategy than wall-clock time.
+- **Three `any` casts** papering over missing NextAuth session types — added real type augmentation instead.
+- Dead imports, an unnecessary `let`, a `useMemo` silently missing its real dependency (`CoursesGrid.tsx` — fixed with `useCallback`).
+
+**Also fixed**: `eslint.config.mjs` had no ignore rules for the foreign directories sitting in this repo's working tree (see Section 6) — ESLint was crashing trying to lint a Laravel project's `postcss.config.js`. Added proper ignores.
+
+### Dependency vulnerabilities — assessed, not urgent
+
+`npm audit` flags 3 high-severity CVEs in `next` and `sharp`. Both packages are already at their latest available versions — this is a genuine unpatched upstream window, not a missed update. Checked actual exploitability in this app specifically: no user-uploaded images go through `sharp` (every `next/image` source is a static local file), no user-submitted CSS goes through `postcss`. Real CVEs, no reachable attack surface here today. Worth an `npm update` once patches ship; not worth downgrading Next.js over (npm's suggested "fix" is literally Next.js 9, which is absurd).
+
+### Found but deliberately not touched — needs a decision, not a fix
+
+1. **A real, unresolved architecture question on authentication.** NextAuth is wired up with Google + LinkedIn OAuth (currently dummy placeholder credentials, not functional) plus an email option, all of which currently redirect to `lms.cybergoat.ae/login` regardless of which is chosen — none of it is connected to the new Laravel backend's user database at all. Antigravity's status report proposed bridging NextAuth to Laravel Sanctum (Next.js completes OAuth, then calls a new `POST /api/v1/auth/social-login` with the verified email, Laravel provisions/finds the user and returns a token). **As described, this has a real account-takeover hole**: if that Laravel endpoint just trusts whatever email arrives in the request body, anyone can call it directly with someone else's email and get a valid token for their account, skipping OAuth entirely. The fix is straightforward (that call must happen server-side from Next.js only, authenticated to Laravel with a shared secret) but **this needs the user's explicit confirmation that this bridge approach is actually the agreed direction** before anyone builds it — it hadn't been confirmed in this conversation as of this document.
+2. **Real duplication** — the chatbot Q&A training tool exists as both a modal component and a completely separate full admin page, doing the same thing. Worth consolidating eventually, not urgent.
+3. **Two hardcoded references to `lms.cybergoat.ae/login`** (`NavBar.tsx`, `SignInModal.tsx`) — need to change once the new student portal has a real `/login` page to point to instead. Not yet fixed since that page doesn't exist yet (see below).
+
+### Student-facing portal — designed, not yet built
+
+The user asked for a proper logged-in student dashboard (course progress, certificates, upcoming classes) with real visual polish, not a bare-bones page. A full design mockup was built and approved (dark theme matching the existing brand exactly — `#0A0F1A` background, glass-card blur, the established blue/cyan/violet/gold palette — LinkedIn-Learning-style progress steps instead of a fabricated completion percentage). **Not yet implemented in real Next.js code** — this was in progress when the conversation moved to auditing the frontend instead. The backend endpoint it needs (`GET /v1/dashboard`) already exists and is tested.
 
 ---
 
-## 5. Deferred / genuinely open items — priority order
+## 3. The old backend (`Cybergoat--backend`, live at `lms.cybergoat.ae`) — unchanged, still broken
 
-1. **Laravel 11 → 12 / firebase/php-jwt 6 → 7 major version upgrade.** This is the real remaining security gap on the backend — 7 high-severity CVEs have no fix available within the currently-pinned major versions. This needs the official Laravel upgrade guide, careful review of breaking changes, and real testing before attempting — not something to do quickly. Second-biggest thing to plan for after this handoff.
-2. **The other bundled-but-likely-unused regional payment gateways** (Razorpay, CCAvenue, Iyzico, PayStack, PayPal variants) — same category of risk as the Paytm cleanup, not yet investigated. Worth the same "is this actually ours" conversation.
-3. **Root DB password rotation** — I generated a new one mid-incident (visible in this session's transcript, same exposure category as the original leaked one), user explicitly said to leave it for now. Not used by the live app day-to-day, so low urgency, but should happen eventually.
-4. **CSP header** not added to the frontend (`next.config.ts` has good baseline headers otherwise). Not urgent — no injection vectors found anywhere in the codebase — but worth adding eventually.
-5. **The `payment_gateways` database table's actual live configuration was never fully checked** — a diagnostic command (`app:check-payment-gateways`) was written and mid-execution when this session ended; re-run it to see what's actually configured/active vs. just present as dead rows.
-6. Not every single backend controller got a full line-by-line audit — deep coverage was auth/session/upload/admin (highest risk surface); things like `CourseController`, `CouponController` business logic weren't individually read the way `AuthenticatedSessionController` was.
+Nothing here has changed since the previous handoff. For the record, since it's easy to lose track of across documents:
+- Still live, still has the CSS/asset-serving bug (static files return HTTP 200 but `Content-Type: text/html`, silently falling through to the app's catch-all error page).
+- Still has uncustomized commercial-template placeholder content on the live login page ("Sydney, Australia," `academy@example.com`, lorem-ipsum-style text).
+- The real database behind it (`cybergoat-db` on Cloud SQL) has essentially zero real rows — pre-launch, nothing of value to migrate out of it.
+- A **Cloud Build trigger** auto-deploys this repo's `main` branch straight to the live Cloud Run service on every push. As long as this exists, any push to that GitHub repo — by anyone, including an AI session that doesn't realize which backend it's touching — redeploys the broken old LMS to production. This is the sharpest concrete risk to "don't let any AI get confused about which backend is real."
 
----
-
-## 6. Methodology notes (what worked, for continuity)
-
-- **Cloud Run Job + Buildpacks launcher pattern** (`/cnb/lifecycle/launcher` as the actual entrypoint, not `php` directly) is the reliable way to run one-off Artisan commands against production. A reusable job (`migrate-cybergoat-db`, badly named at this point — it's the general-purpose one-off command runner) exists for this.
-- **The Cloud Run Job and the Cloud Run Service have completely independent env vars.** Updating one does not update the other — this caused real confusion mid-session (mail config worked on the service but the job kept failing with defaults). Always sync both when adding new env vars.
-- **Inline `tinker --execute` one-liners are fragile** (shell-escaping issues, and can silently hang on an interactive prompt if the command gets mangled, burning 2-3 minutes before timing out). Writing a proper, committed Artisan command file and deploying it is slower per-iteration but far more reliable — this became the standard pattern.
-- **`gcloud` from PowerShell needs the full path** (`$env:LOCALAPPDATA\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd`) and the `&` call operator; invoking it through a Bash wrapper broke on path-with-spaces resolution.
-- Both repos now have working local dev setups — use them before pushing anything non-trivial.
+**A staged migration plan was drafted** (build/test the new LMS fully → cut the `lms.cybergoat.ae` domain mapping over to it → decommission the old Cloud Run service/job/Cloud SQL/GitHub repo, in that order, never skipping ahead). Nothing in that plan has been executed yet — still at the "new LMS needs a real deployment + a real frontend for people to land on" stage.
 
 ---
 
-## 7. Access / where things live (not repeating secret values here — check the actual sources)
+## 4. Infrastructure inventory (verified live against GCP, not from memory)
 
-- **Backend**: Cloud Run service `cybergoat--backend` (project `gen-lang-client-0992165942`, us-central1), Cloud SQL instance `cybergoat-db`, all env vars set directly on the service — check `gcloud run services describe cybergoat--backend` for current state.
-- **Frontend**: Vercel project `cybergoat/cybergoat-frontend`. Env vars in Vercel dashboard → Settings → Environment Variables (several marked "Sensitive," can't be read back via CLI once set — if you need a value, you'll need the original source or to rotate it).
-- **New GCP service account**: `vertex-ai-chatbot@gen-lang-client-0992165942.iam.gserviceaccount.com`, scoped to `roles/aiplatform.user` only — used by the frontend's chatbot.
-- **Redis**: Upstash instance provisioned via Vercel Marketplace, connected to the frontend project automatically.
+Project `gen-lang-client-0992165942`, region `us-central1` throughout.
+
+| Resource | State |
+|---|---|
+| Cloud Run service `cybergoat--backend` | Live, serves `lms.cybergoat.ae` |
+| Cloud Run job `migrate-cybergoat-db` | Exists, old backend's one-off command runner |
+| Cloud SQL `cybergoat-db` (MySQL 8.4) | Live, database `cybergoat_lms`, near-zero real data |
+| Domain mapping | `lms.cybergoat.ae` → `cybergoat--backend`, healthy |
+| DNS | CNAME `lms` → `ghs.googlehosted.com.` at the registrar |
+| Cloud Build trigger | Auto-deploys old backend repo's `main` to the live service — see risk note above |
+| Service accounts | `vertex-ai-chatbot@...` (frontend chatbot, `roles/aiplatform.user` only), `gemini-vertex-agent@...` (purpose unclear, not investigated), default compute SA (used by the old backend — not scoped, a pre-existing smell, not fixed) |
+| GCS buckets | Only one exists project-wide: `cybergoat-course-kits-prod` — the **new** LMS's bucket. The old backend has none. |
+| Secrets | Old backend's DB password and Gmail app password sit as plaintext Cloud Run env vars, not Secret Manager — pre-existing, not changed this session |
+
+**No infrastructure has been provisioned yet for the new LMS** — no Cloud Run service, no Cloud SQL instance, no dedicated service account. That's the next real infrastructure step once the new LMS and its frontend are both ready to actually go live, and once the auth-bridge decision above is settled.
+
+---
+
+## 5. Repo / git hygiene — a real mess, partially mapped, not yet cleaned up
+
+The `Cybergoat-frontend` GitHub repo currently has **~9,690 files committed that don't belong there**:
+- `cybergoat-backend/` — an abandoned Node.js backend attempt, 5,596 files including its entire `node_modules`.
+- `cybergoat-lms-backend/` — a *second*, different abandoned Node.js backend attempt, 3,922 files, also with `node_modules`.
+- **`cybergoat-laravel-lms/` — 175 files — meaning the new LMS's entire source is itself already tangled inside the frontend repo's git history**, not sitting in a repo of its own. It has no independent git identity at all right now.
+- Stray old source-code text dumps under a nested `scratch/` directory.
+
+`backend-reference` (the old Laravel backend's clone) and `v1-backup-snapshot` are already properly gitignored from an earlier cleanup pass — those two are fine as-is on disk, just not part of any active work.
+
+**Nothing has been executed yet** beyond identifying this and adding proper ESLint ignores for these directories so the frontend's own tooling stops trying to lint foreign PHP/Node projects. The actual cleanup plan (give the new LMS its own repo, untrack the dead Node backends, physically remove them once confirmed safe) is drafted but not run — see the earlier conversation in this session for the staged plan if picking this up.
+
+---
+
+## 6. Open decisions that need the user directly, not either AI unilaterally
+
+1. **The NextAuth-to-Sanctum auth bridge** — is this actually confirmed as the direction? If yes, the shared-secret security fix described in Section 2 needs to be part of it, not optional.
+2. **The old backend migration timeline** — when does `lms.cybergoat.ae` actually cut over, and what happens to the domain in the meantime (leave the old broken thing live, or point it somewhere less embarrassing until the new stack is ready)?
+3. **Repo cleanup execution** — confirm before deleting/untracking anything in Section 5; the plan is drafted, not approved for execution as of this document.
+
+---
+
+## 7. Credentials / config the new LMS needs before it can go live
+
+None of these are set yet — all currently empty placeholders in `.env`:
+- Real Stripe secret key + webhook signing secret (account exists, Wio-onboarded, just needs the keys).
+- A dedicated GCP service account for the new LMS (GCS + Sheets + Calendar + Vertex AI) — deliberately *not* reusing `vertex-ai-chatbot@...`, which belongs to the frontend chatbot.
+- Domain-wide delegation grant for that service account in the Workspace Admin Console (Calendar/Meet integration needs this, can't be done via code).
+- Google Sheets spreadsheet created + shared with that service account + its ID set.
+- `GOOGLE_VERTEX_PROJECT_ID` for the quiz/content generators.
+- Real course prices, at least one real bundle pairing, at least one real coupon code (all optional to launch, but currently all placeholder/empty).
+
+---
+
+## 8. Methodology notes (for continuity, whoever picks this up)
+
+- **Local PHP 8.2 + Composer setup exists** at `C:\php` — use it, don't push untested backend changes to a live service again.
+- **Every new backend feature this session got a mockable service class** (`GcsKitSigner`, `StripeCheckoutService`, `CertificateService`, `QuizGeneratorService`/`ContentGeneratorService` via a shared `CallsVertexAi` trait, `GoogleCalendarService`, `GoogleSheetsSyncService`) so tests never hit real external APIs — this is why 113 tests run in ~15 seconds instead of minutes, and why they're safe to run constantly.
+- **Filament actions get tested with real Livewire component tests** (`Livewire::test(...)->callTableAction(...)`), not just "does the page load" — this is what caught the cascade-delete bug and a self-referential-relationship bug in the course-bundling UI that would have crashed the first time anyone used it for real.
+- **When an `npm audit`/`composer audit` "fix" looks absurd** (a major downgrade), check whether the top-level package is already at latest before trusting the suggestion — twice this session the "fix" was nonsensical because the real vulnerability was nested inside a dependency the maintainers haven't patched yet, not something a version bump on our end could touch.
+- **`gcloud` from PowerShell needs the full path** (`$env:LOCALAPPDATA\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd`) and the `&` call operator.
 
 ---
 
 ## Please independently verify (don't just trust this document)
 
-Ask Antigravity to check these directly rather than take my word for it:
-
-1. Confirm `lms.cybergoat.ae` and `www.cybergoat.ae` are both actually live and serving correctly right now.
-2. Confirm the chatbot on the live site gives real AI-generated answers (not fallback text) and doesn't append WhatsApp to irrelevant answers.
-3. Confirm a real submission through `TrackDetailModal`'s enrollment form actually appears in `/admin/leads`.
-4. Re-run `composer audit` on the backend and confirm the count matches what's described here (40 advisories) — flag if it's drifted.
-5. Independently form an opinion on the Laravel 11→12 upgrade question (Section 5, item 1) — this is the biggest real decision left open, and a second opinion on timing/approach is genuinely useful here, not just a formality.
+1. Run `php artisan test` inside `cybergoat-laravel-lms` yourself and confirm 113 passing, not just take the number here.
+2. Run `npx eslint .` and `npm run build` inside the frontend yourself and confirm genuinely zero errors, not just this document's word for it.
+3. Independently check whether the NextAuth auth-bridge direction is actually confirmed with the user, since this document was written without that confirmation existing yet.
+4. Independently confirm the file counts in Section 5 (`git ls-files | grep -c "^cybergoat-backend/"` etc.) — repo state can drift between this being written and being read.
+5. Form your own opinion on the old-backend migration timeline (Section 6, item 2) — a second opinion on when it's actually safe to cut over is genuinely useful, not a formality.

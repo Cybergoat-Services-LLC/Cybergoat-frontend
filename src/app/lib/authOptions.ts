@@ -17,7 +17,10 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 Days
   },
-  secret: process.env.NEXTAUTH_SECRET || 'cybergoat_secret_jwt_key_2026',
+  // No hardcoded fallback - a missing NEXTAUTH_SECRET should fail loudly in
+  // production rather than silently sign sessions with a secret that's
+  // sitting in source control for anyone with repo access to read.
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/',
     error: '/',
@@ -26,14 +29,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = (user as any).role || 'student';
+        token.role = user.role || 'student';
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).id = token.id;
-        (session.user as any).role = token.role;
+        session.user.id = token.id;
+        session.user.role = token.role;
       }
       return session;
     },

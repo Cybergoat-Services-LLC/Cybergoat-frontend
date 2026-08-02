@@ -33,9 +33,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# repository separation
+# repository separation - each of these is (or will be) its own independent repo
 /backend-reference
 /v1-backup-snapshot
+/cybergoat-backend
+/cybergoat-lms-backend
+/cybergoat-laravel-lms
 
 # GCP Service Account Keys
 gcp-key.json

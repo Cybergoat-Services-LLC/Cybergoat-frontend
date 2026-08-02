@@ -60,7 +60,7 @@ export default function TrackDetailModal({
       }
 
       setSubmitted(true);
-    } catch (err) {
+    } catch {
       setSubmitError(
         "We couldn't submit your inquiry right now. Please use the WhatsApp option below instead, or try again in a moment."
       );

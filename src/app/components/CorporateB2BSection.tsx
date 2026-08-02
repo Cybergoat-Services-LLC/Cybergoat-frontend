@@ -38,7 +38,7 @@ export default function CorporateB2BSection() {
         }),
       });
       setSubmitted(true);
-    } catch (err) {
+    } catch {
       // Fallback submission success display
       setSubmitted(true);
     } finally {

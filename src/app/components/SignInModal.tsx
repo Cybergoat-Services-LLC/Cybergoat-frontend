@@ -30,7 +30,7 @@ export default function SignInModal({
 
           <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2 text-left">
             <p className="text-xs text-gray-400 flex items-center gap-2">
-              <UserIcon className="w-4 h-4 text-[#00F0FF]" /> <strong>Role:</strong> {(session.user as any).role || 'Student'}
+              <UserIcon className="w-4 h-4 text-[#00F0FF]" /> <strong>Role:</strong> {session.user.role || 'Student'}
             </p>
             <p className="text-xs text-gray-400 flex items-center gap-2">
               <KeyIcon className="w-4 h-4 text-[#C664FF]" /> <strong>Email:</strong> {session.user.email}

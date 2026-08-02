@@ -5,6 +5,10 @@ export type TrackDetail = {
   duration: string;
   level: string;
   includesVoucher: boolean;
+  isOfficialPartner: boolean;
+  certHeader: string;
+  readinessTitle: string;
+  readinessDesc: string;
   certs: string[];
   modules: string[];
   careerPaths: string[];
@@ -19,6 +23,10 @@ export const TRACK_DETAILS: Record<string, TrackDetail> = {
     duration: '40 Hours (4 Weeks)',
     level: 'Beginner',
     includesVoucher: false,
+    isOfficialPartner: false,
+    certHeader: 'Core Learning Modules',
+    readinessTitle: '🎓 Comprehensive Foundation Training',
+    readinessDesc: 'Includes instructor mentorship, practical lab exercises, course completion certificate, and foundational assessment.',
     certs: ['Cybersecurity Fundamentals', 'Ethical Hacking Intro', 'Privacy Basics'],
     modules: [
       'Module 1: Cyber Threat Landscape & Attack Vectors',
@@ -38,7 +46,11 @@ export const TRACK_DETAILS: Record<string, TrackDetail> = {
     duration: '80 Hours (8 Weeks)',
     level: 'Intermediate / Advanced',
     includesVoucher: true,
-    certs: ['EC-Council CEH v12', 'EC-Council CHFI v11', 'VAPT Advanced Labs', 'AppSec Specialist'],
+    isOfficialPartner: true,
+    certHeader: 'Included EC-Council Certifications',
+    readinessTitle: '🎓 Authorized Partner & Official Vouchers Included',
+    readinessDesc: 'Includes official EC-Council courseware, direct official exam vouchers (CEH v12, CHFI v11), hands-on iLabs, and certified instructor coaching.',
+    certs: ['EC-Council CEH v12 (Voucher Included)', 'EC-Council CHFI v11 (Voucher Included)', 'VAPT Advanced Practical Labs', 'AppSec Specialist'],
     modules: [
       'Module 1: Reconnaissance, Scanning & Footprinting',
       'Module 2: System Exploitation, Privilege Escalation & Pivoting',
@@ -57,7 +69,11 @@ export const TRACK_DETAILS: Record<string, TrackDetail> = {
     duration: '60 Hours (6 Weeks)',
     level: 'Advanced',
     includesVoucher: false,
-    certs: ['CISA (ISACA)', 'CISM (ISACA)', 'CRISC (ISACA)', 'CISSP (ISC2)', 'CIPP/E (Data Privacy)'],
+    isOfficialPartner: false,
+    certHeader: 'Certification Exam Preparation Targets',
+    readinessTitle: '🎓 Intensive Exam Readiness Training',
+    readinessDesc: 'CyberGOAT provides comprehensive bootcamp training, domain reviews, and practice questions to make you 100% ready for ISACA (CISA/CISM/CRISC), ISC2 (CISSP), and IAPP (CIPP/E) exams.',
+    certs: ['CISA (ISACA) — Exam Readiness', 'CISM (ISACA) — Exam Readiness', 'CRISC (ISACA) — Exam Readiness', 'CISSP (ISC2) — Exam Readiness', 'CIPP/E (Data Privacy) — Exam Readiness'],
     modules: [
       'Module 1: Information Systems Auditing & Internal Controls',
       'Module 2: Enterprise Risk Management (ERM) & ISO 27001 Alignment',
@@ -76,7 +92,11 @@ export const TRACK_DETAILS: Record<string, TrackDetail> = {
     duration: '50 Hours (5 Weeks)',
     level: 'Executive',
     includesVoucher: true,
-    certs: ['EC-Council C|CISO', 'Applied Enterprise Security Architecture (ESA)', 'TOGAF 10'],
+    isOfficialPartner: true,
+    certHeader: 'Included Certifications & Vouchers',
+    readinessTitle: '🎓 Authorized C|CISO Executive Training',
+    readinessDesc: 'Includes official EC-Council C|CISO courseware, official exam voucher, executive case studies, and C-suite mentorship.',
+    certs: ['EC-Council C|CISO (Voucher Included)', 'Applied Enterprise Security Architecture (ESA)', 'TOGAF 10 Framework Alignment'],
     modules: [
       'Module 1: Governance & Risk Management Domain (C|CISO Domain 1)',
       'Module 2: Information Security Controls, Compliance & Audit',

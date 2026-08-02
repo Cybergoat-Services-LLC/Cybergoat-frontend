@@ -1,0 +1,433 @@
+# CYBERGOAT LMS BACKEND — CLAUDE-FIXED SOURCE CODE BUNDLE
+
+Changes since the last bundle (see CLAUDE_REAUDIT_REPORT.md in this folder for full detail):
+
+1. src/routes/auth.js — /login was still using `process.env.JWT_SECRET || 'fallback_secret'`.
+   Now throws if JWT_SECRET is missing, matching /register and middleware/auth.js.
+2. src/routes/auth.js — rate limiting was only wired into /register, not /login (verified
+   live: 12 rapid login attempts never triggered a 429). Now wired into both.
+3. src/routes/auth.js — rate limiting rebuilt on Firestore (auth_rate_limits collection,
+   via firestore.runTransaction) instead of an in-memory Map, since Cloud Run's
+   scale-to-zero + multi-instance model means in-memory state isn't shared or durable.
+   The counting logic itself was pulled into a pure, exported function
+   (computeRateLimitState) and unit-tested directly across 6 boundary cases (fresh IP,
+   10th attempt, 11th attempt, well over limit, expired window, exact window boundary).
+   All 6 passed.
+
+Honest limitation: this environment has no gcloud CLI, no Firestore emulator, and no
+real GCP service account, so the actual Firestore transaction round-trip could not be
+exercised end-to-end. It follows the standard runTransaction(tx.get -> tx.set) pattern.
+Recommend one real test against the actual Firestore project before shipping.
+
+================================================================================
+1. package.json
+================================================================================
+{
+  "name": "cybergoat-lms-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^7.11.0",
+    "@google-cloud/storage": "^7.15.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
+
+================================================================================
+2. .env.example
+================================================================================
+PORT=8080
+JWT_SECRET="cybergoat_super_secret_jwt_key_2026"
+ALLOWED_ORIGIN="https://lms.cybergoat.ae"
+STORAGE_BUCKET_NAME="cybergoat-course-kits-prod"
+GCP_PROJECT_ID="gen-lang-client-0992165942"
+
+================================================================================
+3. src/server.js (CORS + health check — unchanged since last bundle, still correct)
+================================================================================
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import authRoutes from './routes/auth.js';
+import kitRoutes from './routes/kits.js';
+import progressRoutes from './routes/progress.js';
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+// CORS Security Configuration
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://cybergoat.ae',
+  'https://lms.cybergoat.ae',
+  process.env.ALLOWED_ORIGIN
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Blocked by CORS policy'));
+    }
+  },
+  credentials: true
+}));
+
+app.use(express.json());
+
+// Health Check Endpoint (For Cloud Run Liveness Probes)
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', service: 'CyberGOAT LMS Backend API' });
+});
+
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/kits', kitRoutes);
+app.use('/api/progress', progressRoutes);
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('Unhandled Error:', err);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+
+app.listen(PORT, () => {
+  console.log(`CyberGOAT LMS API running on port ${PORT}`);
+});
+
+================================================================================
+4. src/middleware/auth.js (unchanged since last bundle, still correct)
+================================================================================
+import jwt from 'jsonwebtoken';
+
+export function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Access token required.' });
+  }
+
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    console.error('CRITICAL ERROR: JWT_SECRET environment variable is missing.');
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+  jwt.verify(token, secret, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Invalid or expired session token.' });
+    }
+    req.user = user;
+    next();
+  });
+}
+
+================================================================================
+5. src/routes/auth.js (FIXED: /login JWT fallback removed, Firestore-backed rate
+   limiting wired into both /register and /login)
+================================================================================
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { Firestore } from '@google-cloud/firestore';
+
+const router = express.Router();
+const firestore = new Firestore({
+  projectId: process.env.GCP_PROJECT_ID || 'gen-lang-client-0992165942'
+});
+
+const USERS_COLLECTION = firestore.collection('students');
+
+// Rate-limit counters live in Firestore, not in-memory: Cloud Run scales to zero and
+// runs multiple concurrent instances, so a plain in-process Map would reset on every
+// cold start and wouldn't be shared across instances, making it ineffective.
+const RATE_LIMIT_COLLECTION = firestore.collection('auth_rate_limits');
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+const MAX_AUTH_ATTEMPTS = 10;
+
+// Pure decision logic, kept free of any Firestore/network dependency so it can be
+// unit-tested directly: given the last stored record (or null) and the current time,
+// decide the record to persist and whether this request should be blocked.
+export function computeRateLimitState(record, now, windowMs = RATE_LIMIT_WINDOW_MS, maxAttempts = MAX_AUTH_ATTEMPTS) {
+  if (!record || now - record.startTime > windowMs) {
+    return { newRecord: { count: 1, startTime: now }, limited: false };
+  }
+  const count = record.count + 1;
+  return { newRecord: { count, startTime: record.startTime }, limited: count > maxAttempts };
+}
+
+function rateLimitKeyFromIp(rawIp) {
+  // x-forwarded-for can be a comma-separated proxy chain; the first entry is the
+  // original client. Firestore doc IDs can't contain "/", which IPs never do.
+  const first = String(rawIp).split(',')[0].trim();
+  return first || '127.0.0.1';
+}
+
+async function isAuthRateLimited(rawIp) {
+  const docRef = RATE_LIMIT_COLLECTION.doc(rateLimitKeyFromIp(rawIp));
+  return firestore.runTransaction(async (tx) => {
+    const snap = await tx.get(docRef);
+    const record = snap.exists ? snap.data() : null;
+    const { newRecord, limited } = computeRateLimitState(record, Date.now());
+    tx.set(docRef, newRecord);
+    return limited;
+  });
+}
+
+// POST /api/auth/register
+router.post('/register', async (req, res) => {
+  try {
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+    if (await isAuthRateLimited(ip)) {
+      return res.status(429).json({ error: 'Too many authentication attempts. Please try again in 15 minutes.' });
+    }
+
+    const { email, password, fullName } = req.body;
+
+    if (!email || !password || !fullName) {
+      return res.status(400).json({ error: 'All fields are required.' });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({ error: 'Password must be at least 8 characters long.' });
+    }
+
+    const userDoc = await USERS_COLLECTION.doc(email.toLowerCase()).get();
+    if (userDoc.exists) {
+      return res.status(400).json({ error: 'Student email is already registered.' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newStudent = {
+      fullName,
+      email: email.toLowerCase(),
+      password: hashedPassword,
+      enrollments: [], // No free course access without verified purchase
+      createdAt: new Date().toISOString()
+    };
+
+    await USERS_COLLECTION.doc(email.toLowerCase()).set(newStudent);
+
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      throw new Error('CRITICAL: JWT_SECRET environment variable is missing.');
+    }
+
+    const token = jwt.sign(
+      { email: newStudent.email, fullName: newStudent.fullName },
+      jwtSecret,
+      { expiresIn: '7d' }
+    );
+
+    res.status(201).json({
+      message: 'Registration successful',
+      token,
+      user: { fullName, email: newStudent.email, enrollments: newStudent.enrollments }
+    });
+  } catch (error) {
+    console.error('Registration Error:', error);
+    res.status(500).json({ error: 'Registration failed.' });
+  }
+});
+
+// POST /api/auth/login
+router.post('/login', async (req, res) => {
+  try {
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
+    if (await isAuthRateLimited(ip)) {
+      return res.status(429).json({ error: 'Too many authentication attempts. Please try again in 15 minutes.' });
+    }
+
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required.' });
+    }
+
+    const userRef = USERS_COLLECTION.doc(email.toLowerCase());
+    const doc = await userRef.get();
+
+    if (!doc.exists) {
+      return res.status(401).json({ error: 'Invalid email or password.' });
+    }
+
+    const student = doc.data();
+    const isPasswordValid = await bcrypt.compare(password, student.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Invalid email or password.' });
+    }
+
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      throw new Error('CRITICAL: JWT_SECRET environment variable is missing.');
+    }
+
+    const token = jwt.sign(
+      { email: student.email, fullName: student.fullName },
+      jwtSecret,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      message: 'Login successful',
+      token,
+      user: {
+        fullName: student.fullName,
+        email: student.email,
+        enrollments: student.enrollments || []
+      }
+    });
+  } catch (error) {
+    console.error('Login Error:', error);
+    res.status(500).json({ error: 'Login failed.' });
+  }
+});
+
+export default router;
+
+================================================================================
+6. src/routes/kits.js (unchanged since last bundle — entitlement gate still correct)
+================================================================================
+import express from 'express';
+import { Storage } from '@google-cloud/storage';
+import { Firestore } from '@google-cloud/firestore';
+import { authenticateToken } from '../middleware/auth.js';
+
+const router = express.Router();
+const storage = new Storage();
+const firestore = new Firestore({
+  projectId: process.env.GCP_PROJECT_ID || 'gen-lang-client-0992165942'
+});
+
+const USERS_COLLECTION = firestore.collection('students');
+const BUCKET_NAME = process.env.STORAGE_BUCKET_NAME || 'cybergoat-course-kits-prod';
+
+const COURSE_KITS = {
+  chfi: 'chfi-digital-kit-v12.zip',
+  cciso: 'cciso-executive-kit-v6.zip'
+};
+
+// GET /api/kits/download?track=chfi
+router.get('/download', authenticateToken, async (req, res) => {
+  try {
+    const { track } = req.query;
+    const requestedTrack = track?.toLowerCase();
+    const fileName = COURSE_KITS[requestedTrack];
+
+    if (!fileName) {
+      return res.status(400).json({ error: 'Invalid course track requested.' });
+    }
+
+    // 1. Entitlement Gate: Check if student has purchased / is enrolled in this course track
+    const userEmail = req.user.email;
+    const userDoc = await USERS_COLLECTION.doc(userEmail.toLowerCase()).get();
+
+    if (!userDoc.exists) {
+      return res.status(403).json({ error: 'Student record not found.' });
+    }
+
+    const studentData = userDoc.data();
+    const studentEnrollments = studentData?.enrollments || [];
+
+    if (!studentEnrollments.includes(requestedTrack)) {
+      return res.status(403).json({
+        error: `Access Denied: You are not enrolled in the ${requestedTrack.toUpperCase()} course kit. Please complete enrollment to access this courseware.`
+      });
+    }
+
+    // 2. Generate 60-Minute Signed V4 Download URL directly from GCP Storage
+    const [downloadUrl] = await storage
+      .bucket(BUCKET_NAME)
+      .file(fileName)
+      .getSignedUrl({
+        version: 'v4',
+        action: 'read',
+        expires: Date.now() + 60 * 60 * 1000 // 1 Hour
+      });
+
+    res.json({ track, downloadUrl, expires: '60 minutes' });
+  } catch (error) {
+    console.error('Signed URL Generation Error:', error);
+    res.status(500).json({ error: 'Failed to generate secure download link.' });
+  }
+});
+
+export default router;
+
+================================================================================
+7. src/routes/progress.js (unchanged since last bundle)
+================================================================================
+import express from 'express';
+import { Firestore } from '@google-cloud/firestore';
+import { authenticateToken } from '../middleware/auth.js';
+
+const router = express.Router();
+const firestore = new Firestore({
+  projectId: process.env.GCP_PROJECT_ID || 'gen-lang-client-0992165942'
+});
+
+const PROGRESS_COLLECTION = firestore.collection('student_progress');
+
+// POST /api/progress/update
+router.post('/update', authenticateToken, async (req, res) => {
+  try {
+    const { courseId, completedModules, quizScores } = req.body;
+    const userEmail = req.user.email;
+
+    if (!courseId) {
+      return res.status(400).json({ error: 'courseId is required.' });
+    }
+
+    const docId = `${userEmail}_${courseId}`;
+    const progressData = {
+      userEmail,
+      courseId,
+      completedModules: completedModules || [],
+      quizScores: quizScores || {},
+      lastUpdated: new Date().toISOString()
+    };
+
+    await PROGRESS_COLLECTION.doc(docId).set(progressData, { merge: true });
+
+    res.json({ message: 'Progress saved successfully.', progress: progressData });
+  } catch (error) {
+    console.error('Progress Update Error:', error);
+    res.status(500).json({ error: 'Failed to update progress.' });
+  }
+});
+
+// GET /api/progress/:courseId
+router.get('/:courseId', authenticateToken, async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const userEmail = req.user.email;
+
+    const docId = `${userEmail}_${courseId}`;
+    const doc = await PROGRESS_COLLECTION.doc(docId).get();
+
+    if (!doc.exists) {
+      return res.json({ completedModules: [], quizScores: {} });
+    }
+
+    res.json(doc.data());
+  } catch (error) {
+    console.error('Fetch Progress Error:', error);
+    res.status(500).json({ error: 'Failed to retrieve progress.' });
+  }
+});
+
+export default router;

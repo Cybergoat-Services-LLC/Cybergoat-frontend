@@ -147,9 +147,9 @@ export default function TrackDetailModal({
               </h3>
               <div className="space-y-2 mb-6">
                 {track.certs.map((c) => (
-                  <div key={c} className="p-3 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-white flex items-center justify-between">
+                  <div key={c} className="p-3 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-white flex items-center justify-between gap-2">
                     <span>{c}</span>
-                    <CheckBadgeIcon className={`w-4 h-4 ${track.isOfficialPartner ? 'text-amber-400' : 'text-[#0DCAF0]'}`} />
+                    <CheckBadgeIcon className={`w-4 h-4 shrink-0 ${c.includes('Voucher Included') ? 'text-amber-400' : 'text-[#0DCAF0]'}`} />
                   </div>
                 ))}
               </div>

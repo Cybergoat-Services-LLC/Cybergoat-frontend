@@ -81,11 +81,10 @@ class EnrollmentResource extends Resource
                             ->send();
                     }),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            // No bulk delete: an enrollment with an issued certificate is
+            // DB-protected from deletion (restrict, not cascade), but a clean
+            // refusal beats a raw SQL error surfacing mid bulk-action.
+            ->bulkActions([]);
     }
 
     public static function getPages(): array

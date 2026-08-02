@@ -1,30 +1,26 @@
 import { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
+import LinkedInProvider from 'next-auth/providers/linkedin';
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    CredentialsProvider({
-      name: 'CyberGOAT Student Credentials',
-      credentials: {
-        email: { label: 'Email', type: 'email', placeholder: 'student@cybergoat.ae' },
-        password: { label: 'Password', type: 'password' }
-      },
-      async authorize() {
-        // Credentials login is intentionally disabled: there is no real student
-        // account store to verify against yet (LMS integration is not wired up).
-        // Real sign-in happens on lms.cybergoat.ae until that integration exists.
-        return null;
-      }
-    })
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || 'dummy_google_client_id',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'dummy_google_client_secret',
+    }),
+    LinkedInProvider({
+      clientId: process.env.LINKEDIN_CLIENT_ID || 'dummy_linkedin_client_id',
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET || 'dummy_linkedin_client_secret',
+    }),
   ],
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 Days
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || 'cybergoat_secret_jwt_key_2026',
   pages: {
     signIn: '/',
-    error: '/'
+    error: '/',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -40,6 +36,6 @@ export const authOptions: NextAuthOptions = {
         (session.user as any).role = token.role;
       }
       return session;
-    }
-  }
+    },
+  },
 };

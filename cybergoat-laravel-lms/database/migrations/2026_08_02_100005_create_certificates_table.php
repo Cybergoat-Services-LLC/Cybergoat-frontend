@@ -12,8 +12,10 @@ return new class extends Migration
             $table->id();
             $table->string('certificate_number')->nullable()->unique();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->foreignId('enrollment_id')->constrained()->onDelete('cascade');
+            // Restrict, not cascade: an issued credential must never silently
+            // vanish because the underlying course/enrollment got deleted.
+            $table->foreignId('course_id')->constrained()->onDelete('restrict');
+            $table->foreignId('enrollment_id')->constrained()->onDelete('restrict');
             $table->enum('type', ['ec_council_aligned', 'vendor_aligned', 'cybergoat_original']);
             $table->string('issuer_name')->default('CyberGOAT Services LLC');
             $table->string('title'); // e.g. "Certificate of Completion — CEH v12 Prep Track"

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Enrollment;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
@@ -48,8 +50,12 @@ class CourseController extends Controller
 
     /**
      * Display live scheduled classes for a course (Dubai DSO & Virtual).
+     * Public so prospective students can see the schedule - but the actual
+     * Google Meet join link is only revealed to authenticated, actively
+     * enrolled students, so a class can't be gate-crashed by anyone browsing
+     * the catalog.
      */
-    public function liveClasses(string $slug): JsonResponse
+    public function liveClasses(Request $request, string $slug): JsonResponse
     {
         $course = Course::where('slug', $slug)->first();
 
@@ -57,12 +63,30 @@ class CourseController extends Controller
             return response()->json(['success' => false, 'message' => 'Course not found'], 404);
         }
 
-        $classes = $course->liveClasses ?? [];
+        $user = $request->user('sanctum');
+        $isEnrolled = $user && Enrollment::where('user_id', $user->id)
+            ->where('course_id', $course->id)
+            ->where('status', 'active')
+            ->where(fn ($q) => $q->whereNull('expires_at')->orWhere('expires_at', '>', now()))
+            ->exists();
+
+        $classes = $course->liveClasses->map(function ($class) use ($isEnrolled) {
+            return [
+                'id' => $class->id,
+                'topic' => $class->topic,
+                'type' => $class->type,
+                'scheduled_at' => $class->scheduled_at->toIso8601String(),
+                'duration_minutes' => $class->duration_minutes,
+                'location_or_link' => ($class->type === 'live_virtual' && !$isEnrolled)
+                    ? 'Join link visible to enrolled students only.'
+                    : $class->location_or_link,
+            ];
+        });
 
         return response()->json([
             'success' => true,
             'course' => $course->title,
-            'data' => $classes
+            'data' => $classes,
         ]);
     }
 }

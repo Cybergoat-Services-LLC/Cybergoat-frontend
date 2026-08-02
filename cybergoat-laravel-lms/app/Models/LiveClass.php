@@ -14,6 +14,7 @@ class LiveClass extends Model
         'topic',
         'type',
         'location_or_link',
+        'google_calendar_event_id',
         'scheduled_at',
         'duration_minutes',
     ];

@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\CourseExternalResourceController;
 use App\Http\Controllers\Api\EnrollmentController;
 use App\Http\Controllers\Api\KitController;
 use App\Http\Controllers\Api\OfflinePaymentController;
+use App\Http\Controllers\Api\QuizController;
+use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +38,14 @@ Route::prefix('v1')->group(function () {
         Route::post('/courses/{slug}/checkout/offline', [OfflinePaymentController::class, 'store']);
 
         Route::get('/certificates', [CertificateController::class, 'index']);
+
+        Route::get('/wishlist', [WishlistController::class, 'index']);
+        Route::post('/courses/{slug}/wishlist', [WishlistController::class, 'store']);
+        Route::delete('/courses/{slug}/wishlist', [WishlistController::class, 'destroy']);
+
+        Route::get('/courses/{slug}/quizzes', [QuizController::class, 'index']);
+        Route::get('/quizzes/{quiz}/take', [QuizController::class, 'take']);
+        Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit']);
     });
 
     // Admin-only — confirms a bank transfer / Aani QR payment was actually received.

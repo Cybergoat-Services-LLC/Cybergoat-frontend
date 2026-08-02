@@ -12,7 +12,9 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_number')->nullable()->unique();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
+            // Restrict, not cascade: a financial record must never silently
+            // disappear just because someone deleted the course it was for.
+            $table->foreignId('course_id')->constrained()->onDelete('restrict');
             $table->decimal('subtotal', 10, 2);
             $table->string('coupon_code')->nullable();
             $table->decimal('discount_amount', 10, 2)->default(0);

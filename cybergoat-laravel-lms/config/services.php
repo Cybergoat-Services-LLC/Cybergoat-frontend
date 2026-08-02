@@ -40,4 +40,11 @@ return [
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
 
+    'google_sheets' => [
+        // Same service account key as GCS - Sheets access is scoped by sharing
+        // the specific spreadsheet with that service account's email, not IAM.
+        'key_file' => env('GOOGLE_CLOUD_KEY_FILE'),
+        'spreadsheet_id' => env('GOOGLE_SHEETS_SPREADSHEET_ID'),
+    ],
+
 ];

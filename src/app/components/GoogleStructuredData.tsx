@@ -1,3 +1,5 @@
+import { SOCIAL_LINKS } from '@/config/socials';
+
 export default function GoogleStructuredData() {
   const organizationSchema = {
     '@context': 'https://schema.org',
@@ -11,7 +13,7 @@ export default function GoogleStructuredData() {
     description:
       'Premier EC-Council Authorized Reseller & Training Partner in Dubai Silicon Oasis. Official training and exam readiness for CEH, CHFI, C|CISO, CISA, CISM, CISSP, and Privacy laws.',
     telephone: '+971551846786',
-    email: 'admin@cybergoat.ae',
+    email: SOCIAL_LINKS.email,
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Dubai Silicon Oasis',
@@ -25,10 +27,10 @@ export default function GoogleStructuredData() {
       longitude: '55.3773',
     },
     sameAs: [
-      'https://www.linkedin.com/company/cybergoat-services-llc/',
-      'https://x.com/cybergoat_uae',
-      'https://www.facebook.com/profile.php?id=61573085285172',
-      'https://wa.me/971551846786',
+      SOCIAL_LINKS.linkedin,
+      SOCIAL_LINKS.x,
+      SOCIAL_LINKS.facebook,
+      SOCIAL_LINKS.whatsapp,
     ],
   };
 

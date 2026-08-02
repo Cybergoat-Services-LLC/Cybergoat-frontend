@@ -5,7 +5,7 @@ import Modal from './Modal';
 import { useSession, signOut } from 'next-auth/react';
 import { KeyIcon, UserIcon, ArrowRightOnRectangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 
-const LMS_LOGIN_URL = 'https://lms.cybergoat.ae/login';
+const LMS_LOGIN_URL = '/login';
 
 export default function SignInModal({
   isOpen,
@@ -40,11 +40,9 @@ export default function SignInModal({
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <a
               href={LMS_LOGIN_URL}
-              target="_blank"
-              rel="noopener noreferrer"
               className="flex-1 py-3 px-4 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs rounded-full hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all cursor-pointer text-center"
             >
-              Open LMS Dashboard ➔
+              Open My Dashboard ➔
             </a>
 
             <button

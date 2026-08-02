@@ -1,12 +1,12 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { MagnifyingGlassIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
 import { useModals } from './site-modals';
 import { SignInTrigger, ContactTrigger, AssessmentTrigger } from './interactive-buttons';
 
 const WHATSAPP_CHAT_URL = 'https://wa.me/971551846786';
-const LMS_URL = 'https://lms.cybergoat.ae/login';
 
 export default function NavBar() {
   const { courseQuery, setCourseQuery } = useModals();
@@ -58,14 +58,9 @@ export default function NavBar() {
           <AssessmentTrigger className="text-[#0DCAF0] hover:underline cursor-pointer flex items-center gap-1">
             Skill Assessment
           </AssessmentTrigger>
-          <a
-            href={LMS_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition-colors"
-          >
+          <Link href="/login" className="hover:text-white transition-colors">
             LMS Login
-          </a>
+          </Link>
           <ContactTrigger className="hover:text-white transition-colors">
             Contact Us
           </ContactTrigger>

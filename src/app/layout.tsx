@@ -5,6 +5,7 @@ import "./globals.css";
 import { ModalsProvider } from "./components/site-modals";
 import AuthProvider from "./components/AuthProvider";
 import GoogleStructuredData from "./components/GoogleStructuredData";
+import { SOCIAL_LINKS } from "@/config/socials";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -51,6 +52,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CyberGOAT | Cybersecurity & Privacy Training Dubai",
     description: "Official EC-Council Partner. Hands-on Cyber Range Labs & Executive CISO Training.",
+    site: SOCIAL_LINKS.twitterHandle,
+    creator: SOCIAL_LINKS.twitterHandle,
     images: ["/cg-assets/grc_cyber_shield.png"],
   },
   alternates: {

@@ -10,6 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import RevealOnScroll from './RevealOnScroll';
 import { ContactTrigger, SignInTrigger, AssessmentTrigger, TrackTrigger } from './interactive-buttons';
+import { SOCIAL_LINKS } from '@/config/socials';
 
 export const HeroSection = () => (
   <section className="relative pt-36 pb-20 lg:pt-48 lg:pb-24 overflow-hidden bg-[#0A0F1A]">
@@ -493,7 +494,7 @@ export const Footer = () => (
         <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-gray-300 py-3 border-y border-white/5 w-full max-w-3xl mx-auto">
           <span className="text-gray-400 uppercase tracking-widest text-[10px]">Follow CyberGOAT:</span>
           <a
-            href="https://www.linkedin.com/company/cybergoat-services-llc/"
+            href={SOCIAL_LINKS.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className="px-3.5 py-1 rounded-full bg-white/5 border border-white/10 hover:border-[#00F0FF] hover:text-[#00F0FF] transition-all flex items-center gap-1.5 font-bold"
@@ -501,7 +502,7 @@ export const Footer = () => (
             <span>LinkedIn</span>
           </a>
           <a
-            href="https://x.com/cybergoat_uae"
+            href={SOCIAL_LINKS.x}
             target="_blank"
             rel="noopener noreferrer"
             className="px-3.5 py-1 rounded-full bg-white/5 border border-white/10 hover:border-[#00F0FF] hover:text-[#00F0FF] transition-all flex items-center gap-1.5 font-bold"
@@ -509,7 +510,7 @@ export const Footer = () => (
             <span>Twitter / X</span>
           </a>
           <a
-            href="https://www.facebook.com/profile.php?id=61573085285172"
+            href={SOCIAL_LINKS.facebook}
             target="_blank"
             rel="noopener noreferrer"
             className="px-3.5 py-1 rounded-full bg-white/5 border border-white/10 hover:border-[#00F0FF] hover:text-[#00F0FF] transition-all flex items-center gap-1.5 font-bold"
@@ -517,7 +518,7 @@ export const Footer = () => (
             <span>Facebook</span>
           </a>
           <a
-            href="https://wa.me/971551846786"
+            href={SOCIAL_LINKS.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             className="px-3.5 py-1 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/40 text-[#00F0FF] hover:bg-[#00F0FF]/20 transition-all flex items-center gap-1.5 font-bold"

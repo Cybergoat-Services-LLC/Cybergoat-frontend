@@ -11,6 +11,7 @@ export default function CorporateB2BSection() {
     phone: '',
     employeeCount: '5 - 10 Employees',
     targetTrack: 'EC-Council Corporate Track (CEH / C|CISO)',
+    customTrack: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -18,6 +19,10 @@ export default function CorporateB2BSection() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+
+    const chosenTrack = formData.targetTrack === 'Other' && formData.customTrack 
+      ? `Custom: ${formData.customTrack}` 
+      : formData.targetTrack;
 
     try {
       await fetch('/api/leads', {
@@ -29,7 +34,7 @@ export default function CorporateB2BSection() {
           name: formData.contactName,
           email: formData.workEmail,
           phone: formData.phone,
-          details: `Group size: ${formData.employeeCount} | Target Track: ${formData.targetTrack}`,
+          details: `Group size: ${formData.employeeCount} | Target Track: ${chosenTrack}`,
         }),
       });
       setSubmitted(true);
@@ -168,9 +173,23 @@ export default function CorporateB2BSection() {
                       <option>Digital Forensics &amp; DFIR (CHFI v11)</option>
                       <option>GRC &amp; ISO 27001 / UAE PDPL Compliance</option>
                       <option>Custom Enterprise Security Architecture</option>
+                      <option value="Other">Other / Type Custom Course Title...</option>
                     </select>
                   </div>
                 </div>
+
+                {formData.targetTrack === 'Other' && (
+                  <div className="text-left animate-in fade-in duration-200">
+                    <label className="block text-xs font-semibold text-[#00F0FF] mb-1">Specify Your Custom Course / Topic</label>
+                    <input
+                      type="text"
+                      required
+                      onChange={(e) => setFormData({ ...formData, customTrack: e.target.value })}
+                      placeholder="Type the specific course name or training topic (e.g. Cloud Security, SCADA, Threat Hunting)..."
+                      className="w-full bg-white/5 border border-[#00F0FF]/40 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF]"
+                    />
+                  </div>
+                )}
 
                 <button
                   type="submit"

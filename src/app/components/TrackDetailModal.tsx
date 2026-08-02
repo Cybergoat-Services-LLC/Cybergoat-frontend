@@ -143,21 +143,27 @@ export default function TrackDetailModal({
           <div className="p-6 rounded-3xl bg-[#05080F] border border-white/10 space-y-4 flex flex-col justify-between">
             <div>
               <h3 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
-                <AcademicCapIcon className="w-5 h-5 text-[#C664FF]" /> Included Certifications
+                <AcademicCapIcon className="w-5 h-5 text-[#C664FF]" /> {track.certHeader}
               </h3>
               <div className="space-y-2 mb-6">
                 {track.certs.map((c) => (
                   <div key={c} className="p-3 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-white flex items-center justify-between">
                     <span>{c}</span>
-                    <CheckBadgeIcon className="w-4 h-4 text-[#0DCAF0]" />
+                    <CheckBadgeIcon className={`w-4 h-4 ${track.isOfficialPartner ? 'text-amber-400' : 'text-[#0DCAF0]'}`} />
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#2F57EF]/10 border border-[#2F57EF]/30 text-xs text-gray-300 space-y-1">
-              <p className="font-bold text-[#0DCAF0]">🎓 Guaranteed Exam Readiness</p>
-              <p>Includes official courseware, practice exams, hands-on lab access, and instructor mentorship.</p>
+            <div className={`p-4 rounded-2xl border text-xs text-gray-300 space-y-1 ${
+              track.isOfficialPartner 
+                ? 'bg-amber-500/10 border-amber-500/30' 
+                : 'bg-[#2F57EF]/10 border-[#2F57EF]/30'
+            }`}>
+              <p className={`font-bold ${track.isOfficialPartner ? 'text-amber-300' : 'text-[#0DCAF0]'}`}>
+                {track.readinessTitle}
+              </p>
+              <p className="leading-relaxed">{track.readinessDesc}</p>
             </div>
           </div>
         </div>

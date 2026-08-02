@@ -2,6 +2,7 @@ import NavBar from './components/NavBar';
 import CoursesGrid from './components/CoursesGrid';
 import RevealOnScroll from './components/RevealOnScroll';
 import ChatbotWidget from './components/ChatbotWidget';
+import RoiCalculator from './components/RoiCalculator';
 import {
   HeroSection,
   StatsBar,
@@ -34,6 +35,7 @@ export default function Home() {
       <HeroSection />
       <StatsBar />
       <CareerRoadmapSection />
+      <RoiCalculator />
       <ApproachSection />
       <GRCSection />
       <CoursesSection />

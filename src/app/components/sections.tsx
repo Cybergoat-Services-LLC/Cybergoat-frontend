@@ -489,7 +489,50 @@ export const Footer = () => (
             className="opacity-60 hover:opacity-100 transition-opacity rounded"
           />
         </div>
-        <div className="flex flex-wrap justify-center gap-8 text-sm font-medium text-gray-400">
+        {/* Verified Omnichannel Social Media Hub */}
+        <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-gray-300 py-3 border-y border-white/5 w-full max-w-3xl mx-auto">
+          <span className="text-gray-400 uppercase tracking-widest text-[10px]">Follow CyberGOAT:</span>
+          <a
+            href="https://www.linkedin.com/company/cybergoat-services-llc/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-1 rounded-full bg-white/5 border border-white/10 hover:border-[#00F0FF] hover:text-[#00F0FF] transition-all flex items-center gap-1.5 font-bold"
+          >
+            <span>LinkedIn</span>
+          </a>
+          <a
+            href="https://x.com/cybergoat_uae"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-1 rounded-full bg-white/5 border border-white/10 hover:border-[#00F0FF] hover:text-[#00F0FF] transition-all flex items-center gap-1.5 font-bold"
+          >
+            <span>Twitter / X</span>
+          </a>
+          <a
+            href="https://www.facebook.com/profile.php?id=61573085285172"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-1 rounded-full bg-white/5 border border-white/10 hover:border-[#00F0FF] hover:text-[#00F0FF] transition-all flex items-center gap-1.5 font-bold"
+          >
+            <span>Facebook</span>
+          </a>
+          <a
+            href="https://wa.me/971551846786"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-1 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/40 text-[#00F0FF] hover:bg-[#00F0FF]/20 transition-all flex items-center gap-1.5 font-bold"
+          >
+            <span>WhatsApp</span>
+          </a>
+          <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-500 flex items-center gap-1 cursor-not-allowed">
+            <span>Instagram</span> <span className="text-[9px] bg-white/10 px-1.5 py-0.5 rounded text-gray-400">Soon</span>
+          </span>
+          <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-500 flex items-center gap-1 cursor-not-allowed">
+            <span>TikTok</span> <span className="text-[9px] bg-white/10 px-1.5 py-0.5 rounded text-gray-400">Soon</span>
+          </span>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-6 text-sm font-medium text-gray-400">
           <a href="#courses" className="hover:text-white transition-colors cursor-pointer">
             Courses
           </a>
@@ -497,6 +540,9 @@ export const Footer = () => (
           <SignInTrigger className="hover:text-white transition-colors cursor-pointer">Sign In</SignInTrigger>
           <a href="/privacy" className="hover:text-white transition-colors cursor-pointer">
             Privacy Policy
+          </a>
+          <a href="/refund-policy" className="hover:text-[#00F0FF] transition-colors cursor-pointer font-semibold text-gray-300">
+            Refund &amp; Cancellation Policy
           </a>
           <a
             href="https://wa.me/971551846786"

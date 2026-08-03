@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { saveLead, getLeads, TrackLead } from '@/app/lib/leads';
 import { TRACK_DETAILS } from '@/app/lib/trackDetails';
 import { isRateLimited, getClientIp } from '@/app/lib/rateLimit';
+import { sendMail } from '@/app/lib/mailer';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const VALID_FORMATS = ['Online Live Interactive', 'In-Person Dubai Bootcamp', 'Corporate Enterprise Team'];
@@ -54,6 +55,25 @@ export async function POST(req: NextRequest) {
     };
 
     await saveLead(lead);
+
+    const notifyTo = process.env.LEAD_NOTIFICATION_EMAIL || 'admin@cybergoat.ae';
+    // Awaited deliberately - on Vercel's serverless runtime, a fire-and-forget
+    // promise can be torn down the moment the response is returned, silently
+    // dropping the notification. sendMail() already catches its own errors
+    // and returns false rather than throwing, so this can't fail the request.
+    await sendMail({
+      to: notifyTo,
+      subject: `New Enrollment Inquiry: ${lead.name} - ${lead.trackTitle}`,
+      html: `
+        <h2>New Enrollment &amp; Schedule Inquiry</h2>
+        <p><strong>Track:</strong> ${lead.trackTitle} (${lead.trackStage})</p>
+        <p><strong>Name:</strong> ${lead.name}</p>
+        <p><strong>Email:</strong> ${lead.email}</p>
+        <p><strong>Phone / WhatsApp:</strong> ${lead.phone}</p>
+        <p><strong>Preferred Format:</strong> ${lead.format}</p>
+        <p><strong>Submitted:</strong> ${lead.submittedAt}</p>
+      `,
+    });
 
     return NextResponse.json({ success: true });
   } catch (err) {

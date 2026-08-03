@@ -21,5 +21,9 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id?: string;
     role?: string;
+    // Server-side only - the raw provider token used by the social login
+    // bridge. Never copied into Session, see authOptions.ts.
+    socialProvider?: 'google' | 'linkedin';
+    socialToken?: string;
   }
 }

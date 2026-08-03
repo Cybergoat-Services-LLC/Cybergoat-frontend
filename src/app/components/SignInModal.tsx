@@ -62,7 +62,7 @@ export default function SignInModal({
 
           <div className="space-y-2.5">
             <button
-              onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+              onClick={() => signIn('google', { callbackUrl: '/api/portal/social-callback' })}
               className="flex w-full items-center justify-center gap-3 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 px-6 py-3 text-xs font-bold text-white transition-all cursor-pointer hover:border-[#00F0FF]"
             >
               <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
@@ -74,7 +74,7 @@ export default function SignInModal({
               Continue with Google
             </button>
             <button
-              onClick={() => signIn('linkedin', { callbackUrl: '/dashboard' })}
+              onClick={() => signIn('linkedin', { callbackUrl: '/api/portal/social-callback' })}
               className="flex w-full items-center justify-center gap-3 rounded-full bg-[#0A66C2] hover:bg-[#0958A8] px-6 py-3 text-xs font-bold text-white transition-all cursor-pointer"
             >
               <svg className="h-4 w-4 shrink-0" fill="currentColor" viewBox="0 0 24 24">

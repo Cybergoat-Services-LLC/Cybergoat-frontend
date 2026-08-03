@@ -26,10 +26,25 @@ export const authOptions: NextAuthOptions = {
     error: '/',
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
         token.role = user.role || 'student';
+      }
+      // Only present on the initial sign-in callback, never on subsequent
+      // token refreshes - stash the REAL provider token here so the social
+      // login bridge (src/app/api/portal/social-callback) can hand it to
+      // the backend for independent verification. This deliberately never
+      // gets copied into the `session` callback below - it must stay
+      // server-side only, since anything in `session` is readable by
+      // client-side JS via useSession()/getSession().
+      if (account?.provider === 'google' && account.id_token) {
+        token.socialProvider = 'google';
+        token.socialToken = account.id_token;
+      }
+      if (account?.provider === 'linkedin' && account.access_token) {
+        token.socialProvider = 'linkedin';
+        token.socialToken = account.access_token;
       }
       return token;
     },

@@ -20,7 +20,6 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', onKeyDown);
-    dialogRef.current?.focus();
     const { overflow } = document.body.style;
     document.body.style.overflow = 'hidden';
     return () => {
@@ -28,6 +27,19 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
       document.body.style.overflow = overflow;
     };
   }, [isOpen, onClose]);
+
+  // Separate from the effect above deliberately - `onClose` is a fresh
+  // function reference on every render of the parent (it's defined inline
+  // in site-modals.tsx), so including it in a dependency array that also
+  // steals focus meant ANY keystroke in a form inside the modal re-ran this
+  // and yanked focus back to the dialog container, breaking typing after
+  // the first character. Focusing should only happen once, when the modal
+  // actually opens.
+  useEffect(() => {
+    if (isOpen) {
+      dialogRef.current?.focus();
+    }
+  }, [isOpen]);
 
   return (
     <AnimatePresence>

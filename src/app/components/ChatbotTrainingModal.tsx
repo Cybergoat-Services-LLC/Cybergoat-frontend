@@ -26,6 +26,8 @@ export default function ChatbotTrainingModal({
     if (typeof window === 'undefined') return '';
     return sessionStorage.getItem(ADMIN_KEY_STORAGE) || '';
   });
+  const [verified, setVerified] = useState(false);
+  const [checking, setChecking] = useState(false);
   const [keyInput, setKeyInput] = useState('');
   const [authError, setAuthError] = useState('');
   const [qaPairs, setQaPairs] = useState<QAPair[]>([]);
@@ -36,33 +38,51 @@ export default function ChatbotTrainingModal({
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
-  const fetchKnowledge = async (key: string) => {
+  // Returns whether the key was actually valid, so callers can decide
+  // whether to treat the panel as unlocked - never flip to the unlocked UI
+  // before the server has confirmed the key.
+  const fetchKnowledge = async (key: string): Promise<boolean> => {
     try {
       const res = await fetch('/api/knowledge', { headers: { 'x-admin-key': key } });
       if (res.status === 401) {
         setAuthError('Invalid admin key.');
         setAdminKey('');
         sessionStorage.removeItem(ADMIN_KEY_STORAGE);
-        return;
+        return false;
+      }
+      if (!res.ok) {
+        setAuthError('Failed to load training data. Please try again.');
+        return false;
       }
       const data = await res.json();
       if (data.qaPairs) {
         setQaPairs(data.qaPairs);
       }
+      return true;
     } catch (err) {
       console.error('Failed to load knowledge base:', err);
+      setAuthError('Failed to connect. Please try again.');
+      return false;
     }
   };
 
   useEffect(() => {
-    // Refetches the knowledge base whenever the modal opens with a known
-    // admin key - a standard "sync with an external system" effect. The
-    // setState this eventually triggers happens inside fetchKnowledge's own
-    // async callback, not synchronously in the effect body.
-    if (isOpen && adminKey) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      fetchKnowledge(adminKey);
-    }
+    // Validates the admin key (whether just typed or restored from a prior
+    // session) before ever rendering the unlocked panel - this is the only
+    // place fetchKnowledge is called, so a key never flips `verified` until
+    // the server has actually confirmed it.
+    if (!isOpen || !adminKey) return;
+    let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setChecking(true);
+    fetchKnowledge(adminKey).then((ok) => {
+      if (cancelled) return;
+      setVerified(ok);
+      setChecking(false);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [isOpen, adminKey]);
 
   const handleUnlock = (e: React.FormEvent) => {
@@ -71,7 +91,6 @@ export default function ChatbotTrainingModal({
     setAuthError('');
     sessionStorage.setItem(ADMIN_KEY_STORAGE, keyInput);
     setAdminKey(keyInput);
-    fetchKnowledge(keyInput);
   };
 
   const handleAddTrainingItem = async (e: React.FormEvent) => {
@@ -116,7 +135,7 @@ export default function ChatbotTrainingModal({
 
   if (!isOpen) return null;
 
-  if (!adminKey) {
+  if (!verified) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto">
         <div className="relative w-full max-w-sm bg-[#0A0F1A] border border-white/10 rounded-3xl p-8 shadow-2xl glass-card space-y-5">
@@ -138,16 +157,18 @@ export default function ChatbotTrainingModal({
             <input
               type="password"
               autoFocus
+              disabled={checking}
               value={keyInput}
               onChange={(e) => setKeyInput(e.target.value)}
               placeholder="Admin key"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF]"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF] disabled:opacity-50"
             />
             <button
               type="submit"
-              className="w-full py-2.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs rounded-full hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all cursor-pointer"
+              disabled={checking}
+              className="w-full py-2.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs rounded-full hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Unlock
+              {checking ? 'Verifying...' : 'Unlock'}
             </button>
           </form>
         </div>

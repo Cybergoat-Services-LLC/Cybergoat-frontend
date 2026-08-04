@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BuildingOfficeIcon, UserGroupIcon, ShieldCheckIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { BuildingOfficeIcon, UserGroupIcon, ShieldCheckIcon, PaperAirplaneIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 export default function CorporateB2BSection() {
   const [formData, setFormData] = useState({
@@ -15,21 +15,23 @@ export default function CorporateB2BSection() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setSubmitError('');
 
-    const chosenTrack = formData.targetTrack === 'Other' && formData.customTrack 
-      ? `Custom: ${formData.customTrack}` 
+    const chosenTrack = formData.targetTrack === 'Other' && formData.customTrack
+      ? `Custom: ${formData.customTrack}`
       : formData.targetTrack;
 
     try {
-      await fetch('/api/leads', {
+      const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: 'B2B Corporate Training Inquiry',
+          type: 'b2b',
           companyName: formData.companyName,
           name: formData.contactName,
           email: formData.workEmail,
@@ -37,10 +39,16 @@ export default function CorporateB2BSection() {
           details: `Group size: ${formData.employeeCount} | Target Track: ${chosenTrack}`,
         }),
       });
+
+      if (!res.ok) {
+        throw new Error('Submission failed');
+      }
+
       setSubmitted(true);
     } catch {
-      // Fallback submission success display
-      setSubmitted(true);
+      setSubmitError(
+        "We couldn't submit your request right now. Please try again, or reach us directly on WhatsApp."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -188,6 +196,13 @@ export default function CorporateB2BSection() {
                       placeholder="Type the specific course name or training topic (e.g. Cloud Security, SCADA, Threat Hunting)..."
                       className="w-full bg-white/5 border border-[#00F0FF]/40 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF]"
                     />
+                  </div>
+                )}
+
+                {submitError && (
+                  <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 flex items-start gap-2">
+                    <ExclamationTriangleIcon className="w-4 h-4 shrink-0 mt-0.5" />
+                    <span>{submitError}</span>
                   </div>
                 )}
 

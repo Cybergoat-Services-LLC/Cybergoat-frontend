@@ -1,5 +1,20 @@
 import nodemailer from 'nodemailer';
 
+const HTML_ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+};
+
+// Free-text submitted through public forms ends up interpolated into email
+// HTML - without escaping, a name like `<a href="...">Confirm Payment</a>`
+// renders as a real clickable element in the recipient's inbox.
+export function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (ch) => HTML_ESCAPES[ch]);
+}
+
 let transporter: nodemailer.Transporter | null = null;
 
 function getTransporter(): nodemailer.Transporter | null {

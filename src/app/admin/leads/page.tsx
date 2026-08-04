@@ -13,8 +13,11 @@ import {
 
 type TrackLead = {
   id: string;
+  type?: 'track' | 'b2b';
   trackStage: string;
   trackTitle: string;
+  companyName?: string;
+  details?: string;
   name: string;
   email: string;
   phone: string;
@@ -43,6 +46,10 @@ export default function AdminLeadsPage() {
       if (res.status === 401) {
         setIsUnlocked(false);
         setErrorMsg('Invalid Admin API Key. Access denied.');
+        return;
+      }
+      if (!res.ok) {
+        setErrorMsg('Failed to load enrollment inquiries. Please try again.');
         return;
       }
       const data = await res.json();
@@ -167,6 +174,11 @@ export default function AdminLeadsPage() {
                       </span>
                     </div>
                     <p className="font-semibold text-white text-sm">{lead.name}</p>
+                    {lead.companyName && (
+                      <p className="text-xs text-gray-400">
+                        Company: <span className="text-white font-semibold">{lead.companyName}</span>
+                      </p>
+                    )}
                     <div className="flex flex-wrap gap-4 text-xs text-gray-300">
                       <span className="flex items-center gap-1.5">
                         <EnvelopeIcon className="w-3.5 h-3.5 text-gray-500" /> {lead.email}
@@ -176,6 +188,9 @@ export default function AdminLeadsPage() {
                       </span>
                       <span className="text-gray-500">{lead.format}</span>
                     </div>
+                    {lead.details && (
+                      <p className="text-xs text-gray-400 italic">{lead.details}</p>
+                    )}
                   </div>
                 ))
               )}

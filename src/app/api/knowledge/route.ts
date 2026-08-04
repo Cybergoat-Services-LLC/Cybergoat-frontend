@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getKnowledgeBase, saveKnowledgeBase, QAPair } from '@/app/lib/knowledge';
+import { isRateLimited, getClientIp } from '@/app/lib/rateLimit';
 
 function isAuthorized(req: NextRequest): boolean {
   const adminKey = process.env.ADMIN_API_KEY;
@@ -8,8 +9,15 @@ function isAuthorized(req: NextRequest): boolean {
   return provided === adminKey;
 }
 
+async function isAdminRateLimited(req: NextRequest): Promise<boolean> {
+  return isRateLimited('knowledge_admin', getClientIp(req), 20, 60);
+}
+
 // GET /api/knowledge: Returns all custom trained Q&A pairs (admin only)
 export async function GET(req: NextRequest) {
+  if (await isAdminRateLimited(req)) {
+    return NextResponse.json({ error: 'Too many requests. Please try again in a minute.' }, { status: 429 });
+  }
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -19,6 +27,9 @@ export async function GET(req: NextRequest) {
 
 // POST /api/knowledge: Adds a new custom Q&A training item (admin only)
 export async function POST(req: NextRequest) {
+  if (await isAdminRateLimited(req)) {
+    return NextResponse.json({ error: 'Too many requests. Please try again in a minute.' }, { status: 429 });
+  }
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -50,6 +61,9 @@ export async function POST(req: NextRequest) {
 
 // DELETE /api/knowledge?id=123: Deletes a trained Q&A pair by ID (admin only)
 export async function DELETE(req: NextRequest) {
+  if (await isAdminRateLimited(req)) {
+    return NextResponse.json({ error: 'Too many requests. Please try again in a minute.' }, { status: 429 });
+  }
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

@@ -44,6 +44,10 @@ export default function AdminTrainingPage() {
         setErrorMsg('Invalid Admin API Key. Access denied.');
         return;
       }
+      if (!res.ok) {
+        setErrorMsg('Failed to load training data. Please try again.');
+        return;
+      }
       const data = await res.json();
       setQaPairs(data.qaPairs || []);
       setIsUnlocked(true);

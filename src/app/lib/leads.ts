@@ -2,8 +2,11 @@ import { Redis } from '@upstash/redis';
 
 export type TrackLead = {
   id: string;
+  type: 'track' | 'b2b';
   trackStage: string;
   trackTitle: string;
+  companyName?: string;
+  details?: string;
   name: string;
   email: string;
   phone: string;

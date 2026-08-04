@@ -74,10 +74,10 @@ export const HeroSection = () => (
           <div className="bg-[#05080F] border border-[#38BDF8]/40 rounded-3xl p-6 glass-card hover:border-[#38BDF8] transition-all">
             <div className="flex items-center gap-2 mb-2 text-[#38BDF8] font-extrabold text-sm uppercase tracking-wider">
               <BuildingOffice2Icon className="w-5 h-5 text-[#38BDF8]" />
-              <span>Dubai Campus &amp; Online</span>
+              <span>Dubai HQ &amp; Virtual Bootcamps</span>
             </div>
             <p className="text-xs text-gray-300 font-medium leading-relaxed">
-              In-person sessions at Dubai Silicon Oasis, live interactive instructor-led virtual classes, or bootcamps.
+              Dubai Silicon Oasis headquarters, live interactive instructor-led virtual bootcamps, and official vouchers.
             </p>
           </div>
         </div>

@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Modal from './Modal';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
+import { fullLogout } from '@/app/lib/logout';
 import { KeyIcon, UserIcon, ArrowRightOnRectangleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 
 const LMS_LOGIN_URL = '/login';
@@ -46,7 +47,7 @@ export default function SignInModal({
             </a>
 
             <button
-              onClick={() => signOut()}
+              onClick={() => fullLogout()}
               className="py-3 px-6 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 font-bold text-xs rounded-full transition-all cursor-pointer flex items-center justify-center gap-2"
             >
               <ArrowRightOnRectangleIcon className="w-4 h-4" /> Sign Out

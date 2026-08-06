@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { ArrowLeftIcon, BookOpenIcon, ClockIcon, VideoCameraIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, BookOpenIcon, ClockIcon, ExclamationTriangleIcon, VideoCameraIcon } from '@heroicons/react/24/outline';
 import { callPortalApi, getPortalToken } from '@/app/lib/portalAuth';
 import LogoutButton from '@/app/dashboard/LogoutButton';
 import LessonBody from './LessonBody';
@@ -29,12 +29,22 @@ interface Module {
   lessons: Lesson[];
 }
 
-async function getModules(slug: string, token: string): Promise<{ modules: Module[]; forbidden: boolean } | null> {
+type ModulesResult =
+  | { status: 'ok'; modules: Module[]; forbidden: false }
+  | { status: 'ok'; modules: []; forbidden: true }
+  | { status: 'unauthenticated' }
+  | { status: 'not_found' }
+  | { status: 'error' };
+
+async function getModules(slug: string, token: string): Promise<ModulesResult> {
   const res = await callPortalApi(`/v1/courses/${slug}/modules`, { token });
-  if (res.status === 403) return { modules: [], forbidden: true };
-  if (!res.ok) return null;
+  if (res.status === 401) return { status: 'unauthenticated' };
+  if (res.status === 403) return { status: 'ok', modules: [], forbidden: true };
+  if (res.status === 404) return { status: 'not_found' };
+  if (!res.ok) return { status: 'error' };
+
   const data = await res.json();
-  return { modules: data.data as Module[], forbidden: false };
+  return { status: 'ok', modules: data.data as Module[], forbidden: false };
 }
 
 async function getCourseTitle(slug: string): Promise<string> {
@@ -50,7 +60,28 @@ export default async function CourseLessonsPage({ params }: { params: Promise<{ 
   if (!token) redirect('/login');
 
   const result = await getModules(slug, token);
-  if (!result) notFound();
+  if (result.status === 'unauthenticated') redirect('/login');
+  if (result.status === 'not_found') notFound();
+
+  if (result.status === 'error') {
+    return (
+      <main className="min-h-screen bg-[#0A0F1A] text-gray-300 font-sans flex items-center justify-center px-6">
+        <div className="max-w-sm w-full p-8 rounded-2xl bg-[#05080F] border border-white/10 text-center space-y-4">
+          <ExclamationTriangleIcon className="w-10 h-10 text-amber-400 mx-auto" />
+          <h1 className="text-lg font-bold text-white">We couldn&apos;t load these lessons</h1>
+          <p className="text-sm text-gray-400">
+            Your session is fine — the backend just didn&apos;t respond. Please try again in a moment.
+          </p>
+          <Link
+            href={`/dashboard/courses/${slug}/lessons`}
+            className="inline-block px-5 py-2 rounded-full bg-[#2F57EF] text-white text-sm font-bold hover:bg-[#2F57EF]/80 transition"
+          >
+            Retry
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   const courseTitle = await getCourseTitle(slug);
   const { modules, forbidden } = result;

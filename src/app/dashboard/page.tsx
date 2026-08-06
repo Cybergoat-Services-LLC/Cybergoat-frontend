@@ -143,6 +143,14 @@ export default async function DashboardPage() {
                         <DocumentCheckIcon className="w-3.5 h-3.5" /> Certified
                       </span>
                     </div>
+                    {c.status === 'active' && (
+                      <Link
+                        href={`/dashboard/courses/${c.course.slug}/lessons`}
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0DCAF0] hover:text-white transition"
+                      >
+                        <AcademicCapIcon className="w-4 h-4" /> View Lessons
+                      </Link>
+                    )}
                   </div>
                 ))}
               </div>

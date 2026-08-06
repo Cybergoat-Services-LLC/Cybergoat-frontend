@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-import { callPortalApi, PORTAL_TOKEN_COOKIE } from '@/app/lib/portalAuth';
+import { callPortalApi, setPortalTokenCookie } from '@/app/lib/portalAuth';
 
 /**
  * NextAuth redirects here after a real Google/LinkedIn OAuth handshake
@@ -37,12 +37,6 @@ export async function GET(request: NextRequest) {
   const data = await apiRes.json();
 
   const response = NextResponse.redirect(new URL('/dashboard', request.url));
-  response.cookies.set(PORTAL_TOKEN_COOKIE, data.token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60 * 24 * 30,
-  });
+  setPortalTokenCookie(response, data.token);
   return response;
 }

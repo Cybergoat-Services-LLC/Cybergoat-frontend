@@ -9,6 +9,7 @@ import {
   DocumentCheckIcon,
   CalendarDaysIcon,
   VideoCameraIcon,
+  ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 import { callPortalApi, getPortalToken } from '@/app/lib/portalAuth';
 import LogoutButton from './LogoutButton';
@@ -32,14 +33,20 @@ interface DashboardData {
   upcoming_live_classes: Array<{ id: number; topic: string; type: string; location_or_link: string; scheduled_at: string; duration_minutes: number; course: { title: string } }>;
 }
 
-async function getDashboard(): Promise<DashboardData | null> {
+type DashboardResult =
+  | { status: 'ok'; data: DashboardData }
+  | { status: 'unauthenticated' }
+  | { status: 'error' };
+
+async function getDashboard(): Promise<DashboardResult> {
   const token = await getPortalToken();
-  if (!token) return null;
+  if (!token) return { status: 'unauthenticated' };
 
   const res = await callPortalApi('/v1/dashboard', { token });
-  if (!res.ok) return null;
+  if (res.status === 401) return { status: 'unauthenticated' };
+  if (!res.ok) return { status: 'error' };
 
-  return res.json();
+  return { status: 'ok', data: await res.json() };
 }
 
 function statusBadge(status: string) {
@@ -52,10 +59,30 @@ function statusBadge(status: string) {
 }
 
 export default async function DashboardPage() {
-  const data = await getDashboard();
-  if (!data) redirect('/login');
+  const result = await getDashboard();
+  if (result.status === 'unauthenticated') redirect('/login');
 
-  const { user, stats, courses, certificates, upcoming_live_classes } = data;
+  if (result.status === 'error') {
+    return (
+      <main className="min-h-screen bg-[#0A0F1A] text-gray-300 font-sans flex items-center justify-center px-6">
+        <div className="max-w-sm w-full p-8 rounded-2xl bg-[#05080F] border border-white/10 text-center space-y-4">
+          <ExclamationTriangleIcon className="w-10 h-10 text-amber-400 mx-auto" />
+          <h1 className="text-lg font-bold text-white">We couldn&apos;t load your dashboard</h1>
+          <p className="text-sm text-gray-400">
+            Your session is fine — the backend just didn&apos;t respond. Please try again in a moment.
+          </p>
+          <a
+            href="/dashboard"
+            className="inline-block px-5 py-2 rounded-full bg-[#2F57EF] text-white text-sm font-bold hover:bg-[#2F57EF]/80 transition"
+          >
+            Retry
+          </a>
+        </div>
+      </main>
+    );
+  }
+
+  const { user, stats, courses, certificates, upcoming_live_classes } = result.data;
 
   return (
     <main className="min-h-screen bg-[#0A0F1A] text-gray-300 font-sans">

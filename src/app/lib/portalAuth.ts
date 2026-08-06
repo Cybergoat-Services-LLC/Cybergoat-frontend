@@ -1,6 +1,23 @@
 import { cookies } from 'next/headers';
+import type { NextResponse } from 'next/server';
 
 export const PORTAL_TOKEN_COOKIE = 'portal_token';
+
+// The backend Sanctum token itself never expires (see config/sanctum.php) -
+// this cookie's lifetime is the only thing that ever forces a student back
+// to the login screen, so keep it long. Shared by login/register/social-callback
+// so the three routes can't drift out of sync with each other.
+const PORTAL_TOKEN_MAX_AGE = 60 * 60 * 24 * 90;
+
+export function setPortalTokenCookie(response: NextResponse, token: string): void {
+  response.cookies.set(PORTAL_TOKEN_COOKIE, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: PORTAL_TOKEN_MAX_AGE,
+  });
+}
 
 function apiBaseUrl(): string {
   const base = process.env.NEXT_PUBLIC_API_BASE_URL;

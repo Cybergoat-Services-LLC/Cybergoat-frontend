@@ -3,11 +3,9 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { ArrowLeftIcon, LockClosedIcon, EnvelopeIcon, UserIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -44,8 +42,8 @@ export default function RegisterPage() {
         return;
       }
 
-      router.push('/dashboard');
-      router.refresh();
+      // Hard navigation, not router.push() - see login/page.tsx for why.
+      window.location.href = '/dashboard';
     } catch {
       setError("We couldn't reach the server. Please try again in a moment.");
     } finally {

@@ -1,7 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { ArrowLeftIcon, BookOpenIcon, ClockIcon, ExclamationTriangleIcon, VideoCameraIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowLeftIcon,
+  BookOpenIcon,
+  BuildingLibraryIcon,
+  ChartBarIcon,
+  ClockIcon,
+  ExclamationTriangleIcon,
+  Square3Stack3DIcon,
+  VideoCameraIcon,
+} from '@heroicons/react/24/outline';
 import { callPortalApi, getPortalToken } from '@/app/lib/portalAuth';
 import LogoutButton from '@/app/dashboard/LogoutButton';
 import LessonBody from './LessonBody';
@@ -47,11 +56,43 @@ async function getModules(slug: string, token: string): Promise<ModulesResult> {
   return { status: 'ok', modules: data.data as Module[], forbidden: false };
 }
 
-async function getCourseTitle(slug: string): Promise<string> {
+interface Course {
+  title: string;
+  description: string | null;
+  vendor: string | null;
+  level: string | null;
+  hours: number | null;
+  certification_code: string | null;
+}
+
+async function getCourse(slug: string): Promise<Course> {
+  const fallback: Course = { title: slug, description: null, vendor: null, level: null, hours: null, certification_code: null };
   const res = await callPortalApi(`/v1/courses/${slug}`);
-  if (!res.ok) return slug;
+  if (!res.ok) return fallback;
   const data = await res.json();
-  return data?.data?.title ?? slug;
+  const c = data?.data;
+  if (!c) return fallback;
+  return {
+    title: c.title ?? slug,
+    description: c.description ?? null,
+    vendor: c.vendor ?? null,
+    level: c.level ?? null,
+    hours: c.hours ?? null,
+    certification_code: c.certification_code ?? null,
+  };
+}
+
+function formatDuration(totalMinutes: number): string {
+  if (totalMinutes <= 0) return '—';
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours === 0) return `${minutes} min`;
+  if (minutes === 0) return `${hours} hr${hours === 1 ? '' : 's'}`;
+  return `${hours} hr${hours === 1 ? '' : 's'} ${minutes} min`;
+}
+
+function capitalize(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
 export default async function CourseLessonsPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -83,8 +124,15 @@ export default async function CourseLessonsPage({ params }: { params: Promise<{ 
     );
   }
 
-  const courseTitle = await getCourseTitle(slug);
+  const course = await getCourse(slug);
   const { modules, forbidden } = result;
+
+  const totalModules = modules.length;
+  const totalLessons = modules.reduce((sum, m) => sum + m.lessons.length, 0);
+  const totalMinutes = modules.reduce(
+    (sum, m) => sum + m.lessons.reduce((lessonSum, lesson) => lessonSum + (lesson.duration_minutes ?? 0), 0),
+    0
+  );
 
   return (
     <main className="min-h-screen bg-[#0A0F1A] text-gray-300 font-sans">
@@ -102,9 +150,66 @@ export default async function CourseLessonsPage({ params }: { params: Promise<{ 
           <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-300 transition mb-3">
             <ArrowLeftIcon className="w-3.5 h-3.5" /> Back to Dashboard
           </Link>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">{courseTitle}</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">{course.title}</h1>
           <p className="text-sm text-gray-400 mt-1">Course lessons and study material.</p>
         </div>
+
+        {/* About this course */}
+        <div className="p-6 rounded-2xl bg-[#05080F] border border-white/10 space-y-4">
+          <h2 className="text-lg font-bold text-white">About this course</h2>
+          {course.description && <p className="text-sm text-gray-400 leading-relaxed">{course.description}</p>}
+          <div className="flex flex-wrap gap-2 text-[11px]">
+            {course.vendor && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border bg-white/5 border-white/10 text-gray-300">
+                <BuildingLibraryIcon className="w-3.5 h-3.5" /> {course.vendor}
+                {course.certification_code ? ` · ${course.certification_code}` : ''}
+              </span>
+            )}
+            {course.level && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border bg-white/5 border-white/10 text-gray-300">
+                <ChartBarIcon className="w-3.5 h-3.5" /> {capitalize(course.level)}
+              </span>
+            )}
+            {course.hours !== null && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border bg-white/5 border-white/10 text-gray-300">
+                <ClockIcon className="w-3.5 h-3.5" /> {course.hours} hrs
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Syllabus stats */}
+        {!forbidden && modules.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-6 rounded-2xl bg-[#05080F] border border-white/10 flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-[#2F57EF]/15">
+                <Square3Stack3DIcon className="w-6 h-6 text-[#0DCAF0]" />
+              </div>
+              <div>
+                <p className="text-2xl font-extrabold text-white">{totalModules}</p>
+                <p className="text-xs text-gray-400">Modules</p>
+              </div>
+            </div>
+            <div className="p-6 rounded-2xl bg-[#05080F] border border-white/10 flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-amber-500/15">
+                <BookOpenIcon className="w-6 h-6 text-amber-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-extrabold text-white">{totalLessons}</p>
+                <p className="text-xs text-gray-400">Lessons</p>
+              </div>
+            </div>
+            <div className="p-6 rounded-2xl bg-[#05080F] border border-white/10 flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-[#C664FF]/15">
+                <ClockIcon className="w-6 h-6 text-[#C664FF]" />
+              </div>
+              <div>
+                <p className="text-2xl font-extrabold text-white">{formatDuration(totalMinutes)}</p>
+                <p className="text-xs text-gray-400">Total Duration</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {forbidden ? (
           <div className="p-8 rounded-2xl bg-[#05080F] border border-white/10 text-center text-sm text-gray-400">
@@ -116,7 +221,9 @@ export default async function CourseLessonsPage({ params }: { params: Promise<{ 
           </div>
         ) : (
           <div className="space-y-6">
-            {modules.map((module) => (
+            {modules.map((module) => {
+              const moduleMinutes = module.lessons.reduce((sum, lesson) => sum + (lesson.duration_minutes ?? 0), 0);
+              return (
               <div key={module.id} className="rounded-2xl bg-[#05080F] border border-white/10 overflow-hidden">
                 <div className="p-6 border-b border-white/10 space-y-2">
                   <div className="flex items-start justify-between gap-4">
@@ -129,6 +236,9 @@ export default async function CourseLessonsPage({ params }: { params: Promise<{ 
                       </span>
                     )}
                   </div>
+                  <p className="text-xs text-gray-500">
+                    {module.lessons.length} lesson{module.lessons.length === 1 ? '' : 's'} · {formatDuration(moduleMinutes)}
+                  </p>
                   {module.exam_domain && <p className="text-xs text-gray-500">{module.exam_domain}</p>}
                   {module.ai_summary && <p className="text-sm text-gray-400">{module.ai_summary}</p>}
                 </div>
@@ -164,7 +274,8 @@ export default async function CourseLessonsPage({ params }: { params: Promise<{ 
                     ))}
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

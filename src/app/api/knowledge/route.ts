@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { timingSafeEqual } from 'crypto';
 import { getKnowledgeBase, saveKnowledgeBase, QAPair } from '@/app/lib/knowledge';
 import { isRateLimited, getClientIp } from '@/app/lib/rateLimit';
 
@@ -6,7 +7,13 @@ function isAuthorized(req: NextRequest): boolean {
   const adminKey = process.env.ADMIN_API_KEY;
   if (!adminKey) return false;
   const provided = req.headers.get('x-admin-key');
-  return provided === adminKey;
+  if (!provided) return false;
+  // Length check first - timingSafeEqual throws on mismatched-length buffers
+  // rather than returning false.
+  const a = Buffer.from(provided);
+  const b = Buffer.from(adminKey);
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
 }
 
 async function isAdminRateLimited(req: NextRequest): Promise<boolean> {

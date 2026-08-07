@@ -34,12 +34,16 @@ function apiBaseUrl(): string {
 // keeps them all working without a caller-side try/catch, and avoids an
 // uncaught exception crashing a Server Component's render into Next's
 // generic error page.
-export async function callPortalApi(path: string, init?: RequestInit & { token?: string }) {
-  const { token, ...rest } = init ?? {};
+export async function callPortalApi(path: string, init?: RequestInit & { token?: string; clientIp?: string }) {
+  const { token, clientIp, ...rest } = init ?? {};
   const headers = new Headers(rest.headers);
   headers.set('Accept', 'application/json');
   if (rest.body) headers.set('Content-Type', 'application/json');
   if (token) headers.set('Authorization', `Bearer ${token}`);
+  // Lets the backend's own per-IP login throttle key on the real visitor
+  // instead of a shared identity - only meaningful once the backend trusts
+  // its proxy enough to read this instead of the raw socket IP.
+  if (clientIp) headers.set('X-Forwarded-For', clientIp);
 
   try {
     return await fetch(`${apiBaseUrl()}${path}`, { ...rest, headers, cache: 'no-store' });

@@ -2,15 +2,29 @@ import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import LinkedInProvider from 'next-auth/providers/linkedin';
 
+// A silently-accepted dummy client id/secret would let OAuth "work" against
+// nothing - broken sign-in with no error until a real user hits it. Same
+// fail-loudly reasoning as NEXTAUTH_SECRET below: missing config in
+// production should crash on boot, not fall back. Local dev without OAuth
+// creds configured still gets a harmless placeholder.
+function requiredOAuthEnv(name: string, devFallback: string): string {
+  const value = process.env[name];
+  if (value) return value;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(`${name} is not set`);
+  }
+  return devFallback;
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || 'dummy_google_client_id',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'dummy_google_client_secret',
+      clientId: requiredOAuthEnv('GOOGLE_CLIENT_ID', 'dummy_google_client_id'),
+      clientSecret: requiredOAuthEnv('GOOGLE_CLIENT_SECRET', 'dummy_google_client_secret'),
     }),
     LinkedInProvider({
-      clientId: process.env.LINKEDIN_CLIENT_ID || 'dummy_linkedin_client_id',
-      clientSecret: process.env.LINKEDIN_CLIENT_SECRET || 'dummy_linkedin_client_secret',
+      clientId: requiredOAuthEnv('LINKEDIN_CLIENT_ID', 'dummy_linkedin_client_id'),
+      clientSecret: requiredOAuthEnv('LINKEDIN_CLIENT_SECRET', 'dummy_linkedin_client_secret'),
     }),
   ],
   session: {

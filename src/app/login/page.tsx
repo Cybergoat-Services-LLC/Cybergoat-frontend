@@ -3,11 +3,10 @@
 import React, { Suspense, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { ArrowLeftIcon, LockClosedIcon, EnvelopeIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,8 +35,12 @@ function LoginForm() {
         return;
       }
 
-      router.push('/dashboard');
-      router.refresh();
+      // A hard navigation, not router.push() - the dashboard is a Server
+      // Component reading the just-set httpOnly cookie via next/headers, and
+      // a client-side transition can serve a stale pre-login render of it
+      // before the fresh cookie is picked up, bouncing back to /login and
+      // looking like a second sign-in prompt.
+      window.location.href = '/dashboard';
     } catch {
       setError("We couldn't reach the server. Please try again in a moment.");
     } finally {

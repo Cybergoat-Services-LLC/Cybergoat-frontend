@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { callPortalApi, getPortalToken } from '@/app/lib/portalAuth';
 
+const ID_PATTERN = /^\d+$/;
+
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  if (!ID_PATTERN.test(id)) {
+    return NextResponse.json({ message: 'Invalid lesson id' }, { status: 400 });
+  }
+
   const token = await getPortalToken();
   if (!token) {
     return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });

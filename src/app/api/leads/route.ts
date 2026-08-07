@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { timingSafeEqual } from 'crypto';
 import { saveLead, getLeads, TrackLead } from '@/app/lib/leads';
 import { TRACK_DETAILS } from '@/app/lib/trackDetails';
 import { isRateLimited, getClientIp } from '@/app/lib/rateLimit';
@@ -10,7 +11,14 @@ const VALID_FORMATS = ['Online Live Interactive', 'In-Person Dubai Bootcamp', 'C
 function isAuthorized(req: NextRequest): boolean {
   const adminKey = process.env.ADMIN_API_KEY;
   if (!adminKey) return false;
-  return req.headers.get('x-admin-key') === adminKey;
+  const provided = req.headers.get('x-admin-key');
+  if (!provided) return false;
+  // Length check first - timingSafeEqual throws on mismatched-length buffers
+  // rather than returning false.
+  const a = Buffer.from(provided);
+  const b = Buffer.from(adminKey);
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
 }
 
 function renderLeadEmail(lead: TrackLead): string {

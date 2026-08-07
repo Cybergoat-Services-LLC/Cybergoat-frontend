@@ -10,6 +10,7 @@ import {
   CalendarDaysIcon,
   VideoCameraIcon,
   ExclamationTriangleIcon,
+  ShoppingBagIcon,
 } from '@heroicons/react/24/outline';
 import { callPortalApi, getPortalToken } from '@/app/lib/portalAuth';
 import LogoutButton from './LogoutButton';
@@ -102,9 +103,17 @@ export default async function DashboardPage() {
       </nav>
 
       <div className="container mx-auto px-6 py-10 space-y-10">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Welcome back, {user.name.split(' ')[0]}</h1>
-          <p className="text-sm text-gray-400 mt-1">Here&apos;s where things stand with your training.</p>
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Welcome back, {user.name.split(' ')[0]}</h1>
+            <p className="text-sm text-gray-400 mt-1">Here&apos;s where things stand with your training.</p>
+          </div>
+          <Link
+            href="/dashboard/courses"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2F57EF] text-white text-sm font-bold hover:bg-[#2F57EF]/80 transition"
+          >
+            <ShoppingBagIcon className="w-4 h-4" /> Browse Courses
+          </Link>
         </div>
 
         {/* Stats */}

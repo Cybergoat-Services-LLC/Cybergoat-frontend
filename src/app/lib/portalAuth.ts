@@ -38,7 +38,11 @@ export async function callPortalApi(path: string, init?: RequestInit & { token?:
   const { token, clientIp, ...rest } = init ?? {};
   const headers = new Headers(rest.headers);
   headers.set('Accept', 'application/json');
-  if (rest.body) headers.set('Content-Type', 'application/json');
+  // FormData bodies (multipart file uploads) must NOT get a manual
+  // Content-Type - fetch sets its own with the correct random boundary.
+  // Setting it ourselves (or leaving a stale one from a caller) breaks
+  // the backend's multipart parser.
+  if (rest.body && !(rest.body instanceof FormData)) headers.set('Content-Type', 'application/json');
   if (token) headers.set('Authorization', `Bearer ${token}`);
   // Lets the backend's own per-IP login throttle key on the real visitor
   // instead of a shared identity - only meaningful once the backend trusts

@@ -1,12 +1,14 @@
 import Image from 'next/image';
-import { 
-  CheckCircleIcon, 
-  ShieldCheckIcon, 
-  AcademicCapIcon, 
-  BuildingOffice2Icon, 
+import Link from 'next/link';
+import {
+  CheckCircleIcon,
+  ShieldCheckIcon,
+  AcademicCapIcon,
+  BuildingOffice2Icon,
   CpuChipIcon,
   SparklesIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  ArrowRightIcon,
 } from '@heroicons/react/24/outline';
 import RevealOnScroll from './RevealOnScroll';
 import { ContactTrigger, SignInTrigger, AssessmentTrigger, TrackTrigger } from './interactive-buttons';
@@ -392,6 +394,36 @@ export const GRCSection = () => (
         <ContactTrigger className="inline-block mt-4 px-6 py-3 bg-gradient-to-r from-[#2F57EF] to-[#C664FF] text-white font-bold rounded-full hover:shadow-[0_0_20px_rgba(47,87,239,0.4)] transition-all cursor-pointer">
           Contact Us to Know More
         </ContactTrigger>
+      </RevealOnScroll>
+    </div>
+  </section>
+);
+
+export const DescIsrCtaSection = () => (
+  <section className="py-16 bg-[#05080F] border-y border-white/5 relative overflow-hidden">
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] opacity-25 pointer-events-none">
+      <div className="absolute inset-0 bg-gradient-to-r from-[#2F57EF] via-[#00F0FF] to-[#C664FF] blur-[110px] rounded-full mix-blend-screen" />
+    </div>
+    <div className="container mx-auto px-6 relative z-10">
+      <RevealOnScroll className="max-w-4xl mx-auto rounded-3xl border border-[#00F0FF]/30 bg-[#0A0F1A] glass-card p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
+        <div className="shrink-0 w-14 h-14 rounded-2xl bg-[#00F0FF]/10 border border-[#00F0FF]/30 flex items-center justify-center">
+          <ShieldCheckIcon className="w-7 h-7 text-[#00F0FF]" />
+        </div>
+        <div className="flex-1 text-center md:text-left">
+          <h3 className="text-xl md:text-2xl font-extrabold text-white mb-1.5">
+            Free DESC ISR Readiness Score
+          </h3>
+          <p className="text-sm md:text-base text-gray-400">
+            Upload your security policies and get a free preliminary readiness score against Dubai&rsquo;s
+            Information Security Regulation &mdash; AI-assisted, reviewed by a certified CyberGOAT professional.
+          </p>
+        </div>
+        <Link
+          href="/desc-isr-readiness"
+          className="shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:scale-[1.02] transition-all cursor-pointer whitespace-nowrap"
+        >
+          Get My Score <ArrowRightIcon className="w-4 h-4" />
+        </Link>
       </RevealOnScroll>
     </div>
   </section>

@@ -10,6 +10,7 @@ import {
   CareerRoadmapSection,
   ApproachSection,
   GRCSection,
+  DescIsrCtaSection,
   TestimonialsSection,
   Footer,
 } from './components/sections';
@@ -39,6 +40,7 @@ export default function Home() {
       <RoiCalculator />
       <ApproachSection />
       <GRCSection />
+      <DescIsrCtaSection />
       <CorporateB2BSection />
       <CoursesSection />
       <TestimonialsSection />

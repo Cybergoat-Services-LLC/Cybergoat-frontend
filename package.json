@@ -8,6 +8,11 @@
     "start": "next start",
     "lint": "eslint"
   },
+  "overrides": {
+    "next-auth": {
+      "nodemailer": "$nodemailer"
+    }
+  },
   "dependencies": {
     "@google/genai": "^2.15.0",
     "@heroicons/react": "^2.2.0",

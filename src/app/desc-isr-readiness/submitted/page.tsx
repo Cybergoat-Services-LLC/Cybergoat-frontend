@@ -4,8 +4,8 @@ import { ArrowLeftIcon, CheckCircleIcon, ClockIcon, UserGroupIcon, EnvelopeIcon 
 import SubmissionStatus from './SubmissionStatus';
 
 export const metadata = {
-  title: 'Documents Received | DESC ISR Readiness Score | CyberGOAT',
-  description: 'Your security policy documents have been received and are being reviewed for your DESC ISR readiness score.',
+  title: 'Documents Received | Compliance Readiness Score | CyberGOAT',
+  description: 'Your policy documents have been received and are being reviewed for your compliance readiness score.',
 };
 
 export default async function DescIsrSubmittedPage({
@@ -48,7 +48,7 @@ export default async function DescIsrSubmittedPage({
                 Thanks &mdash; your documents are being analyzed
               </h1>
               <p className="text-gray-400 leading-relaxed">
-                Our AI is running your preliminary DESC ISR readiness assessment now.
+                Our AI is running your preliminary compliance readiness assessment now.
                 {email ? (
                   <>
                     {' '}

@@ -411,11 +411,11 @@ export const DescIsrCtaSection = () => (
         </div>
         <div className="flex-1 text-center md:text-left">
           <h3 className="text-xl md:text-2xl font-extrabold text-white mb-1.5">
-            Free DESC ISR Readiness Score
+            Free UAE Compliance Readiness Score
           </h3>
           <p className="text-sm md:text-base text-gray-400">
-            Upload your security policies and get a free preliminary readiness score against Dubai&rsquo;s
-            Information Security Regulation &mdash; AI-assisted, reviewed by a certified CyberGOAT professional.
+            Upload your policies and get a free preliminary readiness score against DESC ISR, UAE PDPL, and/or
+            DESC&rsquo;s AI Security Policy &mdash; AI-assisted, reviewed by a certified CyberGOAT professional.
           </p>
         </div>
         <Link

@@ -17,7 +17,7 @@ import { ContactTrigger, SignInTrigger, AssessmentTrigger, TrackTrigger } from '
 import { SOCIAL_LINKS } from '@/config/socials';
 
 export const HeroSection = () => (
-  <section className="relative pt-36 pb-20 lg:pt-48 lg:pb-24 overflow-hidden bg-[#0A0F1A]">
+  <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-24 overflow-hidden bg-[#0A0F1A]">
     {/* Cyber Grid & Scanline Background Isolated (Zero Mask Interference) */}
     <div className="absolute inset-0 cyber-grid cyber-scanline pointer-events-none" />
 
@@ -36,25 +36,25 @@ export const HeroSection = () => (
         </div>
 
         {/* Refined High-Contrast Crisp Headline (Un-bloated) */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.06] mb-6 max-w-4xl mx-auto">
-          Dubai&rsquo;s EC-Council{' '}
+        <h1 className="text-4xl sm:text-6xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.06] mb-6 max-w-5xl mx-auto">
+          CyberGOAT: The UAE&rsquo;s{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] via-[#38BDF8] to-[#00F0FF] font-extrabold">
-            Training
+            AI-Powered Cybersecurity Training
           </span>{' '}
-          &amp; Cybersecurity{' '}
+          &amp;{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C664FF] via-[#E066FF] to-[#F472B6] font-extrabold">
-            Consulting
+            Compliance Enablement
           </span>{' '}
-          Authority.
+          Studio.
         </h1>
 
         {/* High-Contrast Executive Sales Sub-Headline */}
-        <p className="text-xl sm:text-2xl text-white font-bold mb-8 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-xl sm:text-2xl text-white font-bold mb-6 max-w-3xl mx-auto leading-relaxed">
           Official EC-Council certification pathways, GRC &amp; security architecture consulting, Virtual CISO retainers, AI/GenAI governance advisory, and a free AI-powered compliance readiness score.
         </p>
 
         {/* 3 High-Impact Cyber Sales Value Pillar Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-10 text-left">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-6 text-left">
           <div className="bg-[#05080F] border border-[#00F0FF]/40 rounded-3xl p-6 glass-card hover:border-[#00F0FF] transition-all">
             <div className="flex items-center gap-2 mb-2 text-[#00F0FF] font-extrabold text-sm uppercase tracking-wider">
               <ShieldCheckIcon className="w-5 h-5 text-[#00F0FF]" />
@@ -91,21 +91,18 @@ export const HeroSection = () => (
           <AssessmentTrigger className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] hover:scale-[1.02] transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg">
             <SparklesIcon className="w-4 h-4 text-black" /> Evaluate Skill Gap (2-Min Free)
           </AssessmentTrigger>
-          <a
-            href="#courses"
-            className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-[#2F57EF] to-[#C664FF] text-white font-bold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(198,100,255,0.4)] hover:scale-[1.02] transition-all cursor-pointer shadow-lg"
-          >
-            Explore Courses
-          </a>
           <Link
             href="/desc-isr-readiness"
             className="w-full sm:w-auto px-7 py-3.5 bg-transparent border border-[#C664FF]/40 text-[#C664FF] font-bold text-xs uppercase tracking-wider rounded-full hover:bg-[#C664FF]/10 transition-all cursor-pointer"
           >
             Assess DESC ISR, PDPL &amp; AI Compliance
           </Link>
-          <ContactTrigger className="w-full sm:w-auto px-7 py-3.5 bg-transparent border border-[#00F0FF]/40 text-[#00F0FF] font-bold text-xs uppercase tracking-wider rounded-full hover:bg-[#00F0FF]/10 transition-all cursor-pointer">
-            Contact Advisor
-          </ContactTrigger>
+          <a
+            href="#courses"
+            className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-[#2F57EF] to-[#C664FF] text-white font-bold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(198,100,255,0.4)] hover:scale-[1.02] transition-all cursor-pointer shadow-lg"
+          >
+            Explore Courses
+          </a>
         </div>
 
         {/* Reseller Accreditation Trust Banner */}

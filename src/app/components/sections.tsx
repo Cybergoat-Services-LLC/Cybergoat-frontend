@@ -66,10 +66,10 @@ export const HeroSection = () => (
           <div className="bg-[#05080F] border border-[#C664FF]/40 rounded-3xl p-6 glass-card hover:border-[#C664FF] transition-all">
             <div className="flex items-center gap-2 mb-2 text-[#E066FF] font-extrabold text-sm uppercase tracking-wider">
               <CpuChipIcon className="w-5 h-5 text-[#E066FF]" />
-              <span>Live Cyber Range Labs</span>
+              <span>Official EC-Council iLabs</span>
             </div>
             <p className="text-xs text-gray-300 font-medium leading-relaxed">
-              100% hands-on attack &amp; defense simulation labs, real-world threat vectors, and active incident response.
+              220+ hands-on lab exercises bundled with official vouchers &mdash; real attack &amp; defense scenarios, not simulations.
             </p>
           </div>
 
@@ -103,13 +103,18 @@ export const HeroSection = () => (
         {/* Reseller Accreditation Trust Banner */}
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-wrap justify-center items-center gap-6 opacity-85">
           <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-gray-400">
-            Official Certification Alignment:
+            Official Reseller:
           </span>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <Image src="/ec-council-logo.jpeg" alt="EC-Council Partner" width={100} height={40} className="rounded brightness-110 contrast-125 object-contain" />
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">ISACA Aligned</span>
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">Data Privacy &amp; GDPR</span>
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">ISC2 Framework</span>
+            <Image src="/ec-council-logo.jpeg" alt="EC-Council Authorized Reseller" width={100} height={40} className="rounded brightness-110 contrast-125 object-contain" />
+          </div>
+          <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-gray-400 ml-2">
+            Independent Exam Prep:
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">ISACA (CISA / CISM / CRISC)</span>
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">ISC2 (CISSP)</span>
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">IAPP (CIPP/E, CIPM)</span>
           </div>
         </div>
       </div>
@@ -141,9 +146,9 @@ export const StatsBar = () => (
         </div>
         <div className="space-y-1">
           <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#2F57EF] to-[#0DCAF0]">
-            24/7 AI
+            Free AI Tool
           </div>
-          <p className="text-xs md:text-sm text-gray-400 font-medium">Career Assistant Support</p>
+          <p className="text-xs md:text-sm text-gray-400 font-medium">Automated Compliance Readiness Scoring</p>
         </div>
       </div>
     </div>

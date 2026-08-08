@@ -65,9 +65,9 @@ export const HeroSection = () => (
             </p>
           </div>
 
-          <div className="bg-[#05080F] border border-[#C664FF]/40 rounded-3xl p-6 glass-card hover:border-[#C664FF] transition-all">
-            <div className="flex items-center gap-2 mb-2 text-[#E066FF] font-extrabold text-sm uppercase tracking-wider">
-              <CpuChipIcon className="w-5 h-5 text-[#E066FF]" />
+          <div className="bg-[#05080F] border border-[#00F0FF]/40 rounded-3xl p-6 glass-card hover:border-[#00F0FF] transition-all">
+            <div className="flex items-center gap-2 mb-2 text-[#00F0FF] font-extrabold text-sm uppercase tracking-wider">
+              <CpuChipIcon className="w-5 h-5 text-[#00F0FF]" />
               <span>Official EC-Council iLabs</span>
             </div>
             <p className="text-xs text-gray-300 font-medium leading-relaxed">
@@ -75,9 +75,9 @@ export const HeroSection = () => (
             </p>
           </div>
 
-          <div className="bg-[#05080F] border border-[#38BDF8]/40 rounded-3xl p-6 glass-card hover:border-[#38BDF8] transition-all">
-            <div className="flex items-center gap-2 mb-2 text-[#38BDF8] font-extrabold text-sm uppercase tracking-wider">
-              <BriefcaseIcon className="w-5 h-5 text-[#38BDF8]" />
+          <div className="bg-[#05080F] border border-[#C664FF]/40 rounded-3xl p-6 glass-card hover:border-[#C664FF] transition-all">
+            <div className="flex items-center gap-2 mb-2 text-[#E066FF] font-extrabold text-sm uppercase tracking-wider">
+              <BriefcaseIcon className="w-5 h-5 text-[#E066FF]" />
               <span>GRC, Security &amp; AI Governance Advisory</span>
             </div>
             <p className="text-xs text-gray-300 font-medium leading-relaxed">
@@ -250,123 +250,116 @@ export const CareerRoadmapSection = () => (
 
 export const ApproachSection = () => (
   <section className="py-24 bg-[#05080F] relative border-y border-white/5">
-    <div className="container mx-auto px-6 space-y-24">
-      <div className="grid md:grid-cols-2 gap-16 items-center">
-        <RevealOnScroll className="space-y-8">
-          <h2 className="text-sm font-bold tracking-widest text-[#0DCAF0] uppercase">Who We Are</h2>
-          <h3 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
-            Empowering individuals and businesses.
-          </h3>
-          <p className="text-xl text-gray-400">
-            CyberGOAT empowers individuals and businesses to navigate the ever-shifting
-            landscape of security and privacy. In a world where regulations scramble to
-            keep pace with emerging technologies like AI, our training and consulting
-            solutions provide a critical edge.
-          </p>
-          <ul className="space-y-6">
-            <li className="flex items-start gap-4">
-              <div className="mt-1 w-8 h-8 rounded-full bg-[#2F57EF]/20 flex items-center justify-center text-[#2F57EF]">
-                <CheckCircleIcon className="w-5 h-5" />
-              </div>
+    <div className="container mx-auto px-6 space-y-16">
+      <RevealOnScroll className="max-w-3xl space-y-6">
+        <h2 className="text-sm font-bold tracking-widest text-[#00F0FF] uppercase">Who We Are</h2>
+        <h3 className="text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+          Built for the practitioner. Trusted by the enterprise.
+        </h3>
+        <p className="text-xl text-gray-400">
+          CyberGOAT empowers individuals and businesses to navigate the ever-shifting
+          landscape of security and privacy. In a world where regulations scramble to
+          keep pace with emerging technologies like AI, our training and consulting
+          practices work side by side to give you a critical edge.
+        </p>
+      </RevealOnScroll>
+
+      <div className="grid lg:grid-cols-2 gap-8">
+        <RevealOnScroll className="bg-[#0A0F1A] border border-[#00F0FF]/30 rounded-3xl p-8 glass-card hover:border-[#00F0FF]/60 transition-all">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-12 h-12 rounded-2xl bg-[#00F0FF]/10 flex items-center justify-center text-[#00F0FF]">
+              <AcademicCapIcon className="w-6 h-6" />
+            </div>
+            <h4 className="text-2xl font-bold text-white">Training &amp; Certification</h4>
+          </div>
+          <ul className="space-y-5">
+            <li className="flex items-start gap-3">
+              <CheckCircleIcon className="w-5 h-5 text-[#00F0FF] shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-white font-semibold text-lg">Expert-Led Training</h4>
-                <p className="text-gray-400">
+                <h5 className="text-white font-semibold">Expert-Led Training</h5>
+                <p className="text-gray-400 text-sm">
                   Delivered by certified instructors with an average of 10+ years of
                   practical and pedagogical experience.
                 </p>
               </div>
             </li>
-            <li className="flex items-start gap-4">
-              <div className="mt-1 w-8 h-8 rounded-full bg-[#2F57EF]/20 flex items-center justify-center text-[#2F57EF]">
-                <CheckCircleIcon className="w-5 h-5" />
-              </div>
+            <li className="flex items-start gap-3">
+              <CheckCircleIcon className="w-5 h-5 text-[#00F0FF] shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-white font-semibold text-lg">Customizable Training</h4>
-                <p className="text-gray-400">
+                <h5 className="text-white font-semibold">Customizable Training</h5>
+                <p className="text-gray-400 text-sm">
                   Designed to scale and future-proof the security posture of businesses
                   across all industries.
                 </p>
               </div>
             </li>
-            <li className="flex items-start gap-4">
-              <div className="mt-1 w-8 h-8 rounded-full bg-[#2F57EF]/20 flex items-center justify-center text-[#2F57EF]">
-                <CheckCircleIcon className="w-5 h-5" />
-              </div>
+          </ul>
+        </RevealOnScroll>
+
+        <RevealOnScroll delay={0.1} className="bg-[#0A0F1A] border border-[#C664FF]/30 rounded-3xl p-8 glass-card hover:border-[#C664FF]/60 transition-all">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-12 h-12 rounded-2xl bg-[#C664FF]/10 flex items-center justify-center text-[#E066FF]">
+              <BriefcaseIcon className="w-6 h-6" />
+            </div>
+            <h4 className="text-2xl font-bold text-white">GRC &amp; Security Advisory</h4>
+          </div>
+          <ul className="space-y-5">
+            <li className="flex items-start gap-3">
+              <CheckCircleIcon className="w-5 h-5 text-[#E066FF] shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-white font-semibold text-lg">GRC &amp; Security Advisory</h4>
-                <p className="text-gray-400">
-                  Direct consulting engagements for compliance advisory, security
-                  architecture, Virtual CISO retainers, and AI/GenAI governance &mdash;
-                  beyond the classroom.
+                <h5 className="text-white font-semibold">Compliance &amp; Security Architecture</h5>
+                <p className="text-gray-400 text-sm">
+                  GRC/compliance advisory and security architecture design for
+                  organizations navigating a growing regulatory landscape.
+                </p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <CheckCircleIcon className="w-5 h-5 text-[#E066FF] shrink-0 mt-0.5" />
+              <div>
+                <h5 className="text-white font-semibold">Virtual CISO &amp; AI Governance</h5>
+                <p className="text-gray-400 text-sm">
+                  Ongoing Virtual CISO retainers and AI/GenAI governance advisory,
+                  led by CISA/CISM-certified practitioners.
                 </p>
               </div>
             </li>
           </ul>
         </RevealOnScroll>
-        <RevealOnScroll delay={0.1} className="relative">
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#C664FF]/20 to-transparent blur-3xl" />
-          <div className="bg-[#0A0F1A] border border-white/10 rounded-3xl p-8 relative z-10 shadow-2xl overflow-hidden glass-card">
-            <h4 className="text-2xl font-bold text-white mb-6">Our Strategy</h4>
-            <p className="text-gray-300 text-lg mb-8">
-              &ldquo;Our strategy involves pre-consultation and understanding your training
-              needs. We customise the courses as best suitable for the individual&rsquo;s or
-              entity&rsquo;s objectives and ensure best-in-class training solutions provided
-              with assessments and certifications.&rdquo;
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {[
-                'Market Analysis',
-                'Course Development',
-                'Pre-Consultation',
-                'Customisation',
-                'Pre-Assessment',
-                'Training',
-                'Post-Assessment',
-                'Exam Voucher',
-                'Certified',
-              ].map((step, i) => (
-                <span
-                  key={step}
-                  className="px-3 py-1.5 rounded-full text-xs font-semibold bg-[#2F57EF]/10 text-[#0DCAF0] border border-[#2F57EF]/20"
-                >
-                  {i + 1}. {step}
-                </span>
-              ))}
-            </div>
-          </div>
-        </RevealOnScroll>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-10">
-        <RevealOnScroll className="rounded-3xl overflow-hidden border border-white/10 glass-card">
-          <div className="relative h-56 w-full">
-            <Image src="/cg-assets/vision.jpg" alt="Vision" fill className="object-cover" />
+      <RevealOnScroll delay={0.15} className="relative">
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#C664FF]/20 to-transparent blur-3xl" />
+        <div className="bg-[#0A0F1A] border border-white/10 rounded-3xl p-8 relative z-10 shadow-2xl overflow-hidden glass-card">
+          <h4 className="text-2xl font-bold text-white mb-6">Our Training Methodology</h4>
+          <p className="text-gray-300 text-lg mb-8">
+            &ldquo;Our strategy involves pre-consultation and understanding your training
+            needs. We customise the courses as best suitable for the individual&rsquo;s or
+            entity&rsquo;s objectives and ensure best-in-class training solutions provided
+            with assessments and certifications.&rdquo;
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {[
+              'Market Analysis',
+              'Course Development',
+              'Pre-Consultation',
+              'Customisation',
+              'Pre-Assessment',
+              'Training',
+              'Post-Assessment',
+              'Exam Voucher',
+              'Certified',
+            ].map((step, i) => (
+              <span
+                key={step}
+                className="px-3 py-1.5 rounded-full text-xs font-semibold bg-[#2F57EF]/10 text-[#0DCAF0] border border-[#2F57EF]/20"
+              >
+                {i + 1}. {step}
+              </span>
+            ))}
           </div>
-          <div className="p-8">
-            <h4 className="text-2xl font-bold text-white mb-3">Vision</h4>
-            <p className="text-gray-400">
-              To empower success to individuals and businesses by providing strategically
-              aligned, career-focused growth in the field of Cybersecurity &amp; Privacy.
-              With quality as paramount concern, we aim to be leading with innovative
-              solutions in a sustainable manner by staying ahead of the growing threat and
-              regulatory landscape.
-            </p>
-          </div>
-        </RevealOnScroll>
-        <RevealOnScroll delay={0.1} className="rounded-3xl overflow-hidden border border-white/10 glass-card">
-          <div className="relative h-56 w-full">
-            <Image src="/cg-assets/mission.jpg" alt="Mission" fill className="object-cover" />
-          </div>
-          <div className="p-8">
-            <h4 className="text-2xl font-bold text-white mb-3">Mission</h4>
-            <p className="text-gray-400">
-              To deliver quality-based exceptional training and advisory experiences,
-              transforming the career and business journey with best-in-class training
-              resources, expert coaches, and trusted GRC and security consulting.
-            </p>
-          </div>
-        </RevealOnScroll>
-      </div>
+        </div>
+      </RevealOnScroll>
     </div>
   </section>
 );

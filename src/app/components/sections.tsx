@@ -9,6 +9,8 @@ import {
   SparklesIcon,
   ChevronRightIcon,
   ArrowRightIcon,
+  BriefcaseIcon,
+  ClipboardDocumentCheckIcon,
 } from '@heroicons/react/24/outline';
 import RevealOnScroll from './RevealOnScroll';
 import { ContactTrigger, SignInTrigger, AssessmentTrigger, TrackTrigger } from './interactive-buttons';
@@ -35,20 +37,20 @@ export const HeroSection = () => (
 
         {/* Refined High-Contrast Crisp Headline (Un-bloated) */}
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.06] mb-6 max-w-4xl mx-auto">
-          Ready to level-up your{' '}
+          Dubai&rsquo;s EC-Council{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] via-[#38BDF8] to-[#00F0FF] font-extrabold">
-            cybersecurity
+            Training
           </span>{' '}
-          and{' '}
+          &amp; Cybersecurity{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C664FF] via-[#E066FF] to-[#F472B6] font-extrabold">
-            privacy
+            Consulting
           </span>{' '}
-          expertise?
+          Authority.
         </h1>
 
         {/* High-Contrast Executive Sales Sub-Headline */}
         <p className="text-xl sm:text-2xl text-white font-bold mb-8 max-w-3xl mx-auto leading-relaxed">
-          Master Enterprise Cyber Defense, Digital Forensics &amp; Executive Security Leadership with Dubai’s Premier <span className="text-[#00F0FF] font-extrabold">EC-Council Authorized Partner</span>.
+          Official EC-Council certification pathways, GRC &amp; security architecture consulting, Virtual CISO retainers, AI/GenAI governance advisory, and a free AI-powered compliance readiness score.
         </p>
 
         {/* 3 High-Impact Cyber Sales Value Pillar Cards */}
@@ -75,11 +77,11 @@ export const HeroSection = () => (
 
           <div className="bg-[#05080F] border border-[#38BDF8]/40 rounded-3xl p-6 glass-card hover:border-[#38BDF8] transition-all">
             <div className="flex items-center gap-2 mb-2 text-[#38BDF8] font-extrabold text-sm uppercase tracking-wider">
-              <BuildingOffice2Icon className="w-5 h-5 text-[#38BDF8]" />
-              <span>Dubai HQ &amp; Virtual Bootcamps</span>
+              <BriefcaseIcon className="w-5 h-5 text-[#38BDF8]" />
+              <span>GRC, Security &amp; AI Governance Advisory</span>
             </div>
             <p className="text-xs text-gray-300 font-medium leading-relaxed">
-              Dubai Silicon Oasis headquarters, live interactive instructor-led virtual bootcamps, and official vouchers.
+              Security architecture design, GRC/compliance advisory, Virtual CISO retainers, and AI/GenAI governance consulting &mdash; led by CISA/CISM-certified practitioners.
             </p>
           </div>
         </div>
@@ -95,6 +97,12 @@ export const HeroSection = () => (
           >
             Explore Courses
           </a>
+          <Link
+            href="/desc-isr-readiness"
+            className="w-full sm:w-auto px-7 py-3.5 bg-transparent border border-[#C664FF]/40 text-[#C664FF] font-bold text-xs uppercase tracking-wider rounded-full hover:bg-[#C664FF]/10 transition-all cursor-pointer"
+          >
+            Assess DESC ISR, PDPL &amp; AI Compliance
+          </Link>
           <ContactTrigger className="w-full sm:w-auto px-7 py-3.5 bg-transparent border border-[#00F0FF]/40 text-[#00F0FF] font-bold text-xs uppercase tracking-wider rounded-full hover:bg-[#00F0FF]/10 transition-all cursor-pointer">
             Contact Advisor
           </ContactTrigger>
@@ -185,7 +193,7 @@ export const CareerRoadmapSection = () => (
             title: 'Technical Defense',
             icon: CpuChipIcon,
             desc: 'Master hands-on penetration testing, forensics, and vulnerability assessment.',
-            certs: ['CEH v12', 'CHFI', 'VAPT Advanced', 'AppSec'],
+            certs: ['CEH v13 AI', 'CHFI v11', 'VAPT Advanced', 'AppSec'],
             color: 'border-[#0DCAF0]/30 text-[#0DCAF0]',
           },
           {
@@ -405,7 +413,7 @@ export const GRCSection = () => (
 );
 
 export const DescIsrCtaSection = () => (
-  <section className="py-16 bg-[#05080F] border-y border-white/5 relative overflow-hidden">
+  <section className="py-16 bg-[#0A0F1A] border-b border-white/5 relative overflow-hidden">
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] opacity-25 pointer-events-none">
       <div className="absolute inset-0 bg-gradient-to-r from-[#2F57EF] via-[#00F0FF] to-[#C664FF] blur-[110px] rounded-full mix-blend-screen" />
     </div>

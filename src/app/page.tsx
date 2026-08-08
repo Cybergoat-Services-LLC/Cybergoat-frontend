@@ -36,11 +36,11 @@ export default function Home() {
       <NavBar />
       <HeroSection />
       <StatsBar />
+      <DescIsrCtaSection />
       <CareerRoadmapSection />
       <RoiCalculator />
       <ApproachSection />
       <GRCSection />
-      <DescIsrCtaSection />
       <CorporateB2BSection />
       <CoursesSection />
       <TestimonialsSection />

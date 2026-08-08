@@ -58,6 +58,9 @@ export default function NavBar() {
           <AssessmentTrigger className="text-[#0DCAF0] hover:underline cursor-pointer flex items-center gap-1">
             Skill Assessment
           </AssessmentTrigger>
+          <Link href="/desc-isr-readiness" className="hover:text-white transition-colors">
+            Compliance Score
+          </Link>
           <Link href="/login" className="hover:text-white transition-colors">
             LMS Login
           </Link>

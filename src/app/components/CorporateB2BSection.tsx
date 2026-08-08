@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BuildingOfficeIcon, UserGroupIcon, ShieldCheckIcon, PaperAirplaneIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { BuildingOfficeIcon, UserGroupIcon, ShieldCheckIcon, PaperAirplaneIcon, ExclamationTriangleIcon, ClipboardDocumentCheckIcon } from '@heroicons/react/24/outline';
 
 export default function CorporateB2BSection() {
   const [formData, setFormData] = useState({
@@ -36,7 +36,7 @@ export default function CorporateB2BSection() {
           name: formData.contactName,
           email: formData.workEmail,
           phone: formData.phone,
-          details: `Group size: ${formData.employeeCount} | Target Track: ${chosenTrack}`,
+          details: `Group/Team Size: ${formData.employeeCount} | Interest: ${chosenTrack}`,
         }),
       });
 
@@ -61,13 +61,13 @@ export default function CorporateB2BSection() {
           {/* Information Side */}
           <div className="lg:col-span-6 space-y-6 text-left">
             <span className="px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-[#2F57EF]/10 text-[#00F0FF] border border-[#2F57EF]/30">
-              Enterprise B2B Training Solutions
+              Enterprise Training &amp; Advisory Solutions
             </span>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-              Upskill Your Corporate Cyber Defense Team
+              Corporate Training &amp; Executive Security Advisory
             </h2>
             <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
-              Empower your enterprise IT security, SOC, and compliance teams with tailored group bootcamps at our Dubai Silicon Oasis campus or live on-site at your corporate headquarters.
+              Empower your enterprise IT security, SOC, and compliance teams with tailored group bootcamps &mdash; or engage our GRC advisory, security architecture, and Virtual CISO consultants directly, delivered from our Dubai Silicon Oasis campus or on-site at your headquarters.
             </p>
 
             <div className="space-y-4 pt-2">
@@ -94,6 +94,14 @@ export default function CorporateB2BSection() {
                   <p className="text-xs text-gray-400">Special enterprise tier pricing and dedicated account manager support for groups of 5+ employees.</p>
                 </div>
               </div>
+
+              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                <ClipboardDocumentCheckIcon className="w-6 h-6 text-[#C664FF] shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-sm font-bold text-white">GRC, Security Architecture &amp; AI Governance Advisory</h4>
+                  <p className="text-xs text-gray-400">Beyond training &mdash; engage our consultants directly for compliance advisory, security architecture design, an ongoing Virtual CISO retainer, or AI/GenAI governance and risk advisory.</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -102,8 +110,8 @@ export default function CorporateB2BSection() {
             {!submitted ? (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-1 text-left border-b border-white/10 pb-4 mb-4">
-                  <h3 className="text-xl font-bold text-white">Request Corporate Training Quote</h3>
-                  <p className="text-xs text-gray-400">Receive a custom proposal and volume discount schedule within 24 hours.</p>
+                  <h3 className="text-xl font-bold text-white">Request a Corporate Training or Advisory Proposal</h3>
+                  <p className="text-xs text-gray-400">Receive a custom proposal tailored to your training or advisory needs within 24 hours.</p>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -171,17 +179,25 @@ export default function CorporateB2BSection() {
                     </select>
                   </div>
                   <div className="text-left">
-                    <label className="block text-xs font-semibold text-gray-400 mb-1">Primary Training Track</label>
+                    <label className="block text-xs font-semibold text-gray-400 mb-1">Primary Interest</label>
                     <select
                       value={formData.targetTrack}
                       onChange={(e) => setFormData({ ...formData, targetTrack: e.target.value })}
                       className="w-full bg-[#0A0F1A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#00F0FF]"
                     >
-                      <option>EC-Council Corporate Track (CEH / C|CISO)</option>
-                      <option>Digital Forensics &amp; DFIR (CHFI v11)</option>
-                      <option>GRC &amp; ISO 27001 / UAE PDPL Compliance</option>
-                      <option>Custom Enterprise Security Architecture</option>
-                      <option value="Other">Other / Type Custom Course Title...</option>
+                      <optgroup label="Training Programs">
+                        <option>EC-Council Corporate Track (CEH / C|CISO)</option>
+                        <option>Digital Forensics &amp; DFIR (CHFI v11)</option>
+                        <option>GRC &amp; ISO 27001 / UAE PDPL Compliance Training</option>
+                        <option>Custom Enterprise Security Architecture Training</option>
+                      </optgroup>
+                      <optgroup label="Consulting &amp; Advisory Engagements">
+                        <option>GRC / Compliance Advisory Engagement</option>
+                        <option>Security Architecture Consulting</option>
+                        <option>Virtual CISO Retainer</option>
+                        <option>Enterprise AI Consulting &amp; GenAI Governance Advisory</option>
+                      </optgroup>
+                      <option value="Other">Other / Type Custom Course or Engagement...</option>
                     </select>
                   </div>
                 </div>
@@ -220,7 +236,7 @@ export default function CorporateB2BSection() {
                 <ShieldCheckIcon className="w-16 h-16 text-[#00F0FF] mx-auto animate-bounce" />
                 <h3 className="text-2xl font-extrabold text-white">Proposal Request Received!</h3>
                 <p className="text-sm text-gray-300 max-w-md mx-auto leading-relaxed">
-                  Thank you, <strong>{formData.contactName}</strong>. Our enterprise training director will contact you at <strong>{formData.workEmail}</strong> within 24 hours with custom group pricing.
+                  Thank you, <strong>{formData.contactName}</strong>. Our team will contact you at <strong>{formData.workEmail}</strong> within 24 hours with a custom training or advisory proposal.
                 </p>
               </div>
             )}

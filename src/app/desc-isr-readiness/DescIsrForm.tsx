@@ -14,6 +14,36 @@ const MAX_FILES = 10;
 const ALLOWED_EXTENSIONS = ['.pdf', '.docx'];
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+type FrameworkId = 'desc_isr' | 'pdpl' | 'ai_security_policy';
+
+const FRAMEWORKS: { id: FrameworkId; label: string; desc: string }[] = [
+  {
+    id: 'desc_isr',
+    label: 'DESC ISR',
+    desc: "Dubai's information security regulation — general security governance, risk management, and incident response.",
+  },
+  {
+    id: 'pdpl',
+    label: 'UAE PDPL',
+    desc: "The UAE's federal Personal Data Protection Law — how personal data is collected, used, and safeguarded.",
+  },
+  {
+    id: 'ai_security_policy',
+    label: 'AI Security Policy',
+    desc: "Dubai's security requirements for organizations that build, deploy, or use AI systems.",
+  },
+];
+
+type FreeZoneStatus = 'onshore' | 'free_zone';
+
+type AiStakeholderRole = 'provider' | 'consumer' | 'end_user';
+
+const AI_ROLES: { id: AiStakeholderRole; label: string; desc: string }[] = [
+  { id: 'provider', label: 'AI Provider', desc: 'We build or train AI systems / models.' },
+  { id: 'consumer', label: 'AI Consumer', desc: 'We deploy third-party AI systems in our business.' },
+  { id: 'end_user', label: 'AI End-User', desc: 'We just use AI tools day to day (chatbots, copilots, etc.).' },
+];
+
 function formatBytes(bytes: number): string {
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)}KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
@@ -35,6 +65,28 @@ export default function DescIsrForm() {
   const [fileError, setFileError] = useState('');
   const [formError, setFormError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  const [selectedFrameworks, setSelectedFrameworks] = useState<Record<FrameworkId, boolean>>({
+    desc_isr: false,
+    pdpl: false,
+    ai_security_policy: false,
+  });
+  const [freeZoneStatus, setFreeZoneStatus] = useState<FreeZoneStatus | ''>('');
+  const [aiRole, setAiRole] = useState<AiStakeholderRole | ''>('');
+
+  const anyFrameworkSelected = Object.values(selectedFrameworks).some(Boolean);
+
+  function toggleFramework(id: FrameworkId) {
+    setFormError('');
+    setSelectedFrameworks((prev) => {
+      const next = { ...prev, [id]: !prev[id] };
+      // Reset the conditional answer when its triggering framework is unchecked,
+      // so a stale answer never gets submitted for a framework that's no longer selected.
+      if (id === 'pdpl' && !next.pdpl) setFreeZoneStatus('');
+      if (id === 'ai_security_policy' && !next.ai_security_policy) setAiRole('');
+      return next;
+    });
+  }
 
   function addFiles(incoming: FileList | null) {
     if (!incoming || incoming.length === 0) return;
@@ -71,6 +123,18 @@ export default function DescIsrForm() {
     e.preventDefault();
     setFormError('');
 
+    if (!anyFrameworkSelected) {
+      setFormError('Please select at least one framework to be assessed against.');
+      return;
+    }
+    if (selectedFrameworks.pdpl && !freeZoneStatus) {
+      setFormError('Please tell us whether your business is registered onshore or in a free zone, so we can assess PDPL correctly.');
+      return;
+    }
+    if (selectedFrameworks.ai_security_policy && !aiRole) {
+      setFormError('Please select the option that best describes your organization’s relationship to AI.');
+      return;
+    }
     if (!name.trim() || !company.trim()) {
       setFormError('Please fill in your name and company.');
       return;
@@ -96,6 +160,15 @@ export default function DescIsrForm() {
       body.set('name', name.trim());
       body.set('company', company.trim());
       body.set('work_email', workEmail.trim());
+      for (const id of Object.keys(selectedFrameworks) as FrameworkId[]) {
+        if (selectedFrameworks[id]) body.append('frameworks[]', id);
+      }
+      if (selectedFrameworks.pdpl) {
+        body.set('is_free_zone_entity', freeZoneStatus === 'free_zone' ? 'true' : 'false');
+      }
+      if (selectedFrameworks.ai_security_policy) {
+        body.set('ai_stakeholder_role', aiRole);
+      }
       for (const file of files) {
         body.append('documents[]', file, file.name);
       }
@@ -137,6 +210,108 @@ export default function DescIsrForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-xs font-semibold text-gray-400 mb-1.5">
+            Which framework(s) do you want assessed?
+          </label>
+          <div className="space-y-2.5">
+            {FRAMEWORKS.map((fw) => (
+              <div
+                key={fw.id}
+                className={`rounded-2xl border p-3.5 transition-colors ${
+                  selectedFrameworks[fw.id]
+                    ? 'border-[#2F57EF]/50 bg-[#2F57EF]/[0.06]'
+                    : 'border-white/10 bg-white/[0.02]'
+                }`}
+              >
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedFrameworks[fw.id]}
+                    onChange={() => toggleFramework(fw.id)}
+                    className="mt-0.5 w-4 h-4 shrink-0 rounded border-white/20 bg-white/5 accent-[#2F57EF] cursor-pointer"
+                  />
+                  <span>
+                    <span className="block text-sm font-bold text-white">{fw.label}</span>
+                    <span className="block text-xs text-gray-400 leading-relaxed mt-0.5">{fw.desc}</span>
+                  </span>
+                </label>
+
+                {fw.id === 'pdpl' && selectedFrameworks.pdpl && (
+                  <div className="mt-3 pl-7 space-y-2">
+                    <p className="text-[11px] text-gray-400 leading-relaxed">
+                      PDPL doesn&rsquo;t apply to entities registered in certain UAE free zones (e.g. DIFC, ADGM)
+                      &mdash; they follow their own separate data protection law instead. Is your business
+                      registered onshore in the UAE, or in a free zone?
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {(['onshore', 'free_zone'] as const).map((opt) => (
+                        <label
+                          key={opt}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium cursor-pointer border transition-colors ${
+                            freeZoneStatus === opt
+                              ? 'border-[#00F0FF]/50 bg-[#00F0FF]/10 text-[#00F0FF]'
+                              : 'border-white/10 bg-white/[0.02] text-gray-400 hover:border-white/20'
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="free_zone_status"
+                            value={opt}
+                            checked={freeZoneStatus === opt}
+                            onChange={() => setFreeZoneStatus(opt)}
+                            className="sr-only"
+                          />
+                          {opt === 'onshore' ? 'Onshore (mainland UAE)' : 'Free zone (e.g. DIFC, ADGM)'}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {fw.id === 'ai_security_policy' && selectedFrameworks.ai_security_policy && (
+                  <div className="mt-3 pl-7 space-y-2">
+                    <p className="text-[11px] text-gray-400 leading-relaxed">
+                      Which best describes your organization&rsquo;s relationship to AI?
+                    </p>
+                    <div className="space-y-1.5">
+                      {AI_ROLES.map((role) => (
+                        <label
+                          key={role.id}
+                          className={`flex items-start gap-2 px-3 py-2 rounded-xl text-xs cursor-pointer border transition-colors ${
+                            aiRole === role.id
+                              ? 'border-[#C664FF]/50 bg-[#C664FF]/[0.08]'
+                              : 'border-white/10 bg-white/[0.02] hover:border-white/20'
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="ai_stakeholder_role"
+                            value={role.id}
+                            checked={aiRole === role.id}
+                            onChange={() => setAiRole(role.id)}
+                            className="mt-0.5 w-3.5 h-3.5 shrink-0 accent-[#C664FF] cursor-pointer"
+                          />
+                          <span>
+                            <span className="font-semibold text-white">{role.label}</span>{' '}
+                            <span className="text-gray-400">&mdash; {role.desc}</span>
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          {!anyFrameworkSelected && (
+            <p className="mt-2 text-[11px] text-amber-400 flex items-start gap-1.5">
+              <ExclamationTriangleIcon className="w-3.5 h-3.5 shrink-0 mt-0.5" /> Select at least one framework to
+              continue.
+            </p>
+          )}
+        </div>
+
         <div>
           <label className="block text-xs font-semibold text-gray-400 mb-1.5">Full Name</label>
           <input
@@ -230,7 +405,7 @@ export default function DescIsrForm() {
 
         <button
           type="submit"
-          disabled={submitting}
+          disabled={submitting || !anyFrameworkSelected}
           className="w-full py-3.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {submitting ? 'Uploading…' : 'Get My Free Readiness Score'}

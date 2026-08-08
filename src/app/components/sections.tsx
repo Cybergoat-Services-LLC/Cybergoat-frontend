@@ -260,8 +260,8 @@ export const ApproachSection = () => (
           <p className="text-xl text-gray-400">
             CyberGOAT empowers individuals and businesses to navigate the ever-shifting
             landscape of security and privacy. In a world where regulations scramble to
-            keep pace with emerging technologies like AI, our training solutions provide a
-            critical edge.
+            keep pace with emerging technologies like AI, our training and consulting
+            solutions provide a critical edge.
           </p>
           <ul className="space-y-6">
             <li className="flex items-start gap-4">
@@ -285,6 +285,19 @@ export const ApproachSection = () => (
                 <p className="text-gray-400">
                   Designed to scale and future-proof the security posture of businesses
                   across all industries.
+                </p>
+              </div>
+            </li>
+            <li className="flex items-start gap-4">
+              <div className="mt-1 w-8 h-8 rounded-full bg-[#2F57EF]/20 flex items-center justify-center text-[#2F57EF]">
+                <CheckCircleIcon className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-white font-semibold text-lg">GRC &amp; Security Advisory</h4>
+                <p className="text-gray-400">
+                  Direct consulting engagements for compliance advisory, security
+                  architecture, Virtual CISO retainers, and AI/GenAI governance &mdash;
+                  beyond the classroom.
                 </p>
               </div>
             </li>
@@ -347,8 +360,9 @@ export const ApproachSection = () => (
           <div className="p-8">
             <h4 className="text-2xl font-bold text-white mb-3">Mission</h4>
             <p className="text-gray-400">
-              To deliver quality-based exceptional training and transform the user journey
-              with best-in-class training resources and expert coaches.
+              To deliver quality-based exceptional training and advisory experiences,
+              transforming the career and business journey with best-in-class training
+              resources, expert coaches, and trusted GRC and security consulting.
             </p>
           </div>
         </RevealOnScroll>

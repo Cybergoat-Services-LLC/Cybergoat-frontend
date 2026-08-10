@@ -11,9 +11,12 @@ import {
   GlobeAltIcon,
   LightBulbIcon,
   ChevronRightIcon,
-  CheckBadgeIcon
+  CheckBadgeIcon,
+  EnvelopeIcon
 } from '@heroicons/react/24/outline';
 import { ContactTrigger } from './interactive-buttons';
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type StepData = {
   experience: string;
@@ -91,8 +94,63 @@ export default function SkillAssessmentModal({
   const [step, setStep] = useState<number>(1);
   const [data, setData] = useState<StepData>(INITIAL_DATA);
   const [isCalculated, setIsCalculated] = useState(false);
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [leadStatus, setLeadStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [leadError, setLeadError] = useState('');
 
   if (!isOpen) return null;
+
+  const handleSaveResults = async (e: React.FormEvent, recommendedTrack: string) => {
+    e.preventDefault();
+
+    if (!contactName.trim()) {
+      setLeadStatus('error');
+      setLeadError('Please enter your name.');
+      return;
+    }
+    if (!EMAIL_PATTERN.test(contactEmail)) {
+      setLeadStatus('error');
+      setLeadError('Please enter a valid email address.');
+      return;
+    }
+
+    setLeadStatus('submitting');
+    setLeadError('');
+
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'skill_assessment',
+          name: contactName.trim(),
+          email: contactEmail.trim(),
+          phone: contactPhone.trim() || undefined,
+          experience: data.experience,
+          role: data.role,
+          education: data.education,
+          location: data.location,
+          certifications: data.certifications,
+          goal: data.goal,
+          recommendedTrack,
+        }),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        setLeadStatus('error');
+        setLeadError(body.error || 'Something went wrong - please try again.');
+        return;
+      }
+
+      setLeadStatus('success');
+    } catch {
+      setLeadStatus('error');
+      setLeadError('Something went wrong - please try again.');
+    }
+  };
 
   const handleNext = () => {
     if (step < 4) {
@@ -446,6 +504,55 @@ export default function SkillAssessmentModal({
                   Specifically tailored to legal frameworks, ISR audit requirements, and enterprise compliance mandates in your target market ({data.location}).
                 </p>
               </div>
+            </div>
+
+            {/* Save Results / Lead Capture */}
+            <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+              {leadStatus === 'success' ? (
+                <div className="flex items-center gap-2 text-sm text-emerald-300">
+                  <CheckCircleIcon className="w-5 h-5 shrink-0" />
+                  Thanks, {contactName.trim().split(' ')[0]} — we&apos;ve saved your results. A CyberGOAT advisor will follow up within 24 hours.
+                </div>
+              ) : (
+                <form onSubmit={(e) => handleSaveResults(e, results.recommendedTrack)} className="space-y-3">
+                  <h5 className="font-bold text-white text-sm flex items-center gap-2">
+                    <EnvelopeIcon className="w-4 h-4 text-[#0DCAF0]" /> Get This Report Emailed &amp; Have an Advisor Follow Up
+                  </h5>
+                  <div className="grid sm:grid-cols-3 gap-2.5">
+                    <input
+                      type="text"
+                      value={contactName}
+                      onChange={(e) => setContactName(e.target.value)}
+                      placeholder="Your name"
+                      className="bg-[#05080F] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#2F57EF]"
+                    />
+                    <input
+                      type="email"
+                      value={contactEmail}
+                      onChange={(e) => setContactEmail(e.target.value)}
+                      placeholder="Work email"
+                      className="bg-[#05080F] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#2F57EF]"
+                    />
+                    <input
+                      type="tel"
+                      value={contactPhone}
+                      onChange={(e) => setContactPhone(e.target.value)}
+                      placeholder="Phone / WhatsApp (optional)"
+                      className="bg-[#05080F] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#2F57EF]"
+                    />
+                  </div>
+                  {leadStatus === 'error' && (
+                    <p className="text-xs text-red-400 font-medium">{leadError}</p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={leadStatus === 'submitting'}
+                    className="w-full sm:w-auto px-6 py-2.5 bg-white/10 hover:bg-white/15 border border-white/10 text-white text-xs font-bold rounded-full transition-all cursor-pointer disabled:opacity-60"
+                  >
+                    {leadStatus === 'submitting' ? 'Saving...' : 'Save My Results'}
+                  </button>
+                </form>
+              )}
             </div>
 
             <div className="pt-4 flex flex-col sm:flex-row gap-4 items-center justify-between border-t border-white/10">

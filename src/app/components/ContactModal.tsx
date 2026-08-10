@@ -22,8 +22,28 @@ export default function ContactModal({
     e.preventDefault();
     const text = `Hi CyberGOAT, my name is ${fullName} (${email}).\n\n${message}`;
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+    // Opened synchronously, before the fetch below, so the browser still
+    // treats it as a direct result of the click - awaiting anything first
+    // risks the popup blocker treating the window.open() as unrequested.
     window.open(url, '_blank', 'noopener,noreferrer');
     setSent(true);
+
+    // Best-effort: WhatsApp is the real, working delivery path for this
+    // form and must not be blocked by this. Previously this was the only
+    // gap left after the leads audit - every other form on the site saved
+    // a real, admin-visible record; this one only ever reached WhatsApp.
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'contact',
+        name: fullName,
+        email,
+        details: message,
+      }),
+    }).catch(() => {
+      // Nothing to do - the visitor already has their WhatsApp message open.
+    });
   };
 
   const handleClose = () => {

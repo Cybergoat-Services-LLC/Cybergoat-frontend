@@ -13,7 +13,7 @@ import {
 
 type TrackLead = {
   id: string;
-  type?: 'track' | 'b2b';
+  type?: 'track' | 'b2b' | 'skill_assessment' | 'contact';
   trackStage: string;
   trackTitle: string;
   companyName?: string;
@@ -183,10 +183,12 @@ export default function AdminLeadsPage() {
                       <span className="flex items-center gap-1.5">
                         <EnvelopeIcon className="w-3.5 h-3.5 text-gray-500" /> {lead.email}
                       </span>
-                      <span className="flex items-center gap-1.5">
-                        <PhoneIcon className="w-3.5 h-3.5 text-gray-500" /> {lead.phone}
-                      </span>
-                      <span className="text-gray-500">{lead.format}</span>
+                      {lead.phone && (
+                        <span className="flex items-center gap-1.5">
+                          <PhoneIcon className="w-3.5 h-3.5 text-gray-500" /> {lead.phone}
+                        </span>
+                      )}
+                      {lead.format && <span className="text-gray-500">{lead.format}</span>}
                     </div>
                     {lead.details && (
                       <p className="text-xs text-gray-400 italic">{lead.details}</p>

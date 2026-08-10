@@ -43,7 +43,7 @@ export default function GoogleStructuredData() {
         position: 1,
         item: {
           '@type': 'Course',
-          name: 'CEH v12 - Certified Ethical Hacker',
+          name: 'CEH v13 AI - Certified Ethical Hacker',
           description: 'Official EC-Council Ethical Hacking certification training with official exam vouchers and hands-on iLabs.',
           provider: {
             '@type': 'Organization',

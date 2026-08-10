@@ -56,7 +56,7 @@ export default function RefundPolicyPage() {
               2. Official EC-Council Exam Vouchers &amp; iLabs Credentials
             </h2>
             <p>
-              CyberGOAT Services LLC acts as an official <strong className="text-white">EC-Council Authorized Reseller</strong>. All official exam vouchers (CEH v12, CHFI v11, C|CISO) and iLabs credentials issued to students are subject to direct vendor governance:
+              CyberGOAT Services LLC acts as an official <strong className="text-white">EC-Council Authorized Reseller</strong>. All official exam vouchers (CEH v13 AI, CHFI v11, C|CISO) and iLabs credentials issued to students are subject to direct vendor governance:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-gray-400 text-xs sm:text-sm">
               <li>

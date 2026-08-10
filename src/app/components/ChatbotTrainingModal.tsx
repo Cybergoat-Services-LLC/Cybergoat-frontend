@@ -232,7 +232,7 @@ export default function ChatbotTrainingModal({
                 required
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
-                placeholder="e.g. What is the fee for CEH v12 or do you offer weekend classes?"
+                placeholder="e.g. What is the fee for CEH v13 AI or do you offer weekend classes?"
                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF]"
               />
             </div>

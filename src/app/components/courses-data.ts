@@ -80,8 +80,8 @@ export const TRAINING_PROGRAMS: CourseItem[] = [
 
 export const CERTIFICATIONS: CourseItem[] = [
   {
-    title: 'CEH v12',
-    description: 'Certified Ethical Hacker v12 — Official EC-Council Certification & Hands-On iLabs.',
+    title: 'CEH v13 AI',
+    description: 'Certified Ethical Hacker v13 AI — Official EC-Council Certification & Hands-On iLabs.',
     image: '/cg-assets/certifications/CEH.jpeg',
     tag: 'EC-Council',
     duration: '40 Hours',

@@ -126,7 +126,7 @@ export default function SkillAssessmentModal({
     const isForensics = data.goal.includes('Forensics');
     const isTechnical = data.goal.includes('Technical') || data.goal.includes('Hacking') || isForensics;
 
-    let recommendedTrack = 'EC-Council CEH v12 (Certified Ethical Hacker)';
+    let recommendedTrack = 'EC-Council CEH v13 AI (Certified Ethical Hacker)';
     let isEcCouncil = false;
     let ecCouncilCourses: string[] = [];
     const geoFramework = isGCC ? 'DESC ISR & UAE PDPL Privacy Laws' : isEU ? 'EU GDPR & DORA Compliance' : 'NIST 800-53 & ISO 27001';
@@ -143,7 +143,7 @@ export default function SkillAssessmentModal({
       ecCouncilCourses = [
         'C|CISO (Certified Chief Info Security Officer)',
         'CCSE (Certified Cloud Security Engineer)',
-        'CEH v12 (Certified Ethical Hacker)'
+        'CEH v13 AI (Certified Ethical Hacker)'
       ];
     } else if (isForensics) {
       // Technical Forensics stream points to CHFI, CTIA, CSA
@@ -159,7 +159,7 @@ export default function SkillAssessmentModal({
       recommendedTrack = 'EC-Council Technical Certification Suite (CEH, CND, CPENT)';
       isEcCouncil = true;
       ecCouncilCourses = [
-        'CEH v12 (Certified Ethical Hacker)',
+        'CEH v13 AI (Certified Ethical Hacker)',
         'CND v2 (Certified Network Defender)',
         'CPENT / LPT (Licensed Pen Tester Master)'
       ];

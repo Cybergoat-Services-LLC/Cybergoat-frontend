@@ -21,18 +21,25 @@ function isAuthorized(req: NextRequest): boolean {
   return timingSafeEqual(a, b);
 }
 
+function leadTypeLabel(lead: TrackLead): string {
+  if (lead.type === 'b2b') return 'B2B Corporate';
+  if (lead.type === 'skill_assessment') return 'Skill Gap Assessment';
+  if (lead.type === 'contact') return 'General Contact';
+  return 'Enrollment & Schedule';
+}
+
 function renderLeadEmail(lead: TrackLead): string {
   const rows = [
     lead.companyName ? `<p><strong>Company:</strong> ${escapeHtml(lead.companyName)}</p>` : '',
     `<p><strong>Track:</strong> ${escapeHtml(lead.trackTitle)} (${escapeHtml(lead.trackStage)})</p>`,
     `<p><strong>Name:</strong> ${escapeHtml(lead.name)}</p>`,
     `<p><strong>Email:</strong> ${escapeHtml(lead.email)}</p>`,
-    `<p><strong>Phone / WhatsApp:</strong> ${escapeHtml(lead.phone)}</p>`,
-    `<p><strong>Preferred Format:</strong> ${escapeHtml(lead.format)}</p>`,
+    lead.phone ? `<p><strong>Phone / WhatsApp:</strong> ${escapeHtml(lead.phone)}</p>` : '',
+    lead.format ? `<p><strong>Preferred Format:</strong> ${escapeHtml(lead.format)}</p>` : '',
     lead.details ? `<p><strong>Details:</strong> ${escapeHtml(lead.details)}</p>` : '',
     `<p><strong>Submitted:</strong> ${escapeHtml(lead.submittedAt)}</p>`,
   ];
-  return `<h2>New ${lead.type === 'b2b' ? 'B2B Corporate' : 'Enrollment & Schedule'} Inquiry</h2>${rows.join('\n')}`;
+  return `<h2>New ${leadTypeLabel(lead)} Inquiry</h2>${rows.join('\n')}`;
 }
 
 // POST /api/leads: Public. Records a track enrollment inquiry or a B2B
@@ -46,6 +53,9 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const isB2B = body.type === 'b2b';
+    const isSkillAssessment = body.type === 'skill_assessment';
+    const isContact = body.type === 'contact';
+    const phoneOptional = isSkillAssessment || isContact;
 
     if (typeof body.name !== 'string' || !body.name.trim() || body.name.length > 200) {
       return NextResponse.json({ error: 'A valid name is required.' }, { status: 400 });
@@ -55,13 +65,78 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'A valid email is required.' }, { status: 400 });
     }
 
-    if (typeof body.phone !== 'string' || !body.phone.trim() || body.phone.length > 50) {
-      return NextResponse.json({ error: 'A valid phone number is required.' }, { status: 400 });
+    // The skill-assessment quiz and the general Contact form never ask for
+    // a phone number - requiring one here would fail every submission from
+    // either of those forms with no way for the visitor to fix it.
+    if (!phoneOptional) {
+      if (typeof body.phone !== 'string' || !body.phone.trim() || body.phone.length > 50) {
+        return NextResponse.json({ error: 'A valid phone number is required.' }, { status: 400 });
+      }
+    } else if (body.phone !== undefined && (typeof body.phone !== 'string' || body.phone.length > 50)) {
+      return NextResponse.json({ error: 'Invalid phone number.' }, { status: 400 });
     }
 
     let lead: TrackLead;
 
-    if (isB2B) {
+    if (isSkillAssessment) {
+      const requiredStringFields: Array<[string, unknown]> = [
+        ['experience', body.experience],
+        ['role', body.role],
+        ['education', body.education],
+        ['location', body.location],
+        ['goal', body.goal],
+        ['recommendedTrack', body.recommendedTrack],
+      ];
+
+      for (const [field, value] of requiredStringFields) {
+        if (typeof value !== 'string' || !value.trim() || value.length > 300) {
+          return NextResponse.json({ error: `A valid ${field} is required.` }, { status: 400 });
+        }
+      }
+
+      const certifications = Array.isArray(body.certifications)
+        ? body.certifications.filter((c: unknown): c is string => typeof c === 'string').slice(0, 20)
+        : [];
+
+      const detailsLines = [
+        `Experience: ${body.experience}`,
+        `Current role: ${body.role}`,
+        `Education: ${body.education}`,
+        `Target market: ${body.location}`,
+        `Career goal: ${body.goal}`,
+        `Current certifications: ${certifications.length > 0 ? certifications.join(', ') : 'None yet'}`,
+      ];
+
+      lead = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        type: 'skill_assessment',
+        trackStage: 'Skill Gap Assessment',
+        trackTitle: body.recommendedTrack.trim(),
+        details: detailsLines.join(' | ').slice(0, 800),
+        name: body.name.trim(),
+        email: body.email.trim(),
+        phone: typeof body.phone === 'string' ? body.phone.trim() : '',
+        format: '',
+        submittedAt: new Date().toISOString(),
+      };
+    } else if (isContact) {
+      if (typeof body.details !== 'string' || !body.details.trim() || body.details.length > 2000) {
+        return NextResponse.json({ error: 'A message is required.' }, { status: 400 });
+      }
+
+      lead = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        type: 'contact',
+        trackStage: 'Website',
+        trackTitle: 'General Contact Form',
+        details: body.details.trim().slice(0, 2000),
+        name: body.name.trim(),
+        email: body.email.trim(),
+        phone: typeof body.phone === 'string' ? body.phone.trim() : '',
+        format: '',
+        submittedAt: new Date().toISOString(),
+      };
+    } else if (isB2B) {
       if (typeof body.companyName !== 'string' || !body.companyName.trim() || body.companyName.length > 200) {
         return NextResponse.json({ error: 'A valid company name is required.' }, { status: 400 });
       }
@@ -109,7 +184,7 @@ export async function POST(req: NextRequest) {
     // and returns false rather than throwing, so this can't fail the request.
     await sendMail({
       to: notifyTo,
-      subject: `New ${isB2B ? 'B2B Corporate' : 'Enrollment'} Inquiry: ${lead.name}${lead.companyName ? ` (${lead.companyName})` : ` - ${lead.trackTitle}`}`,
+      subject: `New ${leadTypeLabel(lead)} Inquiry: ${lead.name}${lead.companyName ? ` (${lead.companyName})` : ` - ${lead.trackTitle}`}`,
       html: renderLeadEmail(lead),
     });
 

@@ -17,12 +17,12 @@ const GCC_SALARY_BENCHMARKS: Record<
     marketDemand: string;
   }
 > = {
-  'CEH v12': {
+  'CEH v13 AI': {
     roleTitle: 'Ethical Hacker / Penetration Tester / SOC L2',
     rangeAed: '18,000 - 25,000 AED',
     avgSalaryAed: 22000,
     estimatedIncreaseAed: 5500,
-    certCode: 'EC-Council CEH v12',
+    certCode: 'EC-Council CEH v13 AI',
     marketDemand: 'Very High (UAE Bank & Telecom SOCs)',
   },
   'CHFI v11': {

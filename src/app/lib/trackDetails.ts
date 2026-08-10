@@ -49,8 +49,8 @@ export const TRACK_DETAILS: Record<string, TrackDetail> = {
     isOfficialPartner: true,
     certHeader: 'Included EC-Council Certifications',
     readinessTitle: '🎓 Authorized Partner & Official Vouchers Included',
-    readinessDesc: 'Includes official EC-Council courseware, direct official exam vouchers (CEH v12, CHFI v11), hands-on iLabs, and certified instructor coaching.',
-    certs: ['EC-Council CEH v12 (Voucher Included)', 'EC-Council CHFI v11 (Voucher Included)', 'VAPT Advanced Practical Labs', 'AppSec Specialist'],
+    readinessDesc: 'Includes official EC-Council courseware, direct official exam vouchers (CEH v13 AI, CHFI v11), hands-on iLabs, and certified instructor coaching.',
+    certs: ['EC-Council CEH v13 AI (Voucher Included)', 'EC-Council CHFI v11 (Voucher Included)', 'VAPT Advanced Practical Labs', 'AppSec Specialist'],
     modules: [
       'Module 1: Reconnaissance, Scanning & Footprinting',
       'Module 2: System Exploitation, Privilege Escalation & Pivoting',

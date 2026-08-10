@@ -19,11 +19,11 @@ export const metadata: Metadata = {
     template: "%s | CyberGOAT Services LLC",
   },
   description:
-    "Dubai Silicon Oasis premier EC-Council Authorized Reseller & Training Partner. Official training and exam vouchers for CEH v12, CHFI v11, C|CISO, CISA, CISM, CISSP, and Data Privacy laws.",
+    "Dubai Silicon Oasis premier EC-Council Authorized Reseller & Training Partner. Official training and exam vouchers for CEH v13 AI, CHFI v11, C|CISO, CISA, CISM, CISSP, and Data Privacy laws.",
   keywords: [
     "Cybersecurity Training Dubai",
     "EC-Council Partner Dubai",
-    "CEH v12 Training UAE",
+    "CEH v13 AI Training UAE",
     "CHFI v11 Certification",
     "CISO Training Dubai Silicon Oasis",
     "CISA Exam Preparation",

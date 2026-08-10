@@ -36,7 +36,7 @@ You are the CyberGOAT AI Course Advisor for CyberGOAT Services LLC (cybergoat.ae
 Your role is to help people quickly figure out which CyberGOAT course or certification track fits their background and goals. You are a guide to the course catalog, not a substitute for the courses themselves - do not teach the certification syllabus, exam domains, or technical subject matter in depth. Give a brief, honest synopsis (what it's broadly for, who it suits) and point them toward the right track, not a lesson on the material itself.
 
 You can advise on:
-1. EC-Council Certifications: CEH v12, C|CISO, CHFI v11, CND v2, CPENT/LPT, CSA, CTIA, CCSE.
+1. EC-Council Certifications: CEH v13 AI, C|CISO, CHFI v11, CND v2, CPENT/LPT, CSA, CTIA, CCSE.
 2. ISACA & ISC2 Certifications: CISA, CISM, CRISC, CISSP.
 3. Data Privacy & Regulatory Compliance: CIPP/E, CIPM, DPO Training, EU GDPR, UAE PDPL, DESC ISR Frameworks.
 4. Training formats: Online Live Interactive, In-Person Dubai Bootcamps, Enterprise Corporate Upskilling.
@@ -91,9 +91,9 @@ export async function POST(req: NextRequest) {
       if (lower.includes('consult') || lower.includes('corporate') || lower.includes('book')) {
         fallbackText = "For custom team or corporate training, you can book a direct consultation with our lead security architects or connect on WhatsApp at +971 55 184 6786!";
       } else if (lower.includes('beginner') || lower.includes('start')) {
-        fallbackText = "For beginners, we highly recommend starting with our Cybersecurity Fundamentals or Ethical Hacking Fundamentals track before moving on to CEH v12 certification.";
+        fallbackText = "For beginners, we highly recommend starting with our Cybersecurity Fundamentals or Ethical Hacking Fundamentals track before moving on to CEH v13 AI certification.";
       } else if (lower.includes('ec-council') || lower.includes('ceh') || lower.includes('cciso') || lower.includes('chfi')) {
-        fallbackText = "As an official EC-Council Reseller, CyberGOAT provides authorized training plus official exam vouchers for CEH v12, C|CISO, CHFI, CND, and CPENT!";
+        fallbackText = "As an official EC-Council Reseller, CyberGOAT provides authorized training plus official exam vouchers for CEH v13 AI, C|CISO, CHFI, CND, and CPENT!";
       }
 
       return NextResponse.json({ reply: fallbackText, source: 'fallback' });
@@ -136,12 +136,12 @@ User Question: ${message}`;
     }
 
     const lower = message.toLowerCase();
-    let smartReply = "Hello! I am CyberGOAT AI. CyberGOAT Services LLC is an official EC-Council Authorized Reseller & Training Partner in Dubai Silicon Oasis, UAE.\n\nWe offer official training & vouchers for **CEH v12, C|CISO, CHFI v11, CND, CPENT**, as well as ISACA (CISA/CISM) and Data Privacy (CIPP/E, CIPM, GDPR).\n\nHow can I help you today? You can also connect directly with our admissions advisor on WhatsApp at **+971 55 184 6786**.";
+    let smartReply = "Hello! I am CyberGOAT AI. CyberGOAT Services LLC is an official EC-Council Authorized Reseller & Training Partner in Dubai Silicon Oasis, UAE.\n\nWe offer official training & vouchers for **CEH v13 AI, C|CISO, CHFI v11, CND, CPENT**, as well as ISACA (CISA/CISM) and Data Privacy (CIPP/E, CIPM, GDPR).\n\nHow can I help you today? You can also connect directly with our admissions advisor on WhatsApp at **+971 55 184 6786**.";
 
     if (lower.includes('awake') || lower.includes('active') || lower.includes('hello') || lower.includes('hi')) {
       smartReply = "Yes, I am fully active and online 24/7! I am your CyberGOAT AI Security & Training Assistant. How can I help you with your EC-Council certifications or data privacy training goals today?";
     } else if (lower.includes('pricing') || lower.includes('cost') || lower.includes('fee') || lower.includes('voucher')) {
-      smartReply = "Our official EC-Council certification packages (CEH v12, C|CISO, CHFI) include **official EC-Council courseware, 6 months of hands-on iLabs, and the official exam voucher**. Please connect on WhatsApp (+971 55 184 6786) for exact pricing and current promotional offers!";
+      smartReply = "Our official EC-Council certification packages (CEH v13 AI, C|CISO, CHFI) include **official EC-Council courseware, 6 months of hands-on iLabs, and the official exam voucher**. Please connect on WhatsApp (+971 55 184 6786) for exact pricing and current promotional offers!";
     }
 
     return NextResponse.json({ reply: smartReply, source: 'smart-fallback' });

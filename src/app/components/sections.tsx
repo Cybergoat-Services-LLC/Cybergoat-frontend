@@ -479,7 +479,7 @@ const TESTIMONIALS = [
   },
   {
     quote:
-      'The CEH v12 preparation track exceeded my expectations. The hands-on labs and official EC-Council exam guidance made achieving my certification seamless.',
+      'The CEH v13 AI preparation track exceeded my expectations. The hands-on labs and official EC-Council exam guidance made achieving my certification seamless.',
     name: 'Anonymous',
     role: 'Senior Security Analyst',
   },

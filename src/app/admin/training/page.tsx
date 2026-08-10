@@ -226,7 +226,7 @@ export default function AdminTrainingPage() {
                       type="text"
                       value={newQuestion}
                       onChange={(e) => setNewQuestion(e.target.value)}
-                      placeholder="e.g. Is CEH v12 exam voucher included?"
+                      placeholder="e.g. Is CEH v13 AI exam voucher included?"
                       className="w-full bg-[#05080F] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#2F57EF]"
                     />
                   </div>

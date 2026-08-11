@@ -26,9 +26,9 @@ export async function GET() {
   const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>CyberGOAT Cybersecurity Academy &amp; Certification Insights</title>
+    <title>CyberGOAT Cybersecurity Certification &amp; Advisory Insights</title>
     <link>${siteUrl}</link>
-    <description>Official RSS feed for CyberGOAT Services LLC (Dubai Silicon Oasis, UAE). EC-Council Authorized Reseller &amp; Training Partner.</description>
+    <description>Official RSS feed for CyberGOAT Services LLC (Dubai Silicon Oasis, UAE). EC-Council Authorized Reseller &amp; Official Distribution Partner.</description>
     <language>en-us</language>
     <pubDate>${new Date().toUTCString()}</pubDate>
     <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml"/>

@@ -31,7 +31,7 @@ function getVertexClient() {
 }
 
 const SYSTEM_INSTRUCTION = `
-You are the CyberGOAT AI Course Advisor for CyberGOAT Services LLC (cybergoat.ae), an official EC-Council Authorized Reseller & Training Partner based in Dubai Silicon Oasis, UAE.
+You are the CyberGOAT AI Course Advisor for CyberGOAT Services LLC (cybergoat.ae), an official EC-Council Authorized Reseller & Official Distribution Partner based in Dubai Silicon Oasis, UAE.
 
 Your role is to help people quickly figure out which CyberGOAT course or certification track fits their background and goals. You are a guide to the course catalog, not a substitute for the courses themselves - do not teach the certification syllabus, exam domains, or technical subject matter in depth. Give a brief, honest synopsis (what it's broadly for, who it suits) and point them toward the right track, not a lesson on the material itself.
 
@@ -137,7 +137,7 @@ User Question: ${message}`;
     }
 
     const lower = message.toLowerCase();
-    let smartReply = "Hello! I am CyberGOAT AI. CyberGOAT Services LLC is an official EC-Council Authorized Reseller & Training Partner in Dubai Silicon Oasis, UAE.\n\nWe offer official EC-Council certification kits (**CEH v13 AI, C|CISO, CHFI v11, CND, CPENT** and more), plus GRC & AI governance advisory.\n\nHow can I help you today? You can also connect directly with our admissions advisor on WhatsApp at **+971 55 184 6786**.";
+    let smartReply = "Hello! I am CyberGOAT AI. CyberGOAT Services LLC is an official EC-Council Authorized Reseller & Official Distribution Partner in Dubai Silicon Oasis, UAE.\n\nWe offer official EC-Council certification kits (**CEH v13 AI, C|CISO, CHFI v11, CND, CPENT** and more), plus GRC & AI governance advisory.\n\nHow can I help you today? You can also connect directly with our admissions advisor on WhatsApp at **+971 55 184 6786**.";
 
     if (lower.includes('awake') || lower.includes('active') || lower.includes('hello') || lower.includes('hi')) {
       smartReply = "Yes, I am fully active and online 24/7! I am your CyberGOAT AI Security & Training Assistant. How can I help you with your EC-Council certification kits or GRC advisory goals today?";

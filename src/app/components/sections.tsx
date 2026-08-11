@@ -31,14 +31,14 @@ export const HeroSection = () => (
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-semibold mb-6 backdrop-blur-md shadow-sm">
           <span className="font-mono text-[11px] text-[#00F0FF]/80 uppercase tracking-wider">[AUTH_PARTNER]</span>
           <span className="w-1 h-1 rounded-full bg-[#00F0FF] animate-pulse"></span>
-          <span>EC-Council Authorized Reseller &amp; Training Partner</span>
+          <span>EC-Council Authorized Reseller &amp; Official Distribution Partner</span>
         </div>
 
         {/* Refined High-Contrast Crisp Headline (Un-bloated) */}
         <h1 className="text-4xl sm:text-6xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.06] mb-6 max-w-5xl mx-auto">
           CyberGOAT: The UAE&rsquo;s{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] via-[#38BDF8] to-[#00F0FF] font-extrabold">
-            AI-Powered Cybersecurity Training
+            AI-Powered Cybersecurity Certification
           </span>{' '}
           &amp;{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C664FF] via-[#E066FF] to-[#F472B6] font-extrabold">
@@ -49,7 +49,7 @@ export const HeroSection = () => (
 
         {/* High-Contrast Executive Sales Sub-Headline */}
         <p className="text-xl sm:text-2xl text-white font-bold mb-6 max-w-3xl mx-auto leading-relaxed">
-          Official EC-Council certification pathways, GRC &amp; security architecture consulting, Virtual CISO retainers, AI/GenAI governance advisory, and a free AI-powered compliance readiness score.
+          Official EC-Council certification kits, GRC &amp; security architecture consulting, Virtual CISO retainers, AI/GenAI governance advisory, and a free AI-powered compliance readiness score.
         </p>
 
         {/* 3 High-Impact Cyber Sales Value Pillar Cards */}

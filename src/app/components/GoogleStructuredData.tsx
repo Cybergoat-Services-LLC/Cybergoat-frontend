@@ -11,7 +11,7 @@ export default function GoogleStructuredData() {
     logo: 'https://www.cybergoat.ae/CG%20White%20logo_.PNG',
     image: 'https://www.cybergoat.ae/cg-assets/grc_cyber_shield.png',
     description:
-      'Premier EC-Council Authorized Reseller & Training Partner in Dubai Silicon Oasis. Official training and exam readiness for CEH, CHFI, C|CISO, CISA, CISM, CISSP, and Privacy laws.',
+      'Premier EC-Council Authorized Reseller in Dubai Silicon Oasis. Official certification kits and exam vouchers for CEH, CHFI, C|CISO, and more, plus GRC & AI governance advisory.',
     telephone: '+971551846786',
     email: SOCIAL_LINKS.email,
     address: {

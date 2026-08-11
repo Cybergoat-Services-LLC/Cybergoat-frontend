@@ -36,10 +36,11 @@ You are the CyberGOAT AI Course Advisor for CyberGOAT Services LLC (cybergoat.ae
 Your role is to help people quickly figure out which CyberGOAT course or certification track fits their background and goals. You are a guide to the course catalog, not a substitute for the courses themselves - do not teach the certification syllabus, exam domains, or technical subject matter in depth. Give a brief, honest synopsis (what it's broadly for, who it suits) and point them toward the right track, not a lesson on the material itself.
 
 You can advise on:
-1. EC-Council Certifications: CEH v13 AI, C|CISO, CHFI v11, CND v2, CPENT/LPT, CSA, CTIA, CCSE.
-2. ISACA & ISC2 Certifications: CISA, CISM, CRISC, CISSP.
-3. Data Privacy & Regulatory Compliance: CIPP/E, CIPM, DPO Training, EU GDPR, UAE PDPL, DESC ISR Frameworks.
-4. Training formats: Online Live Interactive, In-Person Dubai Bootcamps, Enterprise Corporate Upskilling.
+1. EC-Council Certification Kits: CEH v13 AI, C|CISO, CHFI v11, CND v2, CPENT/LPT, CSA, CTIA, CCSE, ECIH v2, EHE. These are self-paced official EC-Council courseware, exam vouchers, and iLabs access - not CyberGOAT-run classes.
+2. GRC, Security Architecture & AI Governance Advisory: our consulting practice, for anyone asking about compliance frameworks, Virtual CISO retainers, or non-technical (governance/audit/privacy) goals.
+3. The free DESC ISR / UAE PDPL / AI Security Policy compliance readiness assessor.
+
+Do not claim we deliver instructor-led classes, live bootcamps, or ISACA/ISC2/IAPP certification training - we don't currently offer those. If asked about them, say we focus on EC-Council certification kits and GRC advisory, and suggest WhatsApp for anything more specific.
 
 Response style - this matters:
 - Keep answers short by default: 2-4 sentences for most questions. Do not exceed this unless the user explicitly asks for a detailed comparison, breakdown, or list.
@@ -85,7 +86,7 @@ export async function POST(req: NextRequest) {
       }
 
       // Graceful fallback response when Vertex AI is not configured yet
-      let fallbackText = "I can certainly help you with that! CyberGOAT provides personalized training tracks across EC-Council (CEH, C|CISO, CHFI), ISACA (CISA, CISM), Data Privacy & Compliance, and custom DevSecOps.";
+      let fallbackText = "I can certainly help you with that! CyberGOAT offers official EC-Council certification kits (CEH, C|CISO, CHFI, and more), plus GRC and AI governance advisory.";
       const lower = message.toLowerCase();
 
       if (lower.includes('consult') || lower.includes('corporate') || lower.includes('book')) {
@@ -136,10 +137,10 @@ User Question: ${message}`;
     }
 
     const lower = message.toLowerCase();
-    let smartReply = "Hello! I am CyberGOAT AI. CyberGOAT Services LLC is an official EC-Council Authorized Reseller & Training Partner in Dubai Silicon Oasis, UAE.\n\nWe offer official training & vouchers for **CEH v13 AI, C|CISO, CHFI v11, CND, CPENT**, as well as ISACA (CISA/CISM) and Data Privacy (CIPP/E, CIPM, GDPR).\n\nHow can I help you today? You can also connect directly with our admissions advisor on WhatsApp at **+971 55 184 6786**.";
+    let smartReply = "Hello! I am CyberGOAT AI. CyberGOAT Services LLC is an official EC-Council Authorized Reseller & Training Partner in Dubai Silicon Oasis, UAE.\n\nWe offer official EC-Council certification kits (**CEH v13 AI, C|CISO, CHFI v11, CND, CPENT** and more), plus GRC & AI governance advisory.\n\nHow can I help you today? You can also connect directly with our admissions advisor on WhatsApp at **+971 55 184 6786**.";
 
     if (lower.includes('awake') || lower.includes('active') || lower.includes('hello') || lower.includes('hi')) {
-      smartReply = "Yes, I am fully active and online 24/7! I am your CyberGOAT AI Security & Training Assistant. How can I help you with your EC-Council certifications or data privacy training goals today?";
+      smartReply = "Yes, I am fully active and online 24/7! I am your CyberGOAT AI Security & Training Assistant. How can I help you with your EC-Council certification kits or GRC advisory goals today?";
     } else if (lower.includes('pricing') || lower.includes('cost') || lower.includes('fee') || lower.includes('voucher')) {
       smartReply = "Our official EC-Council certification packages (CEH v13 AI, C|CISO, CHFI) include **official EC-Council courseware, 6 months of hands-on iLabs, and the official exam voucher**. Please connect on WhatsApp (+971 55 184 6786) for exact pricing and current promotional offers!";
     }

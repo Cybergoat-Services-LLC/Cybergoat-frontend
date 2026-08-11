@@ -6,77 +6,12 @@ export type CourseItem = {
   duration?: string;
   level?: 'Beginner' | 'Intermediate' | 'Advanced' | 'Executive';
   includesVoucher?: boolean;
-  category?: 'EC-Council' | 'ISACA' | 'ISC2' | 'Fundamentals' | 'Advanced' | 'Governance' | 'Privacy';
+  category?: 'EC-Council';
 };
 
-export const TRAINING_PROGRAMS: CourseItem[] = [
-  {
-    title: 'Cybersecurity Fundamentals',
-    description:
-      'Threat landscape, network security, encryption, access control, risk management, and incident response.',
-    image: '/cg-assets/learnings/CybersecurityFundamentals.jpeg',
-    tag: 'Fundamentals',
-    duration: '24 Hours',
-    level: 'Beginner',
-    includesVoucher: false,
-    category: 'Fundamentals',
-  },
-  {
-    title: 'Information Privacy Fundamentals',
-    description:
-      'Privacy principles, data lifecycle, GDPR/CCPA, privacy impact assessments, and privacy by design.',
-    image: '/cg-assets/learnings/InformationPrivacyFundamentals.jpeg',
-    tag: 'Fundamentals',
-    duration: '20 Hours',
-    level: 'Beginner',
-    includesVoucher: false,
-    category: 'Privacy',
-  },
-  {
-    title: 'Ethical Hacking Fundamentals',
-    description:
-      'Reconnaissance, scanning, exploitation, penetration testing methodology, and lawful hacking practice.',
-    image: '/cg-assets/learnings/EthicalHackingFundamentals.jpeg',
-    tag: 'Fundamentals',
-    duration: '30 Hours',
-    level: 'Beginner',
-    includesVoucher: false,
-    category: 'Fundamentals',
-  },
-  {
-    title: 'Data Protection Officer (DPO) Training',
-    description:
-      'DPO responsibilities, GDPR, UAE PDPL & DPDP regulatory compliance, data subject rights, breach notification, and DPIA methodology.',
-    image: '/cg-assets/grc_cyber_shield.png',
-    tag: 'Governance',
-    duration: '40 Hours',
-    level: 'Advanced',
-    includesVoucher: false,
-    category: 'Privacy',
-  },
-  {
-    title: 'Applied Enterprise Security Architecture',
-    description:
-      'SABSA / TOGAF integration, security design patterns, zero-trust architecture, and cloud security controls.',
-    image: '/cg-assets/certifications/TOGAF.jpeg',
-    tag: 'Advanced',
-    duration: '40 Hours',
-    level: 'Executive',
-    includesVoucher: false,
-    category: 'Advanced',
-  },
-  {
-    title: 'Vulnerability Assessment & Penetration Testing (VAPT)',
-    description:
-      'Hands-on vulnerability scanning, web application security, network penetration testing, and report writing.',
-    image: '/cg-assets/learnings/VulnerabilityAssessmentPenetrationTestingAdvanced.jpeg',
-    tag: 'Technical',
-    duration: '45 Hours',
-    level: 'Intermediate',
-    includesVoucher: false,
-    category: 'Advanced',
-  },
-];
+// CyberGOAT-authored tracks (no EC-Council courseware behind them) intentionally
+// removed from the public catalog - see KHDA alignment review, August 2026.
+export const TRAINING_PROGRAMS: CourseItem[] = [];
 
 export const CERTIFICATIONS: CourseItem[] = [
   {
@@ -84,7 +19,7 @@ export const CERTIFICATIONS: CourseItem[] = [
     description: 'Certified Ethical Hacker v13 AI — Official EC-Council Certification & Hands-On iLabs.',
     image: '/cg-assets/certifications/CEH.jpeg',
     tag: 'EC-Council',
-    duration: '40 Hours',
+    duration: '45 Hours',
     level: 'Intermediate',
     includesVoucher: true,
     category: 'EC-Council',
@@ -160,63 +95,23 @@ export const CERTIFICATIONS: CourseItem[] = [
     category: 'EC-Council',
   },
   {
-    title: 'CISA',
-    description: 'Certified Information Systems Auditor — ISACA Gold Standard for IT Audit.',
-    image: '/cg-assets/certifications/CISA.jpeg',
-    tag: 'ISACA',
-    duration: '40 Hours',
-    level: 'Advanced',
-    includesVoucher: false,
-    category: 'ISACA',
-  },
-  {
-    title: 'CISM',
-    description: 'Certified Information Security Manager — ISACA Security Leadership Certification.',
-    image: '/cg-assets/certifications/CISM.jpeg',
-    tag: 'ISACA',
-    duration: '40 Hours',
-    level: 'Executive',
-    includesVoucher: false,
-    category: 'ISACA',
-  },
-  {
-    title: 'CRISC',
-    description: 'Certified in Risk and Information Systems Control — ISACA Enterprise Risk Framework.',
-    image: '/cg-assets/certifications/CRISC.jpeg',
-    tag: 'ISACA',
+    title: 'ECIH v2',
+    description: 'EC-Council Certified Incident Handler — Official Incident Handling & Response Program.',
+    image: '/cg-assets/certifications/CHFI.png',
+    tag: 'EC-Council',
     duration: '35 Hours',
-    level: 'Advanced',
-    includesVoucher: false,
-    category: 'ISACA',
+    level: 'Intermediate',
+    includesVoucher: true,
+    category: 'EC-Council',
   },
   {
-    title: 'CISSP',
-    description: 'Certified Information Systems Security Professional — ISC2 Premier Security Credential.',
-    image: '/cg-assets/certifications/CISSP.jpeg',
-    tag: 'ISC2',
-    duration: '50 Hours',
-    level: 'Executive',
-    includesVoucher: false,
-    category: 'ISC2',
-  },
-  {
-    title: 'European Data Privacy Professional (CIPP/E Exam Prep)',
-    description: 'European Data Protection & GDPR Masterclass aligned with CIPP/E exam preparation guidelines.',
-    image: '/cg-assets/certifications/CIPPE.jpeg',
-    tag: 'Privacy Prep',
-    duration: '30 Hours',
-    level: 'Advanced',
-    includesVoucher: false,
-    category: 'Privacy',
-  },
-  {
-    title: 'Enterprise Data Privacy Manager (CIPM Exam Prep)',
-    description: 'Data Protection Program Governance Masterclass aligned with CIPM exam preparation guidelines.',
-    image: '/cg-assets/certifications/CIPM.jpeg',
-    tag: 'Privacy Prep',
-    duration: '30 Hours',
-    level: 'Advanced',
-    includesVoucher: false,
-    category: 'Privacy',
+    title: 'Ethical Hacking Essentials (EHE)',
+    description: 'Official EC-Council entry-level ethical hacking and cybersecurity fundamentals program.',
+    image: '/cg-assets/learnings/EthicalHackingFundamentals.jpeg',
+    tag: 'EC-Council',
+    duration: '20 Hours',
+    level: 'Beginner',
+    includesVoucher: true,
+    category: 'EC-Council',
   },
 ];

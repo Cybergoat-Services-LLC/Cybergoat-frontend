@@ -125,7 +125,7 @@ export default function CoursesGrid() {
           type="search"
           value={courseQuery}
           onChange={(e) => setCourseQuery(e.target.value)}
-          placeholder="Search courses & certifications..."
+          placeholder="Search certification kits..."
           className="w-full rounded-full border border-white/10 bg-white/5 py-2.5 pl-11 pr-4 text-sm text-white placeholder-gray-500 outline-none transition-colors focus:border-[#2F57EF]"
         />
       </div>

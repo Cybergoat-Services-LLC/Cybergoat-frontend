@@ -303,22 +303,25 @@ export const ApproachSection = () => (
       <RevealOnScroll delay={0.15} className="relative">
         <div className="absolute inset-0 bg-gradient-to-tr from-[#C664FF]/20 to-transparent blur-3xl" />
         <div className="bg-[#0A0F1A] border border-white/10 rounded-3xl p-8 relative z-10 shadow-2xl overflow-hidden glass-card">
-          <h4 className="text-2xl font-bold text-white mb-6">How Your Certification Kit Works</h4>
+          <h4 className="text-2xl font-bold text-white mb-6">
+            Enterprise GRC, Security Architecture &amp; AI Advisory Methodology
+          </h4>
           <p className="text-gray-300 text-lg mb-8">
-            &ldquo;We help you choose the right EC-Council certification kit for your
-            goals, then get you straight to the official courseware, exam voucher,
-            and iLabs &mdash; no filler, just what you need to pass your exam and get
-            certified.&rdquo;
+            &ldquo;We partner with enterprise leaders to deliver tailored security architecture design,
+            Virtual CISO retainers, AI/GenAI risk governance, and automated DESC ISR &amp; UAE PDPL
+            compliance readiness scoring &mdash; ensuring your security posture scales seamlessly
+            with evolving regulatory standards.&rdquo;
           </p>
           <div className="flex flex-wrap gap-2">
             {[
-              'Choose Your Kit',
-              'Purchase & Receive Voucher',
-              'Self-Paced Study',
-              'Official iLabs Practice',
-              'Schedule Your Exam',
-              'Sit Your Exam',
-              'Certified',
+              'Needs & Scope Discovery',
+              'Security Architecture Design',
+              'Regulatory Gap Analysis',
+              'AI Risk & Privacy Governance',
+              'Virtual CISO Integration',
+              'Automated AI Scoring',
+              'Human SME Audit Sign-Off',
+              'Board-Level Delivery & Retainer',
             ].map((step, i) => (
               <span
                 key={step}

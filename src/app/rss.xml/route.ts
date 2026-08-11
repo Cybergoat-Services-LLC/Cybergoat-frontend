@@ -13,11 +13,11 @@ export async function GET() {
 
       return `
     <item>
-      <title><![CDATA[${item.title} — CyberGOAT Training]]></title>
+      <title><![CDATA[${item.title} — CyberGOAT Certification Kit]]></title>
       <link>${itemUrl}</link>
       <guid isPermaLink="false">${siteUrl}/course/${item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}</guid>
       <pubDate>${pubDate}</pubDate>
-      <description><![CDATA[${item.description} Level: ${item.level || 'Professional'}. Category: ${item.category || 'Cybersecurity'}. Dubai Silicon Oasis Campus & Online Virtual.]]></description>
+      <description><![CDATA[${item.description} Level: ${item.level || 'Professional'}. Category: ${item.category || 'Cybersecurity'}. Official EC-Council Reseller distribution & GRC Consulting. Dubai Silicon Oasis, UAE.]]></description>
       <category>${item.category || 'Cybersecurity'}</category>
     </item>`;
     })
@@ -26,7 +26,7 @@ export async function GET() {
   const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>CyberGOAT Cybersecurity Certification &amp; Advisory Insights</title>
+    <title>CyberGOAT Cybersecurity Consulting &amp; Advisory Insights</title>
     <link>${siteUrl}</link>
     <description>Official RSS feed for CyberGOAT Services LLC (Dubai Silicon Oasis, UAE). EC-Council Authorized Reseller &amp; Official Distribution Partner.</description>
     <language>en-us</language>

@@ -38,7 +38,7 @@ export const HeroSection = () => (
         <h1 className="text-4xl sm:text-6xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.06] mb-6 max-w-5xl mx-auto">
           CyberGOAT: The UAE&rsquo;s{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] via-[#38BDF8] to-[#00F0FF] font-extrabold">
-            AI-Powered Cybersecurity Certification
+            AI-Powered Cybersecurity Consulting
           </span>{' '}
           &amp;{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C664FF] via-[#E066FF] to-[#F472B6] font-extrabold">

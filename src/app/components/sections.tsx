@@ -126,7 +126,7 @@ export const StatsBar = () => (
           <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#0DCAF0] to-[#2F57EF]">
             10+ Years
           </div>
-          <p className="text-xs md:text-sm text-gray-400 font-medium">Certified Instructor Experience</p>
+          <p className="text-xs md:text-sm text-gray-400 font-medium">Certified Lead Practitioner Experience</p>
         </div>
         <div className="space-y-1">
           <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#C664FF] to-[#2F57EF]">
@@ -162,7 +162,7 @@ export const CareerRoadmapSection = () => (
           Your Guided Journey from Practitioner to CISO
         </h3>
         <p className="text-xl text-gray-400">
-          We don&rsquo;t just teach isolated classes. We guide your career step-by-step with accredited certifications.
+          We support your long-term career progression step-by-step with accredited certification pathways.
         </p>
       </RevealOnScroll>
 
@@ -231,7 +231,7 @@ export const ApproachSection = () => (
         <p className="text-xl text-gray-400">
           CyberGOAT empowers individuals and businesses to navigate the ever-shifting
           landscape of security and privacy. In a world where regulations scramble to
-          keep pace with emerging technologies like AI, our training and consulting
+          keep pace with emerging technologies like AI, our certification enablement and GRC advisory
           practices work side by side to give you a critical edge.
         </p>
       </RevealOnScroll>
@@ -583,6 +583,9 @@ export const Footer = () => (
         </div>
       </div>
       <div className="border-t border-white/5 pt-8 text-center text-gray-500 text-xs space-y-3">
+        <p className="text-[11px] text-gray-400 max-w-4xl mx-auto leading-relaxed opacity-75 mb-2">
+          <strong>Legal &amp; Regulatory Disclosure:</strong> CyberGOAT Services LLC (CYBERGOAT SERVICES - FZCO, IFZA Business Park, DSO, Dubai, UAE) operates as a licensed B2B cybersecurity advisory consultancy, security architecture practice, and official international reseller (EC-Council Partner ID: ECRS21832). CyberGOAT provides enterprise enablement, Virtual CISO retainers, and international certification preparation for working cybersecurity professionals.
+        </p>
         <p className="text-[11px] text-gray-400 max-w-4xl mx-auto leading-relaxed opacity-75">
           <strong>Trademark &amp; Accreditation Disclaimer:</strong> CyberGOAT Services LLC is an official <strong>EC-Council Authorized Reseller</strong>. EC-Council®, CEH®, C|CISO®, CHFI®, CND®, CPENT®, CSA®, CTIA®, CCSE® are registered trademarks of EC-Council. Certifications are awarded directly by EC-Council upon passing the official proctored examination.
         </p>

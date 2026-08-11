@@ -15,19 +15,19 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.cybergoat.ae"),
   title: {
-    default: "CyberGOAT | Premier EC-Council Partner & Certification Kits Dubai",
+    default: "CyberGOAT | Premier AI & Cybersecurity Consulting & Certification Kits Dubai",
     template: "%s | CyberGOAT Services LLC",
   },
   description:
-    "Dubai Silicon Oasis premier EC-Council Authorized Reseller. Official certification kits and exam vouchers for CEH v13 AI, CHFI v11, C|CISO, and more, plus GRC & AI governance advisory.",
+    "Dubai Silicon Oasis premier AI & Cybersecurity Consulting practice and EC-Council Authorized Reseller. Official certification kits and exam vouchers for CEH v13 AI, CHFI v11, C|CISO, plus GRC & AI governance advisory.",
   keywords: [
-    "Cybersecurity Certification Dubai",
+    "Cybersecurity Consulting Dubai",
+    "AI Governance Advisory Dubai",
+    "GRC Advisory Dubai",
     "EC-Council Partner Dubai",
     "CEH v13 AI Certification Kit UAE",
-    "CHFI v11 Certification",
+    "CHFI v11 Certification Kit",
     "C|CISO Certification Kit Dubai",
-    "EC-Council Certification Kits UAE",
-    "GRC Advisory Dubai",
   ],
   authors: [{ name: "CyberGOAT Services LLC", url: "https://www.cybergoat.ae" }],
   openGraph: {

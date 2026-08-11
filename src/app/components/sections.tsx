@@ -242,26 +242,26 @@ export const ApproachSection = () => (
             <div className="w-12 h-12 rounded-2xl bg-[#00F0FF]/10 flex items-center justify-center text-[#00F0FF]">
               <AcademicCapIcon className="w-6 h-6" />
             </div>
-            <h4 className="text-2xl font-bold text-white">Training &amp; Certification</h4>
+            <h4 className="text-2xl font-bold text-white">Certification Kits</h4>
           </div>
           <ul className="space-y-5">
             <li className="flex items-start gap-3">
               <CheckCircleIcon className="w-5 h-5 text-[#00F0FF] shrink-0 mt-0.5" />
               <div>
-                <h5 className="text-white font-semibold">Expert-Led Training</h5>
+                <h5 className="text-white font-semibold">Official EC-Council Certification Kits</h5>
                 <p className="text-gray-400 text-sm">
-                  Delivered by certified instructors with an average of 10+ years of
-                  practical and pedagogical experience.
+                  Direct access to official EC-Council courseware, exam vouchers, and
+                  iLabs &mdash; the same materials used by EC-Council&rsquo;s own training centers.
                 </p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <CheckCircleIcon className="w-5 h-5 text-[#00F0FF] shrink-0 mt-0.5" />
               <div>
-                <h5 className="text-white font-semibold">Customizable Training</h5>
+                <h5 className="text-white font-semibold">Corporate Voucher Bundles</h5>
                 <p className="text-gray-400 text-sm">
-                  Designed to scale and future-proof the security posture of businesses
-                  across all industries.
+                  Bulk EC-Council certification kit allocations for enterprise teams,
+                  with volume pricing.
                 </p>
               </div>
             </li>

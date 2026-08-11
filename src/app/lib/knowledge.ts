@@ -24,7 +24,7 @@ const KB_KEY = 'cybergoat:knowledge_base';
 const DEFAULT_KB: KnowledgeBase = {
   companyInfo: {
     name: "CyberGOAT Services LLC",
-    accreditation: "Official EC-Council Authorized Reseller & Training Partner",
+    accreditation: "Official EC-Council Authorized Reseller & Distribution Partner",
     address: "Dubai Silicon Oasis, DSO-IFZA, Building A1, Dubai, UAE",
     phone: "+971 55 184 6786",
     email: "admin@cybergoat.ae",

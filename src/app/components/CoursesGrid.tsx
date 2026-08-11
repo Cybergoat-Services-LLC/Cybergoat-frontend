@@ -151,7 +151,7 @@ export default function CoursesGrid() {
             <AcademicCapIcon className="w-5 h-5 text-[#0DCAF0]" /> Professional Certifications
           </h4>
           <p className="text-sm text-gray-400 mb-8">
-            As an authorized EC-Council partner, we provide official training alongside official exam vouchers.
+            As an official EC-Council reseller, we distribute official courseware, iLabs, and proctored exam vouchers.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCerts.map((item) => (
@@ -179,7 +179,7 @@ export default function CoursesGrid() {
             No matches for &ldquo;{courseQuery || selectedCategory}&rdquo; in our current catalog.
           </p>
           <ContactTrigger className="inline-block px-6 py-3 bg-gradient-to-r from-[#2F57EF] to-[#C664FF] text-white font-bold rounded-full hover:shadow-[0_0_20px_rgba(47,87,239,0.4)] transition-all">
-            Ask Us About Custom Training
+            Ask Us About Enterprise Enablement
           </ContactTrigger>
         </div>
       )}

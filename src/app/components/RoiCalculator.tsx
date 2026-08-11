@@ -41,6 +41,22 @@ const GCC_SALARY_BENCHMARKS: Record<
     certCode: 'EC-Council C|CISO',
     marketDemand: 'Critical (Government & Enterprise Entities)',
   },
+  'CISA': {
+    roleTitle: 'IT Audit Manager / Senior Systems Auditor',
+    rangeAed: '25,000 - 38,000 AED',
+    avgSalaryAed: 30000,
+    estimatedIncreaseAed: 6500,
+    certCode: 'ISACA CISA Target',
+    marketDemand: 'High (Big 4 & Banking Audit Teams)',
+  },
+  'CISSP': {
+    roleTitle: 'Enterprise Cyber Security Architect',
+    rangeAed: '35,000 - 52,000 AED',
+    avgSalaryAed: 42000,
+    estimatedIncreaseAed: 11000,
+    certCode: 'ISC2 CISSP Target',
+    marketDemand: 'Very High (Enterprise Zero Trust Migration)',
+  },
 };
 
 export default function RoiCalculator() {
@@ -125,7 +141,7 @@ export default function RoiCalculator() {
 
             <div className="pt-2 flex flex-col sm:flex-row items-center gap-4">
               <ContactTrigger className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all cursor-pointer flex items-center justify-center gap-2">
-                <SparklesIcon className="w-4 h-4 text-black" /> Inquire About Certification Kits &amp; Pricing
+                <SparklesIcon className="w-4 h-4 text-black" /> Speak With an Advisor About Your Career Path
               </ContactTrigger>
             </div>
           </div>

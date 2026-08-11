@@ -61,9 +61,6 @@ export default function NavBar() {
           <Link href="/desc-isr-readiness" className="hover:text-white transition-colors">
             Compliance Score
           </Link>
-          <Link href="/login" className="hover:text-white transition-colors">
-            LMS Login
-          </Link>
           <ContactTrigger className="hover:text-white transition-colors">
             Contact Us
           </ContactTrigger>

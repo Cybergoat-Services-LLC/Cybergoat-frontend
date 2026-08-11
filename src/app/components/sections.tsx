@@ -100,7 +100,7 @@ export const HeroSection = () => (
             href="#courses"
             className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-[#2F57EF] to-[#C664FF] text-white font-bold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(198,100,255,0.4)] hover:scale-[1.02] transition-all cursor-pointer shadow-lg"
           >
-            Explore Courses
+            Explore Certification Kits
           </a>
         </div>
 
@@ -557,7 +557,7 @@ export const Footer = () => (
 
         <div className="flex flex-wrap justify-center gap-6 text-sm font-medium text-gray-400">
           <a href="#courses" className="hover:text-white transition-colors cursor-pointer">
-            Courses
+            Certification Kits
           </a>
           <ContactTrigger className="hover:text-white transition-colors cursor-pointer">Contact</ContactTrigger>
           <SignInTrigger className="hover:text-white transition-colors cursor-pointer">Sign In</SignInTrigger>

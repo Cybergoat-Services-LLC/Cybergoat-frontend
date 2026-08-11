@@ -21,7 +21,7 @@ const CoursesSection = () => (
       <RevealOnScroll className="text-center max-w-3xl mx-auto mb-16">
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Featured Tracks</h2>
         <p className="text-xl text-gray-400">
-          World-class cybersecurity certifications and training programs tailored to your
+          Official EC-Council certification kits, matched to your career
           goals.
         </p>
       </RevealOnScroll>

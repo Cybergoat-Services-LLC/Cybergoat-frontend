@@ -21,7 +21,7 @@ const INITIAL_MESSAGES: Message[] = [
   {
     id: '1',
     sender: 'bot',
-    text: '👋 Hello! I am CyberGOAT AI Assistant. How can I help you with our cybersecurity training programs or EC-Council certifications today?',
+    text: '👋 Hello! I am CyberGOAT AI Assistant. How can I help you with our EC-Council certification kits or GRC advisory today?',
     timestamp: 'Just now',
   },
 ];

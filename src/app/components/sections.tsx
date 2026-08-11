@@ -303,23 +303,21 @@ export const ApproachSection = () => (
       <RevealOnScroll delay={0.15} className="relative">
         <div className="absolute inset-0 bg-gradient-to-tr from-[#C664FF]/20 to-transparent blur-3xl" />
         <div className="bg-[#0A0F1A] border border-white/10 rounded-3xl p-8 relative z-10 shadow-2xl overflow-hidden glass-card">
-          <h4 className="text-2xl font-bold text-white mb-6">Our Training Methodology</h4>
+          <h4 className="text-2xl font-bold text-white mb-6">How Your Certification Kit Works</h4>
           <p className="text-gray-300 text-lg mb-8">
-            &ldquo;Our strategy involves pre-consultation and understanding your training
-            needs. We customise the courses as best suitable for the individual&rsquo;s or
-            entity&rsquo;s objectives and ensure best-in-class training solutions provided
-            with assessments and certifications.&rdquo;
+            &ldquo;We help you choose the right EC-Council certification kit for your
+            goals, then get you straight to the official courseware, exam voucher,
+            and iLabs &mdash; no filler, just what you need to pass your exam and get
+            certified.&rdquo;
           </p>
           <div className="flex flex-wrap gap-2">
             {[
-              'Market Analysis',
-              'Course Development',
-              'Pre-Consultation',
-              'Customisation',
-              'Pre-Assessment',
-              'Training',
-              'Post-Assessment',
-              'Exam Voucher',
+              'Choose Your Kit',
+              'Purchase & Receive Voucher',
+              'Self-Paced Study',
+              'Official iLabs Practice',
+              'Schedule Your Exam',
+              'Sit Your Exam',
               'Certified',
             ].map((step, i) => (
               <span

@@ -398,25 +398,38 @@ export const DescIsrCtaSection = () => (
       <div className="absolute inset-0 bg-gradient-to-r from-[#2F57EF] via-[#00F0FF] to-[#C664FF] blur-[110px] rounded-full mix-blend-screen" />
     </div>
     <div className="container mx-auto px-6 relative z-10">
-      <RevealOnScroll className="max-w-4xl mx-auto rounded-3xl border border-[#00F0FF]/30 bg-[#0A0F1A] glass-card p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
-        <div className="shrink-0 w-14 h-14 rounded-2xl bg-[#00F0FF]/10 border border-[#00F0FF]/30 flex items-center justify-center">
-          <ShieldCheckIcon className="w-7 h-7 text-[#00F0FF]" />
-        </div>
-        <div className="flex-1 text-center md:text-left">
-          <h3 className="text-xl md:text-2xl font-extrabold text-white mb-1.5">
+      <RevealOnScroll className="max-w-5xl mx-auto rounded-3xl border border-[#00F0FF]/30 bg-[#0A0F1A] glass-card p-8 md:p-10 flex flex-col lg:flex-row items-center gap-8">
+        <div className="flex-1 space-y-4 text-center lg:text-left">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-semibold">
+            <ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" />
+            <span>Dubai Multi-Framework Assessor Engine</span>
+          </div>
+          <h3 className="text-2xl lg:text-3xl font-extrabold text-white leading-tight">
             Free UAE Compliance Readiness Score
           </h3>
-          <p className="text-sm md:text-base text-gray-400">
-            Upload your policies and get a free preliminary readiness score against DESC ISR, UAE PDPL, and/or
-            DESC&rsquo;s AI Security Policy &mdash; AI-assisted, reviewed by a certified CyberGOAT professional.
+          <p className="text-sm md:text-base text-gray-300 leading-relaxed">
+            Upload your policy documents and get an instant preliminary readiness score against DESC ISR v3.1, UAE PDPL, and DESC AI Security Policy &mdash; AI-assisted, reviewed by certified security auditors before delivery.
           </p>
+          <div>
+            <Link
+              href="/desc-isr-readiness"
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:scale-[1.02] transition-all cursor-pointer shadow-lg"
+            >
+              Get My Score <ArrowRightIcon className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
-        <Link
-          href="/desc-isr-readiness"
-          className="shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:scale-[1.02] transition-all cursor-pointer whitespace-nowrap"
-        >
-          Get My Score <ArrowRightIcon className="w-4 h-4" />
-        </Link>
+
+        <div className="w-full lg:w-1/2 relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
+          <Image
+            src="/cg-assets/cybergoat_ciso_promo.jpg"
+            alt="Dubai Multi-Framework Compliance Assessor Dashboard Preview"
+            width={1200}
+            height={675}
+            className="w-full h-auto object-cover rounded-2xl transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1A]/80 via-transparent to-transparent pointer-events-none" />
+        </div>
       </RevealOnScroll>
     </div>
   </section>

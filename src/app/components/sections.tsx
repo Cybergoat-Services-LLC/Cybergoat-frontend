@@ -422,31 +422,31 @@ export const DescIsrCtaSection = () => (
 const TESTIMONIALS = [
   {
     quote:
-      'CyberGOAT provided exceptional structured cybersecurity workshops for our students. Their practical approach and expert mentorship made complex topics accessible and engaging.',
+      'CyberGOAT’s cybersecurity advisory support for our institution was exceptional. Their practical, real-world guidance made complex security and compliance topics accessible for our team.',
     name: 'eKutub Education Society',
     role: 'Educational Partner',
   },
   {
     quote:
-      'Partnering with CyberGOAT for enterprise security awareness upgraded our operational posture significantly. Top-tier training delivered with true professionalism.',
+      'Partnering with CyberGOAT for enterprise security advisory upgraded our operational posture significantly. Top-tier guidance delivered with true professionalism.',
     name: 'Vision Era',
     role: 'Enterprise Client',
   },
   {
     quote:
-      'The C|CISO executive training program at CyberGOAT was outstanding. The strategic insights, governance frameworks, and board-level risk guidance prepared me to lead at the highest level.',
+      'The C|CISO certification support and executive advisory from CyberGOAT was outstanding. The strategic insights, governance frameworks, and board-level risk guidance prepared me to lead at the highest level.',
     name: 'Pradeep Nagula',
     role: 'Certified Chief Information Security Officer (C|CISO)',
   },
   {
     quote:
-      'The corporate training tailored for our legal and compliance teams was invaluable. CyberGOAT bridged technical defense with data privacy laws seamlessly.',
+      'The corporate advisory tailored for our legal and compliance teams was invaluable. CyberGOAT bridged technical defense with data privacy laws seamlessly.',
     name: 'Collegium De Legalpreneur',
-    role: 'Corporate Training Partner',
+    role: 'Corporate Advisory Partner',
   },
   {
     quote:
-      'The Ethical Hacking Bootcamp at CyberGOAT was a game-changer. The hands-on demonstrations were incredibly realistic, and the instructor brought deep, real-world experience.',
+      'CyberGOAT’s ethical hacking advisory engagement was a game-changer. The hands-on scenario walkthroughs were incredibly realistic, and our advisor brought deep, real-world experience.',
     name: 'Anonymous',
     role: 'Cyber Security Consultant, Big4',
   },
@@ -458,7 +458,7 @@ const TESTIMONIALS = [
   },
   {
     quote:
-      'CyberGOAT’s GRC and Data Privacy training provided clear, actionable insights for navigating complex regulatory frameworks like GDPR and UAE ISR.',
+      'CyberGOAT’s GRC and Data Privacy advisory provided clear, actionable insights for navigating complex regulatory frameworks like GDPR and UAE ISR.',
     name: 'Anonymous',
     role: 'GRC & Privacy Specialist',
   },

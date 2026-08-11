@@ -125,7 +125,7 @@ export default function RoiCalculator() {
 
             <div className="pt-2 flex flex-col sm:flex-row items-center gap-4">
               <ContactTrigger className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all cursor-pointer flex items-center justify-center gap-2">
-                <SparklesIcon className="w-4 h-4 text-black" /> Inquire for Course Syllabus &amp; Batch Fees
+                <SparklesIcon className="w-4 h-4 text-black" /> Inquire About Certification Kits &amp; Pricing
               </ContactTrigger>
             </div>
           </div>

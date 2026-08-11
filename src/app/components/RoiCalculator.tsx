@@ -41,22 +41,6 @@ const GCC_SALARY_BENCHMARKS: Record<
     certCode: 'EC-Council C|CISO',
     marketDemand: 'Critical (Government & Enterprise Entities)',
   },
-  'CISA': {
-    roleTitle: 'IT Audit Manager / Senior Systems Auditor',
-    rangeAed: '25,000 - 38,000 AED',
-    avgSalaryAed: 30000,
-    estimatedIncreaseAed: 6500,
-    certCode: 'ISACA CISA Target',
-    marketDemand: 'High (Big 4 & Banking Audit Teams)',
-  },
-  'CISSP': {
-    roleTitle: 'Enterprise Cyber Security Architect',
-    rangeAed: '35,000 - 52,000 AED',
-    avgSalaryAed: 42000,
-    estimatedIncreaseAed: 11000,
-    certCode: 'ISC2 CISSP Target',
-    marketDemand: 'Very High (Enterprise Zero Trust Migration)',
-  },
 };
 
 export default function RoiCalculator() {

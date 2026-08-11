@@ -19,16 +19,15 @@ export const metadata: Metadata = {
     template: "%s | CyberGOAT Services LLC",
   },
   description:
-    "Dubai Silicon Oasis premier EC-Council Authorized Reseller & Training Partner. Official training and exam vouchers for CEH v13 AI, CHFI v11, C|CISO, CISA, CISM, CISSP, and Data Privacy laws.",
+    "Dubai Silicon Oasis premier EC-Council Authorized Reseller. Official certification kits and exam vouchers for CEH v13 AI, CHFI v11, C|CISO, and more, plus GRC & AI governance advisory.",
   keywords: [
     "Cybersecurity Training Dubai",
     "EC-Council Partner Dubai",
     "CEH v13 AI Training UAE",
     "CHFI v11 Certification",
-    "CISO Training Dubai Silicon Oasis",
-    "CISA Exam Preparation",
-    "CISSP Bootcamp Dubai",
-    "UAE PDPL GDPR Privacy Training",
+    "C|CISO Certification Kit Dubai",
+    "EC-Council Certification Kits UAE",
+    "GRC Advisory Dubai",
   ],
   authors: [{ name: "CyberGOAT Services LLC", url: "https://www.cybergoat.ae" }],
   openGraph: {

@@ -214,8 +214,7 @@ export default function AdminTrainingPage() {
                       className="w-full bg-[#05080F] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#2F57EF]"
                     >
                       <option value="EC-Council">EC-Council (CEH, C|CISO, CHFI)</option>
-                      <option value="ISACA">ISACA (CISA, CISM, CRISC)</option>
-                      <option value="Privacy">Data Privacy (CIPP/E, CIPM)</option>
+                      <option value="Advisory">GRC & Privacy Advisory</option>
                       <option value="Pricing">Pricing & Discounts</option>
                       <option value="General">General Inquiries</option>
                     </select>

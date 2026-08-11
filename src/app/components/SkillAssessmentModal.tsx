@@ -69,10 +69,6 @@ const EDUCATION_OPTIONS = [
 const CERT_OPTIONS = [
   'CompTIA Security+',
   'CEH (Certified Ethical Hacker)',
-  'CISA (Auditor)',
-  'CISM / CRISC',
-  'CISSP',
-  'CIPP/E or CIPM Privacy',
   'No Formal Certifications Yet',
 ];
 
@@ -191,8 +187,9 @@ export default function SkillAssessmentModal({
     const peerPercentile = isExecutive ? '88th Percentile' : '74th Percentile';
 
     if (isPrivacy) {
-      // Privacy stream remains standard IAPP / GDPR / PDPL
-      recommendedTrack = 'CIPP/E & CIPM Privacy Manager Program';
+      // No EC-Council privacy-specific course exists - route to the GRC/Privacy
+      // advisory practice (a real service) rather than mis-recommend a course.
+      recommendedTrack = 'Privacy & Data Protection Advisory Consultation';
       isEcCouncil = false;
     } else if (isExecutive) {
       // Executive Technical stream points to C|CISO & CCSE
@@ -222,9 +219,11 @@ export default function SkillAssessmentModal({
         'CPENT / LPT (Licensed Pen Tester Master)'
       ];
     } else {
-      // GRC stream
-      recommendedTrack = 'CISA / CISM + GRC Regulatory Frameworks';
-      isEcCouncil = false;
+      // GRC stream - C|CISO's Domain 1 (Governance, Risk Management & Compliance)
+      // is a genuine fit, unlike the ISACA path this used to recommend.
+      recommendedTrack = 'EC-Council C|CISO (Certified Chief Information Security Officer)';
+      isEcCouncil = true;
+      ecCouncilCourses = ['C|CISO (Certified Chief Info Security Officer)'];
     }
 
     return { recommendedTrack, isEcCouncil, ecCouncilCourses, geoFramework, peerPercentile, isPrivacy };
@@ -489,7 +488,7 @@ export default function SkillAssessmentModal({
 
                 {results.isPrivacy && (
                   <p className="text-xs text-gray-400 pt-1">
-                    Aligned with CIPP/E, CIPM, EU GDPR, and UAE PDPL compliance standards.
+                    Our GRC advisory team covers EU GDPR and UAE PDPL compliance frameworks.
                   </p>
                 )}
               </div>

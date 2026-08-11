@@ -72,7 +72,7 @@ function CourseCard({ item }: { item: CourseItem }) {
   );
 }
 
-const CATEGORIES = ['All', 'EC-Council', 'ISACA', 'Privacy', 'Advanced', 'Fundamentals'];
+const CATEGORIES = ['All', 'EC-Council'];
 
 export default function CoursesGrid() {
   const { courseQuery, setCourseQuery } = useModals();

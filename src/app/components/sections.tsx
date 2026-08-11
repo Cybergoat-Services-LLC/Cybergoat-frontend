@@ -4,7 +4,6 @@ import {
   CheckCircleIcon,
   ShieldCheckIcon,
   AcademicCapIcon,
-  BuildingOffice2Icon,
   CpuChipIcon,
   SparklesIcon,
   ChevronRightIcon,
@@ -113,14 +112,6 @@ export const HeroSection = () => (
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Image src="/ec-council-logo.jpeg" alt="EC-Council Authorized Reseller" width={100} height={40} className="rounded brightness-110 contrast-125 object-contain" />
           </div>
-          <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-gray-400 ml-2">
-            Independent Exam Prep:
-          </span>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">ISACA (CISA / CISM / CRISC)</span>
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">ISC2 (CISSP)</span>
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 text-gray-200">IAPP (CIPP/E, CIPM)</span>
-          </div>
         </div>
       </div>
     </div>
@@ -175,38 +166,22 @@ export const CareerRoadmapSection = () => (
         </p>
       </RevealOnScroll>
 
-      <div className="grid md:grid-cols-4 gap-6 relative">
+      <div className="grid md:grid-cols-2 gap-6 relative max-w-3xl mx-auto">
         {[
           {
             stage: 'Stage 1',
-            title: 'Fundamentals',
-            icon: ShieldCheckIcon,
-            desc: 'Build essential security, privacy, and ethical hacking foundations.',
-            certs: ['Cybersecurity Fundamentals', 'Ethical Hacking Intro', 'Privacy Basics'],
-            color: 'border-emerald-500/30 text-emerald-400',
-          },
-          {
-            stage: 'Stage 2',
             title: 'Technical Defense',
             icon: CpuChipIcon,
             desc: 'Master hands-on penetration testing, forensics, and vulnerability assessment.',
-            certs: ['CEH v13 AI', 'CHFI v11', 'VAPT Advanced', 'AppSec'],
+            certs: ['CEH v13 AI', 'CHFI v11'],
             color: 'border-[#0DCAF0]/30 text-[#0DCAF0]',
           },
           {
-            stage: 'Stage 3',
-            title: 'GRC & Audit',
-            icon: BuildingOffice2Icon,
-            desc: 'Lead enterprise risk governance, audit, privacy management, and compliance.',
-            certs: ['CISA', 'CISM', 'CRISC', 'CISSP', 'CIPP/E'],
-            color: 'border-[#2F57EF]/30 text-[#2F57EF]',
-          },
-          {
-            stage: 'Stage 4',
+            stage: 'Stage 2',
             title: 'Executive CISO',
             icon: AcademicCapIcon,
             desc: 'Command executive security governance, enterprise architecture, and board leadership.',
-            certs: ['C|CISO', 'Applied ESA', 'TOGAF 10'],
+            certs: ['C|CISO'],
             color: 'border-[#C664FF]/30 text-[#C664FF]',
           },
         ].map((item, idx) => {
@@ -611,7 +586,7 @@ export const Footer = () => (
       </div>
       <div className="border-t border-white/5 pt-8 text-center text-gray-500 text-xs space-y-3">
         <p className="text-[11px] text-gray-400 max-w-4xl mx-auto leading-relaxed opacity-75">
-          <strong>Trademark &amp; Accreditation Disclaimer:</strong> CyberGOAT Services LLC is an official <strong>EC-Council Authorized Reseller &amp; Training Partner</strong>. EC-Council®, CEH®, C|CISO®, CHFI®, CND®, CPENT®, CSA®, CTIA®, CCSE® are registered trademarks of EC-Council. CIPP/E®, CIPM®, and IAPP® are registered trademarks of the International Association of Privacy Professionals. CISA®, CISM®, CRISC® are registered trademarks of ISACA. CISSP® is a registered trademark of ISC2. Third-party privacy and certification training tracks delivered by CyberGOAT are independent exam preparation masterclasses and regulatory compliance framework alignment programs.
+          <strong>Trademark &amp; Accreditation Disclaimer:</strong> CyberGOAT Services LLC is an official <strong>EC-Council Authorized Reseller</strong>. EC-Council®, CEH®, C|CISO®, CHFI®, CND®, CPENT®, CSA®, CTIA®, CCSE® are registered trademarks of EC-Council. Certifications are awarded directly by EC-Council upon passing the official proctored examination.
         </p>
         <p>© 2026 CyberGOAT Services LLC. All rights reserved. Dubai Silicon Oasis, Dubai, UAE.</p>
       </div>

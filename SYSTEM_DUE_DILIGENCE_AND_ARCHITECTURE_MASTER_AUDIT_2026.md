@@ -14,7 +14,7 @@ To eliminate confusion between *code that passes unit tests* vs. *code that actu
 
 1. **Unit Test Pass ≠ Live Production Wiring**: Unit tests mock third-party services (Gemini, Upstash, GCS). 285 passing backend tests mean the code is syntactically sound, but does not guarantee cloud resources exist.
 2. **Git Push ≠ Cloud Deployment**: Pushing code to GitHub backs up source code; it does not deploy Cloud Run or Vercel. Deploys require CLI builds (`gcloud run deploy`, `vercel --prod`).
-3. **Delete-After-Send ≠ Zero Retention**: Uploaded compliance documents are stored in GCS and vector namespaces during audit review, then deleted upon report delivery. It is a "Delete-After-Send" lifecycle, not "Zero Retention."
+3. **"Zero Retention" is not accurate, and neither is "Delete-After-Send"**: Confirmed directly against `ComplianceReportService`/`ComplianceVectorStore` - only the AI vector namespace used for scoring is cleared after report delivery. The raw uploaded files remain in GCS; they are not deleted. Any customer-facing privacy copy must reflect that raw documents are retained, not "deleted upon report delivery."
 
 ---
 
@@ -149,7 +149,7 @@ Before launching public marketing campaigns or accepting paid corporate clients:
 1. **Brand & Trademark Integrity**:
    - Maintain strict separation between **Official EC-Council Reseller Accreditation (`ECRS21832`)** vs. **Independent Exam Prep (ISACA CISA/CISM & ISC2 CISSP)**.
 2. **Data Privacy Protection**:
-   - Communicate the true **"Delete-After-Send"** data lifecycle for uploaded compliance documents.
+   - Do not describe the data lifecycle as "Delete-After-Send" or "Zero Retention" in any customer-facing copy - it is factually inaccurate. Only the AI vector namespace is cleared after report delivery; raw uploaded documents remain retained in GCS. Communicate the accurate retention behavior instead.
 3. **Execution Readiness Checklist**:
    - [ ] Upload Courseware PDFs to GCS bucket.
    - [ ] Add Upstash Vector credentials to Cloud Run `.env`.

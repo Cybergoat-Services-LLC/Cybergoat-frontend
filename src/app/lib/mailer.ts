@@ -15,9 +15,11 @@ export function escapeHtml(value: string): string {
   return value.replace(/[&<>"']/g, (ch) => HTML_ESCAPES[ch]);
 }
 
-let transporter: nodemailer.Transporter | null = null;
+type MailTransporter = ReturnType<typeof nodemailer.createTransport>;
 
-function getTransporter(): nodemailer.Transporter | null {
+let transporter: MailTransporter | null = null;
+
+function getTransporter(): MailTransporter | null {
   const user = process.env.GMAIL_SENDER_EMAIL;
   const pass = process.env.GMAIL_APP_PASSWORD;
   if (!user || !pass) return null;

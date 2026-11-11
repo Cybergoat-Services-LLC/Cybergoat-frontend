@@ -5,6 +5,7 @@ import { GoogleGenAI } from '@google/genai';
 
 const VERTEX_PROJECT = process.env.GOOGLE_VERTEX_PROJECT;
 const VERTEX_LOCATION = process.env.GOOGLE_VERTEX_LOCATION || 'us-central1';
+const VERTEX_MODEL = process.env.GOOGLE_VERTEX_MODEL || 'gemini-3.8-flash';
 
 // Cached at module scope so warm serverless instances reuse the same client
 // (and its underlying OAuth token) instead of re-authenticating on every
@@ -115,7 +116,7 @@ User Question: ${message}`;
     try {
       const result = await Promise.race([
         vertexClient.models.generateContent({
-          model: 'gemini-2.5-flash',
+          model: VERTEX_MODEL,
           contents: fullPrompt,
         }),
         new Promise<never>((_, reject) =>

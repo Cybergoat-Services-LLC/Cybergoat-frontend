@@ -10,14 +10,15 @@ import {
   ArrowRightIcon,
   BriefcaseIcon,
   ClipboardDocumentCheckIcon,
+  ServerIcon,
 } from '@heroicons/react/24/outline';
 import RevealOnScroll from './RevealOnScroll';
-import { ContactTrigger, SignInTrigger, AssessmentTrigger, TrackTrigger } from './interactive-buttons';
+import { ContactTrigger, SignInTrigger, AssessmentTrigger, TrackTrigger, BookDemoTrigger } from './interactive-buttons';
 import { SOCIAL_LINKS } from '@/config/socials';
 
 export const HeroSection = () => (
   <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-24 overflow-hidden bg-[#0A0F1A]">
-    {/* Cyber Grid & Scanline Background Isolated (Zero Mask Interference) */}
+    {/* Cyber Grid & Scanline Background */}
     <div className="absolute inset-0 cyber-grid cyber-scanline pointer-events-none" />
 
     {/* Subtle High-Tech Ambient Glow */}
@@ -27,91 +28,89 @@ export const HeroSection = () => (
 
     <div className="container mx-auto px-6 relative z-10 text-center">
       <div>
-        {/* Sleek Cyber Security Partner Badge */}
+        {/* Sovereign GCC GRC Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-semibold mb-6 backdrop-blur-md shadow-sm">
-          <span className="font-mono text-[11px] text-[#00F0FF]/80 uppercase tracking-wider">[AUTH_PARTNER]</span>
-          <span className="w-1 h-1 rounded-full bg-[#00F0FF] animate-pulse"></span>
-          <span>EC-Council Authorized Reseller &amp; Official Distribution Partner</span>
+          <span className="font-mono text-[11px] text-[#00F0FF]/80 uppercase tracking-wider">[SOVEREIGN_GCC_GRC]</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00F0FF] animate-pulse"></span>
+          <span>AI Continuous Compliance Platform &amp; Enterprise Academy</span>
         </div>
 
-        {/* Refined High-Contrast Crisp Headline (Un-bloated) */}
+        {/* Refined Headline */}
         <h1 className="text-4xl sm:text-6xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.06] mb-6 max-w-5xl mx-auto">
-          CyberGOAT: The UAE&rsquo;s{' '}
+          Autonomous Continuous GRC &amp;{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] via-[#38BDF8] to-[#00F0FF] font-extrabold">
-            AI-Powered Cybersecurity Consulting
+            AI-Powered Audit Defense
           </span>{' '}
-          &amp;{' '}
+          for the{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C664FF] via-[#E066FF] to-[#F472B6] font-extrabold">
-            Compliance Enablement
-          </span>{' '}
-          Studio.
+            GCC.
+          </span>
         </h1>
 
-        {/* High-Contrast Executive Sales Sub-Headline */}
-        <p className="text-xl sm:text-2xl text-white font-bold mb-6 max-w-3xl mx-auto leading-relaxed">
-          Official EC-Council certification kits, GRC &amp; security architecture consulting, Virtual CISO retainers, AI/GenAI governance advisory, and a free AI-powered compliance readiness score.
+        {/* Executive Sub-Headline */}
+        <p className="text-lg sm:text-xl text-gray-300 font-medium mb-8 max-w-3xl mx-auto leading-relaxed">
+          Unified compliance automation for <strong>DESC ISR, UAE IA, CBUAE, UAE PDPL, and ISO 27001</strong>. Accelerate audit readiness with Corrective RAG AI evaluation, human-in-the-loop review gates, and guaranteed in-region data residency.
         </p>
 
-        {/* 3 High-Impact Cyber Sales Value Pillar Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-6 text-left">
+        {/* 3 High-Impact Value Pillar Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-8 text-left">
           <div className="bg-[#05080F] border border-[#00F0FF]/40 rounded-3xl p-6 glass-card hover:border-[#00F0FF] transition-all">
             <div className="flex items-center gap-2 mb-2 text-[#00F0FF] font-extrabold text-sm uppercase tracking-wider">
-              <ShieldCheckIcon className="w-5 h-5 text-[#00F0FF]" />
-              <span>Official EC-Council Vouchers</span>
+              <ServerIcon className="w-5 h-5 text-[#00F0FF]" />
+              <span>Sovereign GCC Residency</span>
             </div>
             <p className="text-xs text-gray-300 font-medium leading-relaxed">
-              Direct official exam vouchers, courseware &amp; global certification pathways for CHFI, C|CISO &amp; CEH.
+              Hosted in GCC (me-central1) or In-Country UAE Zones with self-hosted vLLM options &mdash; zero data egress to US servers.
             </p>
           </div>
 
           <div className="bg-[#05080F] border border-[#00F0FF]/40 rounded-3xl p-6 glass-card hover:border-[#00F0FF] transition-all">
             <div className="flex items-center gap-2 mb-2 text-[#00F0FF] font-extrabold text-sm uppercase tracking-wider">
-              <CpuChipIcon className="w-5 h-5 text-[#00F0FF]" />
-              <span>Official EC-Council iLabs</span>
+              <SparklesIcon className="w-5 h-5 text-[#00F0FF]" />
+              <span>Corrective RAG AI Review Gate</span>
             </div>
             <p className="text-xs text-gray-300 font-medium leading-relaxed">
-              220+ hands-on lab exercises bundled with official vouchers &mdash; real attack &amp; defense scenarios, not simulations.
+              Ingests policy documents, maps controls with 94%+ confidence, and enforces mandatory Human-in-the-Loop auditor sign-off.
             </p>
           </div>
 
           <div className="bg-[#05080F] border border-[#C664FF]/40 rounded-3xl p-6 glass-card hover:border-[#C664FF] transition-all">
             <div className="flex items-center gap-2 mb-2 text-[#E066FF] font-extrabold text-sm uppercase tracking-wider">
-              <BriefcaseIcon className="w-5 h-5 text-[#E066FF]" />
-              <span>GRC, Security &amp; AI Governance Advisory</span>
+              <ShieldCheckIcon className="w-5 h-5 text-[#E066FF]" />
+              <span>Unified Controls Framework</span>
             </div>
             <p className="text-xs text-gray-300 font-medium leading-relaxed">
-              Security architecture design, GRC/compliance advisory, Virtual CISO retainers, and AI/GenAI governance consulting &mdash; led by CISA/CISM-certified practitioners.
+              Comply once with DESC ISR; satisfy matching controls in UAE IA, CBUAE, and ISO 27001 simultaneously across 671 unified controls.
             </p>
           </div>
         </div>
 
-        {/* Sleek Cybersecurity Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3.5 justify-center items-center max-w-2xl mx-auto">
-          <AssessmentTrigger className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] hover:scale-[1.02] transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg">
-            <SparklesIcon className="w-4 h-4 text-black" /> Evaluate Skill Gap (2-Min Free)
-          </AssessmentTrigger>
-          <Link
-            href="/desc-isr-readiness"
-            className="w-full sm:w-auto px-7 py-3.5 bg-transparent border border-[#C664FF]/40 text-[#C664FF] font-bold text-xs uppercase tracking-wider rounded-full hover:bg-[#C664FF]/10 transition-all cursor-pointer"
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-2xl mx-auto">
+          <a
+            href="#interactive-demo"
+            className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] hover:scale-[1.02] transition-all cursor-pointer flex items-center justify-center gap-2 shadow-lg"
           >
-            Assess DESC ISR, PDPL &amp; AI Compliance
-          </Link>
+            <SparklesIcon className="w-4 h-4 text-black" /> Test Drive Interactive Platform
+          </a>
+          <BookDemoTrigger className="w-full sm:w-auto px-8 py-3.5 bg-transparent border border-[#00F0FF]/40 text-[#00F0FF] font-bold text-xs uppercase tracking-wider rounded-full hover:bg-[#00F0FF]/10 transition-all cursor-pointer">
+            Book CISO Walkthrough
+          </BookDemoTrigger>
           <a
             href="#courses"
-            className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-[#2F57EF] to-[#C664FF] text-white font-bold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(198,100,255,0.4)] hover:scale-[1.02] transition-all cursor-pointer shadow-lg"
+            className="w-full sm:w-auto px-7 py-3.5 border border-[#C664FF]/40 text-[#C664FF] font-bold text-xs uppercase tracking-wider rounded-full hover:bg-[#C664FF]/10 transition-all cursor-pointer"
           >
-            Explore Certification Kits
+            Enterprise Academy &rarr;
           </a>
         </div>
 
-        {/* Reseller Accreditation Trust Banner */}
-        <div className="mt-12 pt-6 border-t border-white/10 flex flex-wrap justify-center items-center gap-6 opacity-85">
-          <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-gray-400">
-            Official Reseller:
-          </span>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Image src="/ec-council-logo.jpeg" alt="EC-Council Authorized Reseller" width={100} height={40} className="rounded brightness-110 contrast-125 object-contain" />
-          </div>
+        {/* Framework & Reseller Trust Banner */}
+        <div className="mt-12 pt-6 border-t border-white/10 flex flex-wrap justify-center items-center gap-x-8 gap-y-3 opacity-80 text-xs text-gray-400 font-mono">
+          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> DESC ISR v3.1</span>
+          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> UAE Federal PDPL</span>
+          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> CBUAE Banking</span>
+          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> ISO 27001 / SOC 2</span>
+          <span className="flex items-center gap-1.5 text-gray-300 font-sans"><AcademicCapIcon className="w-4 h-4 text-[#C664FF]" /> EC-Council Authorized Partner</span>
         </div>
       </div>
     </div>
@@ -349,7 +348,7 @@ const REGULATIONS = [
 ];
 
 export const GRCSection = () => (
-  <section className="py-24 bg-[#0A0F1A] relative">
+  <section id="frameworks" className="py-24 bg-[#0A0F1A] relative">
     <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
       <RevealOnScroll className="relative rounded-3xl overflow-hidden border border-white/10 glass-card order-2 lg:order-1">
         <div className="relative h-72 w-full">
@@ -393,37 +392,40 @@ export const GRCSection = () => (
 );
 
 export const DescIsrCtaSection = () => (
-  <section className="py-16 bg-[#0A0F1A] border-b border-white/5 relative overflow-hidden">
+  <section id="platform" className="py-16 bg-[#0A0F1A] border-b border-white/5 relative overflow-hidden">
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] opacity-25 pointer-events-none">
       <div className="absolute inset-0 bg-gradient-to-r from-[#2F57EF] via-[#00F0FF] to-[#C664FF] blur-[110px] rounded-full mix-blend-screen" />
     </div>
     <div className="container mx-auto px-6 relative z-10">
-      <RevealOnScroll className="max-w-5xl mx-auto rounded-3xl border border-[#00F0FF]/30 bg-[#0A0F1A] glass-card p-8 md:p-10 flex flex-col lg:flex-row items-center gap-8">
+      <RevealOnScroll className="max-w-5xl mx-auto rounded-3xl border border-[#00F0FF]/30 bg-[#05080F] glass-card p-8 md:p-10 flex flex-col lg:flex-row items-center gap-8">
         <div className="flex-1 space-y-4 text-center lg:text-left">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-semibold">
             <ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" />
-            <span>Dubai Multi-Framework Assessor Engine</span>
+            <span>Autonomous GRC SaaS Platform</span>
           </div>
           <h3 className="text-2xl lg:text-3xl font-extrabold text-white leading-tight">
-            Free UAE Compliance Readiness Score
+            Continuous Audit Readiness for GCC CISOs
           </h3>
           <p className="text-sm md:text-base text-gray-300 leading-relaxed">
-            Upload your policy documents and get an instant preliminary readiness score against DESC ISR v3.1, UAE PDPL, and DESC AI Security Policy &mdash; AI-assisted, reviewed by certified security auditors before delivery.
+            Eliminate audit panic and static spreadsheets. CyberGOAT continuously maps your infrastructure and policies against DESC ISR v3.1, UAE PDPL, and CBUAE with cryptographic evidence verification.
           </p>
-          <div>
-            <Link
-              href="/desc-isr-readiness"
+          <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+            <a
+              href="#interactive-demo"
               className="inline-flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:scale-[1.02] transition-all cursor-pointer shadow-lg"
             >
-              Get My Score <ArrowRightIcon className="w-4 h-4" />
-            </Link>
+              Test Drive Platform <ArrowRightIcon className="w-4 h-4" />
+            </a>
+            <BookDemoTrigger className="inline-flex items-center gap-2 px-7 py-3.5 border border-[#00F0FF]/40 text-[#00F0FF] font-bold text-xs uppercase tracking-wider rounded-full hover:bg-[#00F0FF]/10 transition-all cursor-pointer">
+              Book CISO Walkthrough
+            </BookDemoTrigger>
           </div>
         </div>
 
         <div className="w-full lg:w-1/2 relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
           <Image
             src="/cg-assets/cybergoat_ciso_promo.jpg"
-            alt="Dubai Multi-Framework Compliance Assessor Dashboard Preview"
+            alt="CyberGOAT Sovereign GRC Platform Interface Preview"
             width={1200}
             height={675}
             className="w-full h-auto object-cover rounded-2xl transition-transform duration-500 group-hover:scale-105"

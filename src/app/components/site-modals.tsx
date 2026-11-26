@@ -6,6 +6,7 @@ import ContactModal from './ContactModal';
 import SkillAssessmentModal from './SkillAssessmentModal';
 import TrackDetailModal from './TrackDetailModal';
 import ChatbotTrainingModal from './ChatbotTrainingModal';
+import BookDemoModal from './BookDemoModal';
 
 type ModalsContextType = {
   openSignIn: () => void;
@@ -13,6 +14,7 @@ type ModalsContextType = {
   openAssessment: () => void;
   openTrackDetail: (stageKey: string) => void;
   openTraining: () => void;
+  openDemo: () => void;
   courseQuery: string;
   setCourseQuery: (q: string) => void;
 };
@@ -30,6 +32,7 @@ export function ModalsProvider({ children }: { children: ReactNode }) {
   const [contactOpen, setContactOpen] = useState(false);
   const [assessmentOpen, setAssessmentOpen] = useState(false);
   const [trainingOpen, setTrainingOpen] = useState(false);
+  const [demoOpen, setDemoOpen] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState<string | null>(null);
   const [courseQuery, setCourseQuery] = useState('');
 
@@ -41,6 +44,7 @@ export function ModalsProvider({ children }: { children: ReactNode }) {
         openAssessment: () => setAssessmentOpen(true),
         openTrackDetail: (stageKey: string) => setSelectedTrack(stageKey),
         openTraining: () => setTrainingOpen(true),
+        openDemo: () => setDemoOpen(true),
         courseQuery,
         setCourseQuery,
       }}
@@ -51,6 +55,7 @@ export function ModalsProvider({ children }: { children: ReactNode }) {
       <SkillAssessmentModal isOpen={assessmentOpen} onClose={() => setAssessmentOpen(false)} />
       <TrackDetailModal stageKey={selectedTrack} onClose={() => setSelectedTrack(null)} />
       <ChatbotTrainingModal isOpen={trainingOpen} onClose={() => setTrainingOpen(false)} />
+      <BookDemoModal isOpen={demoOpen} onClose={() => setDemoOpen(false)} />
     </ModalsContext.Provider>
   );
 }

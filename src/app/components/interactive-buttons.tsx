@@ -48,6 +48,21 @@ export function AssessmentTrigger({
   );
 }
 
+export function BookDemoTrigger({
+  className,
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) {
+  const { openDemo } = useModals();
+  return (
+    <button onClick={openDemo} className={className}>
+      {children}
+    </button>
+  );
+}
+
 export function TrackTrigger({
   stageKey,
   className,
@@ -67,16 +82,14 @@ export function TrackTrigger({
 
 export function TrainingTrigger({
   className,
-  title,
   children,
 }: {
   className?: string;
-  title?: string;
   children: ReactNode;
 }) {
   const { openTraining } = useModals();
   return (
-    <button onClick={openTraining} className={className} title={title}>
+    <button onClick={openTraining} className={className}>
       {children}
     </button>
   );

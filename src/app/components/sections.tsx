@@ -131,9 +131,11 @@ export const StatsBar = () => (
         </div>
         <div className="space-y-1">
           <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#C664FF] to-[#2F57EF] font-mono">
-            9 Role Tracks
+            8 Enterprise Tracks
           </div>
-          <p className="text-xs md:text-sm text-gray-300 font-medium">Official EC-Council Workforce Pathways</p>
+          <p className="text-xs md:text-sm text-gray-300 font-medium">
+            Official EC-Council Pathways (<Link href="/academy" className="text-[#00F0FF] hover:underline">9 on Academy &rarr;</Link>)
+          </p>
         </div>
         <div className="space-y-1">
           <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#22D3A8] to-[#00F0FF] font-mono">

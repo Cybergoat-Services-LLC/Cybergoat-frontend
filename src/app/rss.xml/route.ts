@@ -8,7 +8,7 @@ export async function GET() {
 
   const rssItemsXml = allItems
     .map((item) => {
-      const itemUrl = `${siteUrl}/#courses`;
+      const itemUrl = `${siteUrl}/academy`;
       const pubDate = new Date().toUTCString();
 
       return `

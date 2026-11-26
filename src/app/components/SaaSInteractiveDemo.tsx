@@ -809,7 +809,7 @@ export default function SaaSInteractiveDemo() {
       {/* Auditor Workpaper Card Modal */}
       {activeWorkpaper && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fadeIn">
-          <div className="bg-[#0A0F1A] border border-[#00F0FF]/40 rounded-2xl max-w-xl w-full p-6 space-y-5 shadow-2xl relative">
+          <div className="bg-[#0A0F1A] border border-[#00F0FF]/40 rounded-2xl max-w-xl w-full p-6 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div className="flex items-center gap-2">
                 <DocumentTextIcon className="w-5 h-5 text-[#00F0FF]" />

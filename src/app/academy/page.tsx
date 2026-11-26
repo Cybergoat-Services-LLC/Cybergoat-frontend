@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import {
   AcademicCapIcon,
   ShieldCheckIcon,
@@ -13,6 +14,22 @@ import { CERTIFICATIONS } from '../components/courses-data';
 import RoiCalculator from '../components/RoiCalculator';
 import ChatbotWidget from '../components/ChatbotWidget';
 import { ContactTrigger } from '../components/interactive-buttons';
+
+export const metadata: Metadata = {
+  title: 'CyberGOAT Academy — Official EC-Council Certification & Workforce Pathways (Dubai, UAE)',
+  description: 'Official EC-Council Authorized Reseller (ID: ECRS21832). Hands-on cybersecurity training, cloud iLabs, and official certification exam vouchers for CEH v13 AI, C|CISO, CHFI, CCSE, CSA, and CND.',
+  alternates: {
+    canonical: 'https://www.cybergoat.ae/academy',
+  },
+  openGraph: {
+    title: 'CyberGOAT Academy — EC-Council Authorized Training Partner',
+    description: 'Master accredited cybersecurity certifications in the UAE. Official courseware, cloud iLabs, and exam vouchers with direct evidence mapping to sovereign GRC frameworks.',
+    url: 'https://www.cybergoat.ae/academy',
+    siteName: 'CyberGOAT Sovereign GRC & Academy',
+    locale: 'en_US',
+    type: 'website',
+  },
+};
 
 const WHATSAPP_CHAT_URL = 'https://wa.me/971551846786?text=Hi%20CyberGOAT%20Academy,%20I%20want%20to%20inquire%20about%20EC-Council%20courses';
 

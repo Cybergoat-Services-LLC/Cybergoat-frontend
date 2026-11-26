@@ -11,12 +11,17 @@ export async function isRateLimited(
   maxRequests: number,
   windowSeconds: number
 ): Promise<boolean> {
-  const key = `cybergoat:${namespace}_rate_limit:${ip}`;
-  const count = await redis.incr(key);
-  if (count === 1) {
-    await redis.expire(key, windowSeconds);
+  try {
+    const key = `cybergoat:${namespace}_rate_limit:${ip}`;
+    const count = await redis.incr(key);
+    if (count === 1) {
+      await redis.expire(key, windowSeconds);
+    }
+    return count > maxRequests;
+  } catch (err) {
+    // Graceful fail-open when Redis is unconfigured or unreachable
+    return false;
   }
-  return count > maxRequests;
 }
 
 export function getClientIp(req: Request): string {

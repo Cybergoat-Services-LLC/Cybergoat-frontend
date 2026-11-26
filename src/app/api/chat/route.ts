@@ -5,7 +5,8 @@ import { GoogleGenAI } from '@google/genai';
 
 const VERTEX_PROJECT = process.env.GOOGLE_VERTEX_PROJECT;
 const VERTEX_LOCATION = process.env.GOOGLE_VERTEX_LOCATION || 'us-central1';
-const VERTEX_MODEL = process.env.GOOGLE_VERTEX_MODEL || 'gemini-3.8-flash';
+const VERTEX_MODEL = process.env.GOOGLE_VERTEX_MODEL || 'gemini-2.0-flash';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 // Cached at module scope so warm serverless instances reuse the same client
 let cachedVertexClient: GoogleGenAI | null | undefined;
@@ -13,19 +14,34 @@ let cachedVertexClient: GoogleGenAI | null | undefined;
 function getVertexClient() {
   if (cachedVertexClient !== undefined) return cachedVertexClient;
 
+  // 1. Try Vertex AI Service Account
   const credentialsJson = process.env.GOOGLE_VERTEX_CREDENTIALS;
-  if (!credentialsJson || !VERTEX_PROJECT) {
-    cachedVertexClient = null;
-    return cachedVertexClient;
+  if (credentialsJson && VERTEX_PROJECT) {
+    try {
+      const credentials = JSON.parse(credentialsJson);
+      cachedVertexClient = new GoogleGenAI({
+        vertexai: true,
+        project: VERTEX_PROJECT,
+        location: VERTEX_LOCATION,
+        googleAuthOptions: { credentials },
+      });
+      return cachedVertexClient;
+    } catch (e) {
+      console.warn('Failed to parse GOOGLE_VERTEX_CREDENTIALS JSON:', e);
+    }
   }
 
-  const credentials = JSON.parse(credentialsJson);
-  cachedVertexClient = new GoogleGenAI({
-    vertexai: true,
-    project: VERTEX_PROJECT,
-    location: VERTEX_LOCATION,
-    googleAuthOptions: { credentials },
-  });
+  // 2. Try Gemini API Key fallback (Google AI Studio)
+  if (GEMINI_API_KEY) {
+    try {
+      cachedVertexClient = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+      return cachedVertexClient;
+    } catch (e) {
+      console.warn('Failed to initialize GoogleGenAI with GEMINI_API_KEY:', e);
+    }
+  }
+
+  cachedVertexClient = null;
   return cachedVertexClient;
 }
 

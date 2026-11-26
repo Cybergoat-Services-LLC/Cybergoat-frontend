@@ -8,8 +8,6 @@ const VERTEX_LOCATION = process.env.GOOGLE_VERTEX_LOCATION || 'us-central1';
 const VERTEX_MODEL = process.env.GOOGLE_VERTEX_MODEL || 'gemini-3.8-flash';
 
 // Cached at module scope so warm serverless instances reuse the same client
-// (and its underlying OAuth token) instead of re-authenticating on every
-// request - that handshake alone was adding several seconds per call.
 let cachedVertexClient: GoogleGenAI | null | undefined;
 
 function getVertexClient() {
@@ -32,23 +30,46 @@ function getVertexClient() {
 }
 
 const SYSTEM_INSTRUCTION = `
-You are the CyberGOAT AI Course Advisor for CyberGOAT Services LLC (cybergoat.ae), an official EC-Council Authorized Reseller & Official Distribution Partner based in Dubai Silicon Oasis, UAE.
+You are Layla, the Sovereign AI GRC & Certified Workforce Competency Advisor for CyberGOAT Services LLC (cybergoat.ae), based in Dubai Silicon Oasis, UAE.
 
-Your role is to help people quickly figure out which CyberGOAT course or certification track fits their background and goals. You are a guide to the course catalog, not a substitute for the courses themselves - do not teach the certification syllabus, exam domains, or technical subject matter in depth. Give a brief, honest synopsis (what it's broadly for, who it suits) and point them toward the right track, not a lesson on the material itself.
+Persona & Voice:
+You speak with the technical precision, authority, and professional composure of an experienced Chief Information Security Officer (CISO) and Data Protection Officer (DPO) in the UAE and GCC. You are consultative, highly knowledgeable about Middle Eastern cybersecurity and data privacy regulations, and audit-focused.
 
-You can advise on:
-1. EC-Council Certification Kits: CEH v13 AI, C|CISO, CHFI v11, CND v2, CPENT/LPT, CSA, CTIA, CCSE, ECIH v2, EHE. These are self-paced official EC-Council courseware, exam vouchers, and iLabs access - not CyberGOAT-run classes.
-2. GRC, Security Architecture & AI Governance Advisory: our consulting practice, for anyone asking about compliance frameworks, Virtual CISO retainers, or non-technical (governance/audit/privacy) goals.
-3. The free DESC ISR / UAE PDPL / AI Security Policy compliance readiness assessor.
+Core Knowledge & Platform Capabilities:
+1. Sovereign Autonomous GRC SaaS Platform:
+   - Continuously monitors, scores, and audits compliance across 1,671 Controls and 18 frameworks.
+   - Specific UAE/GCC Framework Mastery:
+     • DESC ISR v3.1 (Dubai Information Security Regulation): Domain 9 (Roles & Responsibilities of Human Resources), Domain 1 (Governance), Domain 11 (Incident Management).
+     • UAE Information Assurance (UAE IA) Regulation v1.1: Management Sub-domain M3 (Awareness & Training, e.g. M3.1.1).
+     • UAE Federal PDPL (Decree-Law No. 45/2021): Article 10 (DPO Competence & Certification), Article 9 (Breach Response Readiness).
+     • CBUAE Cyber Risk Management Framework: Mandated technical competencies for SOC operators, incident responders, and executive boards.
+     • ISO/IEC 27001:2022: Annex A.6.3 (Information Security Awareness & Training) & Clause 7.2 (Competence).
+   - Sovereign UAE Data Residency: Guaranteed zero data egress from the UAE. Tier 1: Sovereign GCC (me-central1 GCP / UAE AWS); Tier 2: In-Country UAE Bare-Metal; Tier 3: On-Premises Air-Gapped vLLM with local model weights.
+   - Corrective RAG Evaluation Gates: AI evaluates compliance policies with citation ground-truth validation, but never auto-certifies without human CISO sign-off.
 
-Do not claim we deliver instructor-led classes, live bootcamps, or ISACA/ISC2/IAPP certification training - we don't currently offer those. If asked about them, say we focus on EC-Council certification kits and GRC advisory, and suggest WhatsApp for anything more specific.
+2. Closed-Loop Human Governance Flywheel:
+   - Technical GRC monitoring is only half the audit; over 60% of compliance findings and breaches stem from human error or missing role competence.
+   - Step 1 (Gap Detection): CyberGOAT GRC continuously identifies missing role competencies across enterprise teams.
+   - Step 2 (Accredited Remediation): Direct delivery of official EC-Council certification tracks (Partner ID: ECRS21832) for designated enterprise roles:
+     • Security Operations (SOC): EC-Council CSA (Certified SOC Analyst)
+     • Cloud Infrastructure: EC-Council CCSE (Certified Cloud Security Engineer)
+     • Digital Forensics & Incident Response: ECIH v2 & CHFI v11
+     • Technical Assessment & Red Teaming: CEH v13 AI & CPENT / LPT
+     • Executive Governance & DPO: C|CISO (Certified Chief Information Security Officer)
+   - Step 3 (Evidence Vault Ingestion): Completed credentials, hands-on cloud iLabs, and official exam results automatically attach to statutory GRC controls with immutable SHA-256 evidence digests as auditor workpapers.
 
-Response style - this matters:
-- Keep answers short by default: 2-4 sentences for most questions. Do not exceed this unless the user explicitly asks for a detailed comparison, breakdown, or list.
-- Never write a full syllabus walkthrough, exam-domain breakdown, or multi-certification deep dive unless directly asked for that level of detail. Your job is to orient people toward the right course, not to be the course.
-- Answer the actual question first, directly, with no promotional padding.
-- Only mention booking a consultation or WhatsApp (+971 55 184 6786) when it's the natural next step for that specific message - pricing, enrollment, scheduling, or something that needs a human. Do not append it as a sign-off to every reply. Most answers should not mention it at all.
-- Use the custom trained Knowledge Base Q&A provided in the prompt context when it's directly relevant, but don't force it in otherwise.
+3. Enterprise Licensing & Academy Route:
+   - Enterprise seat pools (Growth 5 seats, Sovereign 15 seats, Critical Infrastructure 30+ seats) with split-budget invoicing (IT OpEx vs. HR/L&D Budget).
+   - Dedicated practitioner portal at cybergoat.ae/academy for individual course inquiry and GCC salary benchmarks (RoiCalculator).
+
+Response Guidelines:
+- State your name is Layla if introducing yourself.
+- Keep responses concise by default: 2-4 sentences for most questions.
+- Never write expansive essay dumps or full syllabi unless explicitly requested.
+- Provide direct, regulatory-sound answers without promotional fluff.
+- If asked about beginner cybersecurity courses, recommend foundational awareness or stepping into CEH v13 AI via /academy.
+- Never cite deprecated domains or fabricated control numbers (e.g. never cite "Domain 2 HR" for DESC ISR or "Control 6.3" for ISO 27001).
+- Only suggest booking a demo or WhatsApp (+971 55 184 6786) when the conversation naturally calls for pricing, procurement, or scheduling.
 `;
 
 export async function POST(req: NextRequest) {
@@ -62,7 +83,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { message } = await req.json();
+    const { message, page } = await req.json();
 
     if (!message || typeof message !== 'string') {
       return NextResponse.json({ error: 'Message parameter is required' }, { status: 400 });
@@ -86,23 +107,27 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ reply: customContext, source: 'knowledge-base' });
       }
 
-      // Graceful fallback response when Vertex AI is not configured yet
-      let fallbackText = "I can certainly help you with that! CyberGOAT offers official EC-Council certification kits (CEH, C|CISO, CHFI, and more), plus GRC and AI governance advisory.";
+      // Intelligent Fallback (Vertex offline or unconfigured)
       const lower = message.toLowerCase();
+      let fallbackText = "Marhaba! I am Layla, CyberGOAT's Sovereign AI GRC & Compliance Advisor. CyberGOAT automates continuous compliance across DESC ISR v3.1, UAE PDPL, CBUAE, and ISO 27001, backed by our Closed-Loop Human Governance Flywheel and verified EC-Council evidence ingestion.";
 
-      if (lower.includes('consult') || lower.includes('corporate') || lower.includes('book')) {
-        fallbackText = "For custom team or corporate training, you can book a direct consultation with our lead security architects or connect on WhatsApp at +971 55 184 6786!";
+      if (lower.includes('consult') || lower.includes('corporate') || lower.includes('demo') || lower.includes('book')) {
+        fallbackText = "You can test drive our simulated platform directly on the homepage, or book a live CISO walkthrough with our lead security architects. You can also connect directly on WhatsApp at +971 55 184 6786.";
+      } else if (lower.includes('desc') || lower.includes('isr')) {
+        fallbackText = "CyberGOAT maps directly to DESC ISR v3.1 requirements—specifically Domain 9 (Roles & Responsibilities of HR), Domain 1 (Governance), and Domain 11 (Incident Management)—linking technical control audits directly to verified personnel credentials.";
       } else if (lower.includes('beginner') || lower.includes('start')) {
-        fallbackText = "For beginners, we highly recommend starting with our Cybersecurity Fundamentals or Ethical Hacking Fundamentals track before moving on to CEH v13 AI certification.";
-      } else if (lower.includes('ec-council') || lower.includes('ceh') || lower.includes('cciso') || lower.includes('chfi')) {
-        fallbackText = "As an official EC-Council Reseller, CyberGOAT provides authorized training plus official exam vouchers for CEH v13 AI, C|CISO, CHFI, CND, and CPENT!";
+        fallbackText = "For practitioners beginning their security journey, explore our dedicated academy catalog at cybergoat.ae/academy, or review entry tracks before advancing to CEH v13 AI.";
+      } else if (lower.includes('pricing') || lower.includes('seat') || lower.includes('cost')) {
+        fallbackText = "We offer flexible enterprise seat allocations (5, 15, or 30+ seats) with split-budget invoicing across IT Security OpEx and HR/L&D training budgets. Connect on WhatsApp (+971 55 184 6786) for custom enterprise proposals.";
       }
 
       return NextResponse.json({ reply: fallbackText, source: 'fallback' });
     }
 
-    // Combine system prompt with custom trained Q&A context
+    // Combine system prompt with custom trained Q&A context and page context
     const fullPrompt = `${SYSTEM_INSTRUCTION}
+
+Visitor Current Page: ${page || 'homepage'}
 
 === CUSTOM TRAINED KNOWLEDGE BASE CONTEXT ===
 ${customContext || 'No specific Q&A override found for this question.'}
@@ -110,8 +135,6 @@ ${customContext || 'No specific Q&A override found for this question.'}
 
 User Question: ${message}`;
 
-    // 10-second timeout to guarantee a bounded response even if Vertex AI hangs.
-    // The SDK doesn't accept a fetch-style AbortSignal, so race it manually.
     let candidateReply: string | undefined;
     try {
       const result = await Promise.race([
@@ -132,25 +155,24 @@ User Question: ${message}`;
       return NextResponse.json({ reply: candidateReply, source: 'gemini+kb' });
     }
 
-    // Intelligent Dynamic CyberGOAT Fallback Response (0s latency, 100% uptime)
     if (customContext) {
       return NextResponse.json({ reply: customContext, source: 'knowledge-base-fallback' });
     }
 
     const lower = message.toLowerCase();
-    let smartReply = "Hello! I am CyberGOAT AI. CyberGOAT Services LLC is an official EC-Council Authorized Reseller & Official Distribution Partner in Dubai Silicon Oasis, UAE.\n\nWe offer official EC-Council certification kits (**CEH v13 AI, C|CISO, CHFI v11, CND, CPENT** and more), plus GRC & AI governance advisory.\n\nHow can I help you today? You can also connect directly with our admissions advisor on WhatsApp at **+971 55 184 6786**.";
+    let smartReply = "Hello! I am Layla, Sovereign AI GRC & Compliance Advisor at CyberGOAT Services LLC (Dubai Silicon Oasis, UAE).\n\nWe provide continuous sovereign compliance automation across DESC ISR v3.1, UAE IA, CBUAE, and UAE PDPL, with direct evidence vault ingestion of official EC-Council certifications.\n\nHow can I assist your security governance today? You can also connect directly with our advisory team on WhatsApp at **+971 55 184 6786**.";
 
-    if (lower.includes('awake') || lower.includes('active') || lower.includes('hello') || lower.includes('hi')) {
-      smartReply = "Yes, I am fully active and online 24/7! I am your CyberGOAT AI Security & Training Assistant. How can I help you with your EC-Council certification kits or GRC advisory goals today?";
-    } else if (lower.includes('pricing') || lower.includes('cost') || lower.includes('fee') || lower.includes('voucher')) {
-      smartReply = "Our official EC-Council certification packages (CEH v13 AI, C|CISO, CHFI) include **official EC-Council courseware, 6 months of hands-on iLabs, and the official exam voucher**. Please connect on WhatsApp (+971 55 184 6786) for exact pricing and current promotional offers!";
+    if (lower.includes('awake') || lower.includes('active') || lower.includes('hello') || lower.includes('hi') || lower.includes('who are you')) {
+      smartReply = "Marhaba! I am Layla, CyberGOAT's Sovereign AI GRC & Compliance Advisor. I'm active 24/7 to help you navigate UAE sovereign compliance, DESC ISR v3.1, UAE PDPL, and our Closed-Loop Human Governance Flywheel. How can I assist you today?";
+    } else if (lower.includes('pricing') || lower.includes('cost') || lower.includes('fee') || lower.includes('seats')) {
+      smartReply = "Our enterprise platform licensing includes flexible workforce seat pools (5, 15, or 30+ seats) with split-line invoicing across IT OpEx and HR/L&D training budgets. Connect with us on WhatsApp (+971 55 184 6786) for a tailored enterprise proposal!";
     }
 
     return NextResponse.json({ reply: smartReply, source: 'smart-fallback' });
   } catch (error) {
     console.error('API Handler Error:', error);
     return NextResponse.json(
-      { reply: 'Thank you for contacting CyberGOAT Services LLC. Please reach out to admin@cybergoat.ae or +971 55 184 6786 on WhatsApp for instant assistance.' },
+      { reply: 'Thank you for contacting CyberGOAT. Please reach out to admin@cybergoat.ae or +971 55 184 6786 on WhatsApp for instant assistance.' },
       { status: 200 }
     );
   }

@@ -5,7 +5,9 @@ import { GoogleGenAI } from '@google/genai';
 
 const VERTEX_PROJECT = process.env.GOOGLE_VERTEX_PROJECT;
 const VERTEX_LOCATION = process.env.GOOGLE_VERTEX_LOCATION || 'us-central1';
-const VERTEX_MODEL = process.env.GOOGLE_VERTEX_MODEL || 'gemini-2.0-flash';
+const rawModel = process.env.GOOGLE_VERTEX_MODEL || 'gemini-2.0-flash';
+// Sanitize invalid internal preview tags (e.g. gemini-3.8-flash) to GA Vertex model
+const VERTEX_MODEL = rawModel.includes('3.8') ? 'gemini-1.5-flash' : rawModel;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 // Cached at module scope so warm serverless instances reuse the same client
@@ -152,6 +154,9 @@ ${customContext || 'No specific Q&A override found for this question.'}
 User Question: ${message}`;
 
     let candidateReply: string | undefined;
+    let vertexError: string | undefined;
+
+    // Try primary model
     try {
       const result = await Promise.race([
         vertexClient.models.generateContent({
@@ -163,12 +168,38 @@ User Question: ${message}`;
         ),
       ]);
       candidateReply = result.text;
-    } catch (vertexErr) {
-      console.warn('Vertex AI call failed or timed out, serving intelligent fallback:', vertexErr);
+    } catch (primaryErr: any) {
+      vertexError = primaryErr?.message || String(primaryErr);
+      console.warn(`Primary Vertex AI call (${VERTEX_MODEL}) failed, trying gemini-1.5-flash:`, primaryErr);
+
+      // Resilient retry with universally supported gemini-1.5-flash
+      if (VERTEX_MODEL !== 'gemini-1.5-flash') {
+        try {
+          const fallbackResult = await Promise.race([
+            vertexClient.models.generateContent({
+              model: 'gemini-1.5-flash',
+              contents: fullPrompt,
+            }),
+            new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error('Vertex fallback timed out')), 8000)
+            ),
+          ]);
+          candidateReply = fallbackResult.text;
+        } catch (secondaryErr: any) {
+          vertexError = `${vertexError} | Fallback: ${secondaryErr?.message || String(secondaryErr)}`;
+          console.warn('Fallback Vertex AI call (gemini-1.5-flash) failed:', secondaryErr);
+        }
+      }
     }
 
+    const isDebug = req.headers.get('x-debug-chat') === 'cybergoat-debug';
+
     if (candidateReply) {
-      return NextResponse.json({ reply: candidateReply, source: 'gemini+kb' });
+      return NextResponse.json({
+        reply: candidateReply,
+        source: 'gemini+kb',
+        ...(isDebug ? { debug: { model: VERTEX_MODEL, status: 'success' } } : {}),
+      });
     }
 
     if (customContext) {
@@ -184,7 +215,11 @@ User Question: ${message}`;
       smartReply = "Our enterprise platform licensing includes flexible workforce seat pools (5, 15, or 30+ seats) with split-line invoicing across IT OpEx and HR/L&D training budgets. Connect with us on WhatsApp (+971 55 184 6786) for a tailored enterprise proposal!";
     }
 
-    return NextResponse.json({ reply: smartReply, source: 'smart-fallback' });
+    return NextResponse.json({
+      reply: smartReply,
+      source: 'smart-fallback',
+      ...(isDebug ? { debug: { model: VERTEX_MODEL, error: vertexError } } : {}),
+    });
   } catch (error) {
     console.error('API Handler Error:', error);
     return NextResponse.json(

@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BuildingOfficeIcon, UserGroupIcon, ShieldCheckIcon, PaperAirplaneIcon, ExclamationTriangleIcon, ClipboardDocumentCheckIcon } from '@heroicons/react/24/outline';
+import {
+  BuildingOfficeIcon,
+  UserGroupIcon,
+  ShieldCheckIcon,
+  PaperAirplaneIcon,
+  ExclamationTriangleIcon,
+  ClipboardDocumentCheckIcon,
+  AcademicCapIcon,
+  DocumentDuplicateIcon,
+} from '@heroicons/react/24/outline';
 
 export default function CorporateB2BSection() {
   const [formData, setFormData] = useState({
@@ -9,9 +18,8 @@ export default function CorporateB2BSection() {
     contactName: '',
     workEmail: '',
     phone: '',
-    employeeCount: '5 - 10 Employees',
-    targetTrack: 'EC-Council Corporate Track (CEH / C|CISO)',
-    customTrack: '',
+    tierSelection: 'Enterprise Suite (Platform + 15 Annual Seats)',
+    invoicingPreference: 'Unified Commercial Invoice (Single Master Agreement)',
   });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -21,10 +29,6 @@ export default function CorporateB2BSection() {
     e.preventDefault();
     setSubmitting(true);
     setSubmitError('');
-
-    const chosenTrack = formData.targetTrack === 'Other' && formData.customTrack
-      ? `Custom: ${formData.customTrack}`
-      : formData.targetTrack;
 
     try {
       const res = await fetch('/api/leads', {
@@ -36,7 +40,7 @@ export default function CorporateB2BSection() {
           name: formData.contactName,
           email: formData.workEmail,
           phone: formData.phone,
-          details: `Group/Team Size: ${formData.employeeCount} | Interest: ${chosenTrack}`,
+          details: `Tier: ${formData.tierSelection} | Invoicing: ${formData.invoicingPreference}`,
         }),
       });
 
@@ -60,46 +64,44 @@ export default function CorporateB2BSection() {
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           {/* Information Side */}
           <div className="lg:col-span-6 space-y-6 text-left">
-            <span className="px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest bg-[#2F57EF]/10 text-[#00F0FF] border border-[#2F57EF]/30">
-              Enterprise Kits &amp; Advisory Solutions
+            <span className="px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-widest bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]/30">
+              Enterprise Procurement &amp; Licensing
             </span>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-              Enterprise Certification Kits &amp; Executive Security Advisory
+              Sovereign GRC + Enterprise Competency Licensing
             </h2>
-            <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
-              Equip your enterprise IT security, SOC, and compliance teams with bulk EC-Council certification kits &mdash; or engage our GRC advisory, security architecture, and Virtual CISO consultants directly, on-site at your Dubai or GCC headquarters.
+            <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+              Bundle autonomous compliance software with annual transferable workforce certification seats &mdash; satisfying both technical GRC requirements and DESC ISR v3.1 Domain 9 human audit mandates under one agreement.
             </p>
 
             <div className="space-y-4 pt-2">
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10">
+              <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#05080F] border border-white/10">
                 <ShieldCheckIcon className="w-6 h-6 text-[#00F0FF] shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-white">Official EC-Council Accredited Partner</h4>
-                  <p className="text-xs text-gray-400">Bulk courseware, iLabs access, and exam vouchers for your entire engineering team.</p>
+                  <h4 className="text-sm font-bold text-white">Tiered Enterprise Seat Pools</h4>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    Allocate 5, 15, or 30+ transferable EC-Council seats annually across your SOC, Cloud, and IR teams with automated Evidence Vault ingestion.
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                <BuildingOfficeIcon className="w-6 h-6 text-[#C664FF] shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#05080F] border border-white/10">
+                <DocumentDuplicateIcon className="w-6 h-6 text-[#C664FF] shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-white">On-Site Advisory Across the GCC</h4>
-                  <p className="text-xs text-gray-400">Our GRC, security architecture, and Virtual CISO consultants engage directly with government entities, banks, and enterprise corporations across the GCC.</p>
+                  <h4 className="text-sm font-bold text-white">Procurement-Friendly Split Invoicing</h4>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    Charge IT and HR separately without procurement friction: we can issue split-line invoices routing software to IT/CISO OpEx and workforce enablement to your L&amp;D training budget.
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                <UserGroupIcon className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#05080F] border border-white/10">
+                <BuildingOfficeIcon className="w-6 h-6 text-[#22D3A8] shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-white">Volume Corporate Discounts</h4>
-                  <p className="text-xs text-gray-400">Special enterprise tier pricing and dedicated account manager support for kit orders of 5+ employees.</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                <ClipboardDocumentCheckIcon className="w-6 h-6 text-[#C664FF] shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-sm font-bold text-white">GRC, Security Architecture &amp; AI Governance Advisory</h4>
-                  <p className="text-xs text-gray-400">Beyond kit supply &mdash; engage our consultants directly for compliance advisory, security architecture design, an ongoing Virtual CISO retainer, or AI/GenAI governance and risk advisory.</p>
+                  <h4 className="text-sm font-bold text-white">Dedicated Sovereign Deployment Tiers</h4>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    Options for isolated GCC tenant residency (me-central1), In-Country UAE dedicated clusters, or on-prem air-gapped vLLM environments.
+                  </p>
                 </div>
               </div>
             </div>
@@ -110,30 +112,30 @@ export default function CorporateB2BSection() {
             {!submitted ? (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-1 text-left border-b border-white/10 pb-4 mb-4">
-                  <h3 className="text-xl font-bold text-white">Request a Corporate Kit Order or Advisory Proposal</h3>
-                  <p className="text-xs text-gray-400">Receive a custom proposal tailored to your certification kit or advisory needs within 24 hours.</p>
+                  <h3 className="text-xl font-bold text-white">Request Enterprise Licensing Proposal</h3>
+                  <p className="text-xs text-gray-400">Receive a tailored GRC platform and workforce seat proposal within 24 hours.</p>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="text-left">
-                    <label className="block text-xs font-semibold text-gray-400 mb-1">Company / Organization</label>
+                    <label className="block text-xs font-semibold text-gray-400 mb-1">Organization / Entity</label>
                     <input
                       type="text"
                       required
                       value={formData.companyName}
                       onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                      placeholder="e.g. Emirates Telecom / Bank"
+                      placeholder="e.g. Dubai Bank / Government Authority"
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF]"
                     />
                   </div>
                   <div className="text-left">
-                    <label className="block text-xs font-semibold text-gray-400 mb-1">Contact Person</label>
+                    <label className="block text-xs font-semibold text-gray-400 mb-1">Contact Name &amp; Title</label>
                     <input
                       type="text"
                       required
                       value={formData.contactName}
                       onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
-                      placeholder="e.g. Sarah Al-Maktoum (CISO)"
+                      placeholder="e.g. Tariq Mansoor (CISO)"
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF]"
                     />
                   </div>
@@ -141,13 +143,13 @@ export default function CorporateB2BSection() {
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="text-left">
-                    <label className="block text-xs font-semibold text-gray-400 mb-1">Work Email</label>
+                    <label className="block text-xs font-semibold text-gray-400 mb-1">Corporate Email</label>
                     <input
                       type="email"
                       required
                       value={formData.workEmail}
                       onChange={(e) => setFormData({ ...formData, workEmail: e.target.value })}
-                      placeholder="name@company.ae"
+                      placeholder="ciso@organization.ae"
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF]"
                     />
                   </div>
@@ -164,58 +166,35 @@ export default function CorporateB2BSection() {
                   </div>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="text-left">
-                    <label className="block text-xs font-semibold text-gray-400 mb-1">Team Size (Kit Order)</label>
-                    <select
-                      value={formData.employeeCount}
-                      onChange={(e) => setFormData({ ...formData, employeeCount: e.target.value })}
-                      className="w-full bg-[#0A0F1A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#00F0FF]"
-                    >
-                      <option>5 - 10 Employees</option>
-                      <option>11 - 25 Employees</option>
-                      <option>26 - 50 Employees</option>
-                      <option>50+ Enterprise Team</option>
-                    </select>
-                  </div>
-                  <div className="text-left">
-                    <label className="block text-xs font-semibold text-gray-400 mb-1">Primary Interest</label>
-                    <select
-                      value={formData.targetTrack}
-                      onChange={(e) => setFormData({ ...formData, targetTrack: e.target.value })}
-                      className="w-full bg-[#0A0F1A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#00F0FF]"
-                    >
-                      <optgroup label="EC-Council Certification Kit Bundles">
-                        <option>EC-Council Corporate Kit Bundle (CEH / C|CISO)</option>
-                        <option>Digital Forensics Kit Bundle (CHFI v11)</option>
-                      </optgroup>
-                      <optgroup label="Consulting &amp; Advisory Engagements">
-                        <option>GRC / Compliance Advisory Engagement</option>
-                        <option>Security Architecture Consulting</option>
-                        <option>Virtual CISO Retainer</option>
-                        <option>Enterprise AI Consulting &amp; GenAI Governance Advisory</option>
-                      </optgroup>
-                      <option value="Other">Other / Tell Us What You Need...</option>
-                    </select>
-                  </div>
+                <div className="text-left">
+                  <label className="block text-xs font-semibold text-gray-400 mb-1">Licensing &amp; Seat Pool Tier</label>
+                  <select
+                    value={formData.tierSelection}
+                    onChange={(e) => setFormData({ ...formData, tierSelection: e.target.value })}
+                    className="w-full bg-[#0A0F1A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#00F0FF]"
+                  >
+                    <option>Core Sovereign Suite (Platform + 5 Transferable Seats)</option>
+                    <option>Enterprise Suite (Platform + 15 Transferable Seats)</option>
+                    <option>Regulated Entity Tier (Dedicated UAE Zone / vLLM + 30+ Seats)</option>
+                    <option>Custom CISO Retainer &amp; Advisory Architecture</option>
+                  </select>
                 </div>
 
-                {formData.targetTrack === 'Other' && (
-                  <div className="text-left animate-in fade-in duration-200">
-                    <label className="block text-xs font-semibold text-[#00F0FF] mb-1">Tell Us What You Need</label>
-                    <input
-                      type="text"
-                      required
-                      onChange={(e) => setFormData({ ...formData, customTrack: e.target.value })}
-                      placeholder="e.g. Cloud Security Advisory, SCADA Risk Assessment, Threat Hunting Consulting..."
-                      className="w-full bg-white/5 border border-[#00F0FF]/40 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00F0FF]"
-                    />
-                  </div>
-                )}
+                <div className="text-left">
+                  <label className="block text-xs font-semibold text-gray-400 mb-1">Invoicing Preference</label>
+                  <select
+                    value={formData.invoicingPreference}
+                    onChange={(e) => setFormData({ ...formData, invoicingPreference: e.target.value })}
+                    className="w-full bg-[#0A0F1A] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#00F0FF]"
+                  >
+                    <option>Unified Commercial Invoice (Single Master Agreement)</option>
+                    <option>Split Invoicing (Platform to IT OpEx, Seats to HR/L&amp;D Budget)</option>
+                  </select>
+                </div>
 
                 {submitError && (
-                  <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 flex items-start gap-2">
-                    <ExclamationTriangleIcon className="w-4 h-4 shrink-0 mt-0.5" />
+                  <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs flex items-center gap-2">
+                    <ExclamationTriangleIcon className="w-4 h-4 shrink-0" />
                     <span>{submitError}</span>
                   </div>
                 )}
@@ -223,18 +202,20 @@ export default function CorporateB2BSection() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-3.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-full hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all cursor-pointer flex items-center justify-center gap-2 mt-4"
+                  className="w-full py-3.5 bg-gradient-to-r from-[#00F0FF] via-[#2F57EF] to-[#C664FF] text-white text-xs font-extrabold uppercase tracking-wider rounded-xl hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg disabled:opacity-50"
                 >
-                  <PaperAirplaneIcon className="w-4 h-4 text-black" />
-                  {submitting ? 'Submitting Proposal...' : 'Request Custom Proposal & Quote'}
+                  <PaperAirplaneIcon className="w-4 h-4" />
+                  {submitting ? 'Submitting...' : 'Request Enterprise Proposal'}
                 </button>
               </form>
             ) : (
-              <div className="py-12 space-y-4 text-center">
-                <ShieldCheckIcon className="w-16 h-16 text-[#00F0FF] mx-auto animate-bounce" />
-                <h3 className="text-2xl font-extrabold text-white">Proposal Request Received!</h3>
-                <p className="text-sm text-gray-300 max-w-md mx-auto leading-relaxed">
-                  Thank you, <strong>{formData.contactName}</strong>. Our team will contact you at <strong>{formData.workEmail}</strong> within 24 hours with a custom kit order or advisory proposal.
+              <div className="py-12 text-center space-y-4">
+                <div className="w-16 h-16 rounded-full bg-[#22D3A8]/20 border border-[#22D3A8]/40 text-[#22D3A8] mx-auto flex items-center justify-center">
+                  <ClipboardDocumentCheckIcon className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold text-white">Proposal Request Received</h3>
+                <p className="text-gray-400 text-xs max-w-md mx-auto">
+                  Our enterprise advisory team will deliver your tailored Sovereign GRC and Competency Seat proposal within 24 hours.
                 </p>
               </div>
             )}

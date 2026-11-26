@@ -2,8 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChatBubbleLeftRightIcon, SparklesIcon } from '@heroicons/react/24/outline';
-import { useModals } from './site-modals';
+import { ChatBubbleLeftRightIcon, SparklesIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { SignInTrigger, BookDemoTrigger } from './interactive-buttons';
 
 const WHATSAPP_CHAT_URL = 'https://wa.me/971551846786?text=Hi%20CyberGOAT,%20we%20want%20to%20inquire%20about%20the%20GRC%20Platform';
@@ -24,23 +23,30 @@ export default function NavBar() {
           />
         </Link>
 
-        {/* Central SaaS Nav Links */}
-        <div className="hidden lg:flex items-center gap-7 text-xs font-semibold text-gray-300 uppercase tracking-wider">
+        {/* Central Enterprise SaaS Nav Links */}
+        <div className="hidden lg:flex items-center gap-6 text-xs font-semibold text-gray-300 uppercase tracking-wider">
           <a href="#platform" className="hover:text-[#00F0FF] transition-colors">
             Platform
           </a>
           <a href="#frameworks" className="hover:text-[#00F0FF] transition-colors">
             Frameworks
           </a>
-          <a href="#sovereignty" className="hover:text-[#00F0FF] transition-colors">
-            Sovereignty
+          <a href="#workforce" className="hover:text-[#00F0FF] transition-colors">
+            Workforce Compliance
           </a>
           <a href="#interactive-demo" className="text-[#00F0FF] hover:text-[#00F0FF]/80 transition-colors flex items-center gap-1 font-bold">
             <SparklesIcon className="w-3.5 h-3.5" /> Interactive Demo
           </a>
-          <a href="#courses" className="hover:text-[#C664FF] transition-colors">
-            Academy
+          <a href="#sovereignty" className="hover:text-[#00F0FF] transition-colors">
+            Sovereignty
           </a>
+          <Link
+            href="/academy"
+            className="text-[11px] font-mono normal-case px-2.5 py-1 rounded-full border border-[#C664FF]/30 bg-[#C664FF]/10 text-[#C664FF] hover:bg-[#C664FF]/20 transition-all flex items-center gap-1"
+          >
+            <span>Academy</span>
+            <ArrowTopRightOnSquareIcon className="w-3 h-3" />
+          </Link>
         </div>
 
         {/* Action Triggers */}

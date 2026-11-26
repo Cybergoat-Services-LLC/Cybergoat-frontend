@@ -11,9 +11,11 @@ import {
   BriefcaseIcon,
   ClipboardDocumentCheckIcon,
   ServerIcon,
+  FingerPrintIcon,
+  ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 import RevealOnScroll from './RevealOnScroll';
-import { ContactTrigger, SignInTrigger, AssessmentTrigger, TrackTrigger, BookDemoTrigger } from './interactive-buttons';
+import { ContactTrigger, SignInTrigger, BookDemoTrigger } from './interactive-buttons';
 import { SOCIAL_LINKS } from '@/config/socials';
 
 export const HeroSection = () => (
@@ -32,14 +34,14 @@ export const HeroSection = () => (
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-semibold mb-6 backdrop-blur-md shadow-sm">
           <span className="font-mono text-[11px] text-[#00F0FF]/80 uppercase tracking-wider">[SOVEREIGN_GCC_GRC]</span>
           <span className="w-1.5 h-1.5 rounded-full bg-[#00F0FF] animate-pulse"></span>
-          <span>AI Continuous Compliance Platform &amp; Enterprise Academy</span>
+          <span>Autonomous AI Compliance &amp; Accredited Workforce Competency</span>
         </div>
 
         {/* Refined Headline */}
         <h1 className="text-4xl sm:text-6xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.06] mb-6 max-w-5xl mx-auto">
           Autonomous Continuous GRC &amp;{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] via-[#38BDF8] to-[#00F0FF] font-extrabold">
-            AI-Powered Audit Defense
+            Verified Workforce Compliance
           </span>{' '}
           for the{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C664FF] via-[#E066FF] to-[#F472B6] font-extrabold">
@@ -49,7 +51,7 @@ export const HeroSection = () => (
 
         {/* Executive Sub-Headline */}
         <p className="text-lg sm:text-xl text-gray-300 font-medium mb-8 max-w-3xl mx-auto leading-relaxed">
-          Unified compliance automation for <strong>DESC ISR, UAE IA, CBUAE, UAE PDPL, and ISO 27001</strong>. Accelerate audit readiness with Corrective RAG AI evaluation, human-in-the-loop review gates, and guaranteed in-region data residency.
+          Automate <strong>DESC ISR v3.1, UAE IA Regulation v1.1, CBUAE, UAE Federal PDPL, and ISO/IEC 27001:2022</strong> readiness &mdash; from autonomous technical control mapping to accredited role competency and audit-ready evidence.
         </p>
 
         {/* 3 High-Impact Value Pillar Cards */}
@@ -57,10 +59,10 @@ export const HeroSection = () => (
           <div className="bg-[#05080F] border border-[#00F0FF]/40 rounded-3xl p-6 glass-card hover:border-[#00F0FF] transition-all">
             <div className="flex items-center gap-2 mb-2 text-[#00F0FF] font-extrabold text-sm uppercase tracking-wider">
               <ServerIcon className="w-5 h-5 text-[#00F0FF]" />
-              <span>Sovereign GCC Residency</span>
+              <span>Sovereign UAE Residency</span>
             </div>
             <p className="text-xs text-gray-300 font-medium leading-relaxed">
-              Hosted in GCC (me-central1) or In-Country UAE Zones with self-hosted vLLM options &mdash; zero data egress to US servers.
+              Hosted in GCC (me-central1) or In-Country UAE Dedicated Zones with self-hosted vLLM options &mdash; zero foreign data egress.
             </p>
           </div>
 
@@ -76,11 +78,11 @@ export const HeroSection = () => (
 
           <div className="bg-[#05080F] border border-[#C664FF]/40 rounded-3xl p-6 glass-card hover:border-[#C664FF] transition-all">
             <div className="flex items-center gap-2 mb-2 text-[#E066FF] font-extrabold text-sm uppercase tracking-wider">
-              <ShieldCheckIcon className="w-5 h-5 text-[#E066FF]" />
-              <span>Unified Controls Framework</span>
+              <AcademicCapIcon className="w-5 h-5 text-[#E066FF]" />
+              <span>Closed-Loop Workforce Evidence</span>
             </div>
             <p className="text-xs text-gray-300 font-medium leading-relaxed">
-              Comply once with DESC ISR; satisfy matching controls in UAE IA, CBUAE, and ISO 27001 simultaneously across 671 unified controls.
+              Solves DESC ISR Domain 9 and ISO A.6.3 by linking unfulfilled role gaps to accredited EC-Council pathways with automated evidence vault ingestion.
             </p>
           </div>
         </div>
@@ -97,20 +99,20 @@ export const HeroSection = () => (
             Book CISO Walkthrough
           </BookDemoTrigger>
           <a
-            href="#courses"
+            href="#workforce"
             className="w-full sm:w-auto px-7 py-3.5 border border-[#C664FF]/40 text-[#C664FF] font-bold text-xs uppercase tracking-wider rounded-full hover:bg-[#C664FF]/10 transition-all cursor-pointer"
           >
-            Enterprise Academy &rarr;
+            Workforce Compliance &rarr;
           </a>
         </div>
 
         {/* Framework & Reseller Trust Banner */}
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-wrap justify-center items-center gap-x-8 gap-y-3 opacity-80 text-xs text-gray-400 font-mono">
-          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> DESC ISR v3.1</span>
-          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> UAE Federal PDPL</span>
-          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> CBUAE Banking</span>
-          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> ISO 27001 / SOC 2</span>
-          <span className="flex items-center gap-1.5 text-gray-300 font-sans"><AcademicCapIcon className="w-4 h-4 text-[#C664FF]" /> EC-Council Authorized Partner</span>
+          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> DESC ISR v3.1 (Domains 1, 9, 11)</span>
+          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> UAE Federal PDPL (Law No. 45/2021)</span>
+          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> CBUAE Banking Cyber Framework</span>
+          <span className="flex items-center gap-1.5"><ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" /> ISO/IEC 27001:2022 (Annex A.6.3 &amp; Clause 7.2)</span>
+          <span className="flex items-center gap-1.5 text-gray-300 font-sans"><AcademicCapIcon className="w-4 h-4 text-[#C664FF]" /> EC-Council Authorized Partner (ECRS21832)</span>
         </div>
       </div>
     </div>
@@ -122,98 +124,148 @@ export const StatsBar = () => (
     <div className="container mx-auto px-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
         <div className="space-y-1">
-          <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#0DCAF0] to-[#2F57EF]">
-            10+ Years
+          <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] font-mono">
+            1,671 Controls
           </div>
-          <p className="text-xs md:text-sm text-gray-400 font-medium">Certified Lead Practitioner Experience</p>
+          <p className="text-xs md:text-sm text-gray-300 font-medium">Unified Framework Mapping</p>
         </div>
         <div className="space-y-1">
-          <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#C664FF] to-[#2F57EF]">
-            100%
+          <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#C664FF] to-[#2F57EF] font-mono">
+            9 Role Tracks
           </div>
-          <p className="text-xs md:text-sm text-gray-400 font-medium">Official Exam Voucher Included</p>
+          <p className="text-xs md:text-sm text-gray-300 font-medium">Official EC-Council Workforce Pathways</p>
         </div>
         <div className="space-y-1">
-          <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#0DCAF0] to-[#C664FF]">
-            GDPR &amp; ISR
+          <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#22D3A8] to-[#00F0FF] font-mono">
+            100% Audit-Ready
           </div>
-          <p className="text-xs md:text-sm text-gray-400 font-medium">Regulatory Framework Aligned</p>
+          <p className="text-xs md:text-sm text-gray-300 font-medium">Automated Evidence Vault Ingestion</p>
         </div>
         <div className="space-y-1">
-          <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#2F57EF] to-[#0DCAF0]">
-            Free AI Tool
+          <div className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#2F57EF] to-[#00F0FF] font-mono">
+            Zero Egress
           </div>
-          <p className="text-xs md:text-sm text-gray-400 font-medium">Automated Compliance Readiness Scoring</p>
+          <p className="text-xs md:text-sm text-gray-300 font-medium">Guaranteed In-Country UAE Data Residency</p>
         </div>
       </div>
     </div>
   </section>
 );
 
-export const CareerRoadmapSection = () => (
-  <section className="py-24 bg-[#0A0F1A] relative border-b border-white/5">
-    <div className="container mx-auto px-6">
-      <RevealOnScroll className="text-center max-w-3xl mx-auto mb-16">
-        <h2 className="text-sm font-bold tracking-widest text-[#0DCAF0] uppercase mb-4">
-          Structured Career Pathways
-        </h2>
-        <h3 className="text-4xl font-bold text-white mb-6">
-          Your Guided Journey from Practitioner to CISO
+export const ClosedLoopFlywheelSection = () => (
+  <section className="py-16 bg-[#05080F] border-b border-white/5 relative z-20">
+    <div className="container mx-auto px-6 max-w-6xl">
+      <RevealOnScroll className="text-center max-w-3xl mx-auto mb-12">
+        <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#00F0FF] px-3.5 py-1 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/30">
+          The Closed-Loop Governance Flywheel
+        </span>
+        <h3 className="text-3xl sm:text-4xl font-extrabold text-white mt-4">
+          From Regulatory Gap Detection to Audit-Ready Evidence
         </h3>
-        <p className="text-xl text-gray-400">
-          We support your long-term career progression step-by-step with accredited certification pathways.
+        <p className="text-sm text-gray-400 mt-2">
+          How CyberGOAT unites autonomous technical GRC with verified workforce competency in three automated steps.
         </p>
       </RevealOnScroll>
 
-      <div className="grid md:grid-cols-2 gap-6 relative max-w-3xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+        <div className="p-6 rounded-2xl bg-[#0A0F1A] border border-white/10 relative">
+          <div className="text-2xl font-black text-[#00F0FF] font-mono mb-2">01</div>
+          <h4 className="text-base font-bold text-white mb-2">Audit &amp; Role Gap Detection</h4>
+          <p className="text-xs text-gray-400 leading-relaxed">
+            Continuous AI monitoring scans your org chart and cloud configurations to detect unfulfilled competencies under DESC ISR v3.1 Domain 9 and ISO/IEC 27001:2022 Clause 7.2.
+          </p>
+        </div>
+
+        <div className="p-6 rounded-2xl bg-[#0A0F1A] border border-[#00F0FF]/40 relative shadow-[0_0_20px_rgba(0,240,255,0.15)]">
+          <div className="text-2xl font-black text-[#00F0FF] font-mono mb-2">02</div>
+          <h4 className="text-base font-bold text-white mb-2">Accredited Role Remediation</h4>
+          <p className="text-xs text-gray-400 leading-relaxed">
+            Automatically allocates official EC-Council training seats (CSA for SOC, CCSE for Cloud, ECIH for Incident Response, C|CISO for Leadership) to bridge detected compliance gaps.
+          </p>
+        </div>
+
+        <div className="p-6 rounded-2xl bg-[#0A0F1A] border border-[#22D3A8]/40 relative">
+          <div className="text-2xl font-black text-[#22D3A8] font-mono mb-2">03</div>
+          <h4 className="text-base font-bold text-white mb-2">Automated Evidence Ingestion</h4>
+          <p className="text-xs text-gray-400 leading-relaxed">
+            Completed coursework, iLabs, and official certifications are authenticated via Partner ID ECRS21832 and ingested into the Evidence Vault as tamper-proof SHA-256 workpapers.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+export const EnterpriseCompetencySection = () => (
+  <section id="workforce" className="py-24 bg-[#0A0F1A] relative border-b border-white/5">
+    <div className="container mx-auto px-6">
+      <RevealOnScroll className="text-center max-w-3xl mx-auto mb-16">
+        <h2 className="text-sm font-bold tracking-widest text-[#00F0FF] uppercase mb-4">
+          Statutory Role Readiness
+        </h2>
+        <h3 className="text-4xl font-extrabold text-white mb-6">
+          Enterprise Competency Architecture
+        </h3>
+        <p className="text-lg text-gray-300">
+          Generic awareness videos fail regulatory inspections. CyberGOAT equips your specialized defense teams with accredited role pathways mapped directly to DESC ISR v3.1 Domain 9 and UAE IA v1.1 M3.
+        </p>
+      </RevealOnScroll>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
         {[
           {
-            stage: 'Stage 1',
-            title: 'Technical Defense',
-            icon: CpuChipIcon,
-            desc: 'Master hands-on penetration testing, forensics, and vulnerability assessment.',
-            certs: ['CEH v13 AI', 'CHFI v11'],
-            color: 'border-[#0DCAF0]/30 text-[#0DCAF0]',
+            role: 'Security Operations & Threat Defense',
+            framework: 'DESC ISR v3.1 Domain 9 • UAE IA v1.1 M3',
+            desc: 'Mandatory technical competence for Tier 1-3 SOC operators, SIEM monitoring, and perimeter defense.',
+            certs: ['CSA (SOC Analyst)', 'CEH v13 AI', 'CND v2'],
+            color: 'border-[#00F0FF]/30 text-[#00F0FF]',
           },
           {
-            stage: 'Stage 2',
-            title: 'Executive CISO',
-            icon: AcademicCapIcon,
-            desc: 'Command executive security governance, enterprise architecture, and board leadership.',
+            role: 'Digital Forensics & Incident Response',
+            framework: 'DESC ISR v3.1 Domain 11 • UAE PDPL Art. 9',
+            desc: 'Accredited forensics, chain of custody preservation, and statutory breach response readiness.',
+            certs: ['CHFI v11', 'ECIH v2'],
+            color: 'border-[#22D3A8]/30 text-[#22D3A8]',
+          },
+          {
+            role: 'Sovereign Cloud Security',
+            framework: 'Sovereign Cloud Policy • ISO/IEC 27017',
+            desc: 'Hardening multi-tenant cloud architecture, container security, and GCC in-country data perimeters.',
+            certs: ['CCSE (Cloud Security)'],
+            color: 'border-[#38BDF8]/30 text-[#38BDF8]',
+          },
+          {
+            role: 'Governance & Risk Leadership',
+            framework: 'DESC ISR Domain 1 • ISO 27001 Cl. 7.2 • PDPL Art. 10',
+            desc: 'Board-level cyber risk oversight, CISO executive governance, and statutory Data Protection Officer competence.',
             certs: ['C|CISO'],
             color: 'border-[#C664FF]/30 text-[#C664FF]',
           },
-        ].map((item, idx) => {
-          const IconComp = item.icon;
-          return (
-            <RevealOnScroll key={item.stage} delay={idx * 0.1} className="relative">
-              <div className={`h-full bg-[#05080F] border rounded-3xl p-6 glass-card flex flex-col justify-between ${item.color}`}>
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-extrabold uppercase tracking-widest px-3 py-1 rounded-full bg-white/5 border border-white/10">
-                      {item.stage}
-                    </span>
-                    <IconComp className="w-6 h-6" />
-                  </div>
-                  <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
-                  <p className="text-xs text-gray-400 mb-6 leading-relaxed">{item.desc}</p>
-                  
-                  <div className="space-y-2 mb-6">
-                    {item.certs.map((c) => (
-                      <div key={c} className="flex items-center gap-2 text-xs text-gray-300">
-                        <ChevronRightIcon className="w-3.5 h-3.5 text-[#0DCAF0]" /> {c}
-                      </div>
-                    ))}
-                  </div>
+        ].map((item, idx) => (
+          <RevealOnScroll key={item.role} delay={idx * 0.1} className="relative">
+            <div className={`h-full bg-[#05080F] border rounded-3xl p-6 glass-card flex flex-col justify-between ${item.color}`}>
+              <div>
+                <div className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 border border-white/10 text-gray-300 mb-3 inline-block">
+                  {item.framework}
                 </div>
+                <h4 className="text-base font-bold text-white mb-2">{item.role}</h4>
+                <p className="text-xs text-gray-400 mb-6 leading-relaxed">{item.desc}</p>
 
-                <TrackTrigger stageKey={item.stage} className="w-full py-2.5 text-center bg-[#2F57EF]/20 hover:bg-[#2F57EF] text-xs font-bold text-white rounded-full transition-all border border-[#2F57EF]/40 shadow-lg cursor-pointer">
-                  Explore Syllabus &amp; Enroll
-                </TrackTrigger>
+                <div className="space-y-2 mb-6">
+                  {item.certs.map((c) => (
+                    <div key={c} className="flex items-center gap-2 text-xs text-gray-300 font-mono">
+                      <ChevronRightIcon className="w-3.5 h-3.5 text-[#00F0FF]" /> {c}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </RevealOnScroll>
-          );
-        })}
+
+              <BookDemoTrigger className="w-full py-2.5 text-center bg-[#00F0FF]/10 hover:bg-[#00F0FF] text-[#00F0FF] hover:text-black text-xs font-bold rounded-xl transition-all border border-[#00F0FF]/30 shadow-lg cursor-pointer">
+                Allocate Enterprise Seats
+              </BookDemoTrigger>
+            </div>
+          </RevealOnScroll>
+        ))}
       </div>
     </div>
   </section>
@@ -223,15 +275,12 @@ export const ApproachSection = () => (
   <section className="py-24 bg-[#05080F] relative border-y border-white/5">
     <div className="container mx-auto px-6 space-y-16">
       <RevealOnScroll className="max-w-3xl space-y-6">
-        <h2 className="text-sm font-bold tracking-widest text-[#00F0FF] uppercase">Who We Are</h2>
+        <h2 className="text-sm font-bold tracking-widest text-[#00F0FF] uppercase">The CyberGOAT Advantage</h2>
         <h3 className="text-4xl lg:text-5xl font-extrabold text-white leading-tight">
-          Built for the practitioner. Trusted by the enterprise.
+          Sovereign Governance Meets Accredited Human Defense
         </h3>
-        <p className="text-xl text-gray-400">
-          CyberGOAT empowers individuals and businesses to navigate the ever-shifting
-          landscape of security and privacy. In a world where regulations scramble to
-          keep pace with emerging technologies like AI, our certification enablement and GRC advisory
-          practices work side by side to give you a critical edge.
+        <p className="text-lg text-gray-300 leading-relaxed">
+          Technology alone cannot pass a regulatory audit. By coupling autonomous AI GRC with official EC-Council workforce credentials, CyberGOAT guarantees that your technical controls and your human defense personnel satisfy DESC ISR v3.1 Domain 9 and UAE IA v1.1 M3 simultaneously.
         </p>
       </RevealOnScroll>
 
@@ -241,26 +290,24 @@ export const ApproachSection = () => (
             <div className="w-12 h-12 rounded-2xl bg-[#00F0FF]/10 flex items-center justify-center text-[#00F0FF]">
               <AcademicCapIcon className="w-6 h-6" />
             </div>
-            <h4 className="text-2xl font-bold text-white">Certification Kits</h4>
+            <h4 className="text-2xl font-bold text-white">Workforce Competency Seats</h4>
           </div>
-          <ul className="space-y-5">
+          <ul className="space-y-5 text-sm text-gray-300">
             <li className="flex items-start gap-3">
               <CheckCircleIcon className="w-5 h-5 text-[#00F0FF] shrink-0 mt-0.5" />
               <div>
-                <h5 className="text-white font-semibold">Official EC-Council Certification Kits</h5>
-                <p className="text-gray-400 text-sm">
-                  Direct access to official EC-Council courseware, exam vouchers, and
-                  iLabs &mdash; the same materials used by EC-Council&rsquo;s own training centers.
+                <h5 className="text-white font-semibold">Accredited EC-Council Curriculum</h5>
+                <p className="text-gray-400 text-xs mt-0.5">
+                  Official courseware, cloud iLabs, and certification examination vouchers for your SOC, cloud, and incident handling personnel.
                 </p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <CheckCircleIcon className="w-5 h-5 text-[#00F0FF] shrink-0 mt-0.5" />
               <div>
-                <h5 className="text-white font-semibold">Corporate Voucher Bundles</h5>
-                <p className="text-gray-400 text-sm">
-                  Bulk EC-Council certification kit allocations for enterprise teams,
-                  with volume pricing.
+                <h5 className="text-white font-semibold">Cryptographic Evidence Vault Ingestion</h5>
+                <p className="text-gray-400 text-xs mt-0.5">
+                  Verified credential completion badges automatically attach to statutory GRC controls with immutable SHA-256 evidence hashes.
                 </p>
               </div>
             </li>
@@ -272,79 +319,43 @@ export const ApproachSection = () => (
             <div className="w-12 h-12 rounded-2xl bg-[#C664FF]/10 flex items-center justify-center text-[#E066FF]">
               <BriefcaseIcon className="w-6 h-6" />
             </div>
-            <h4 className="text-2xl font-bold text-white">GRC &amp; Security Advisory</h4>
+            <h4 className="text-2xl font-bold text-white">GRC &amp; Sovereign Advisory</h4>
           </div>
-          <ul className="space-y-5">
+          <ul className="space-y-5 text-sm text-gray-300">
             <li className="flex items-start gap-3">
               <CheckCircleIcon className="w-5 h-5 text-[#E066FF] shrink-0 mt-0.5" />
               <div>
-                <h5 className="text-white font-semibold">Compliance &amp; Security Architecture</h5>
-                <p className="text-gray-400 text-sm">
-                  GRC/compliance advisory and security architecture design for
-                  organizations navigating a growing regulatory landscape.
+                <h5 className="text-white font-semibold">DESC ISR v3.1 &amp; CBUAE Audit Preparation</h5>
+                <p className="text-gray-400 text-xs mt-0.5">
+                  End-to-end audit readiness, gap remediation, and security architecture design led by certified Lead Auditors and vCISOs.
                 </p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <CheckCircleIcon className="w-5 h-5 text-[#E066FF] shrink-0 mt-0.5" />
               <div>
-                <h5 className="text-white font-semibold">Virtual CISO &amp; AI Governance</h5>
-                <p className="text-gray-400 text-sm">
-                  Ongoing Virtual CISO retainers and AI/GenAI governance advisory,
-                  led by CISA/CISM-certified practitioners.
+                <h5 className="text-white font-semibold">Virtual CISO &amp; AI Governance Retainers</h5>
+                <p className="text-gray-400 text-xs mt-0.5">
+                  Dedicated executive leadership for GCC entities navigating emerging generative AI risk and statutory data protection laws.
                 </p>
               </div>
             </li>
           </ul>
         </RevealOnScroll>
       </div>
-
-      <RevealOnScroll delay={0.15} className="relative">
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#C664FF]/20 to-transparent blur-3xl" />
-        <div className="bg-[#0A0F1A] border border-white/10 rounded-3xl p-8 relative z-10 shadow-2xl overflow-hidden glass-card">
-          <h4 className="text-2xl font-bold text-white mb-6">
-            Enterprise GRC, Security Architecture &amp; AI Advisory Methodology
-          </h4>
-          <p className="text-gray-300 text-lg mb-8">
-            &ldquo;We partner with enterprise leaders to deliver tailored security architecture design,
-            Virtual CISO retainers, AI/GenAI risk governance, and automated DESC ISR &amp; UAE PDPL
-            compliance readiness scoring &mdash; ensuring your security posture scales seamlessly
-            with evolving regulatory standards.&rdquo;
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {[
-              'Needs & Scope Discovery',
-              'Security Architecture Design',
-              'Regulatory Gap Analysis',
-              'AI Risk & Privacy Governance',
-              'Virtual CISO Integration',
-              'Automated AI Scoring',
-              'Human SME Audit Sign-Off',
-              'Board-Level Delivery & Retainer',
-            ].map((step, i) => (
-              <span
-                key={step}
-                className="px-3 py-1.5 rounded-full text-xs font-semibold bg-[#2F57EF]/10 text-[#0DCAF0] border border-[#2F57EF]/20"
-              >
-                {i + 1}. {step}
-              </span>
-            ))}
-          </div>
-        </div>
-      </RevealOnScroll>
     </div>
   </section>
 );
 
 const REGULATIONS = [
-  'GDPR (EU)',
-  'UAE PDPL',
-  'DPDP (India)',
-  'DESC ISR',
-  'NIS2 Framework',
-  'DORA Compliance',
-  'GenAI & Privacy Rules',
-  'AI Governance Requirements',
+  'DESC ISR v3.1',
+  'UAE IA Regulation v1.1',
+  'UAE Federal PDPL',
+  'CBUAE Cyber Risk Framework',
+  'ISO/IEC 27001:2022',
+  'ISO/IEC 27017 (Cloud)',
+  'NIS2 Compliance',
+  'AI Governance Rules',
 ];
 
 export const GRCSection = () => (
@@ -362,29 +373,26 @@ export const GRCSection = () => (
       </RevealOnScroll>
       <RevealOnScroll delay={0.1} className="order-1 lg:order-2 space-y-6">
         <h2 className="text-sm font-bold tracking-widest text-[#0DCAF0] uppercase">
-          GRC Interpretation
+          Unified Compliance Crosswalk
         </h2>
         <h3 className="text-4xl font-bold text-white leading-tight">
-          Simplifying the regulatory landscape.
+          Simplifying the Sovereign Regulatory Landscape.
         </h3>
-        <p className="text-xl text-gray-400">
-          With rising trends in technologies and threats, regulations are increasing
-          world-wide. We help you interpret these regulations and compliance requirements
-          &mdash; sector-specific and organization-specific &mdash; and simplify their
-          relationship to other compliance laws.
+        <p className="text-lg text-gray-300">
+          Eliminate duplicative audit preparation. CyberGOAT's Unified Controls Framework maps 1,671 controls across DESC ISR v3.1, UAE IA v1.1, CBUAE, and ISO 27001 &mdash; satisfy one requirement and automatically resolve cross-framework mandates.
         </p>
         <div className="flex flex-wrap gap-2 pt-2">
           {REGULATIONS.map((reg) => (
             <span
               key={reg}
-              className="px-4 py-2 rounded-full text-sm font-semibold bg-[#C664FF]/10 text-[#C664FF] border border-[#C664FF]/20"
+              className="px-4 py-2 rounded-full text-xs font-semibold bg-[#C664FF]/10 text-[#C664FF] border border-[#C664FF]/20"
             >
               {reg}
             </span>
           ))}
         </div>
-        <ContactTrigger className="inline-block mt-4 px-6 py-3 bg-gradient-to-r from-[#2F57EF] to-[#C664FF] text-white font-bold rounded-full hover:shadow-[0_0_20px_rgba(47,87,239,0.4)] transition-all cursor-pointer">
-          Contact Us to Know More
+        <ContactTrigger className="inline-block mt-4 px-6 py-3 bg-gradient-to-r from-[#2F57EF] to-[#C664FF] text-white font-bold rounded-full hover:shadow-[0_0_20px_rgba(47,87,239,0.4)] transition-all cursor-pointer text-xs uppercase tracking-wider">
+          Request Framework Crosswalk Matrix
         </ContactTrigger>
       </RevealOnScroll>
     </div>
@@ -401,13 +409,13 @@ export const DescIsrCtaSection = () => (
         <div className="flex-1 space-y-4 text-center lg:text-left">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#00F0FF]/30 bg-[#00F0FF]/10 text-[#00F0FF] text-xs font-semibold">
             <ShieldCheckIcon className="w-4 h-4 text-[#00F0FF]" />
-            <span>Autonomous GRC SaaS Platform</span>
+            <span>Autonomous GRC SaaS &amp; Workforce Competency</span>
           </div>
           <h3 className="text-2xl lg:text-3xl font-extrabold text-white leading-tight">
             Continuous Audit Readiness for GCC CISOs
           </h3>
           <p className="text-sm md:text-base text-gray-300 leading-relaxed">
-            Eliminate audit panic and static spreadsheets. CyberGOAT continuously maps your infrastructure and policies against DESC ISR v3.1, UAE PDPL, and CBUAE with cryptographic evidence verification.
+            Eliminate audit panic and static spreadsheets. CyberGOAT continuously maps your infrastructure and personnel competence against DESC ISR v3.1, UAE IA Regulation v1.1, and CBUAE with cryptographic evidence verification.
           </p>
           <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
             <a
@@ -565,18 +573,18 @@ export const Footer = () => (
           >
             <span>WhatsApp</span>
           </a>
-          <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-500 flex items-center gap-1 cursor-not-allowed">
-            <span>Instagram</span> <span className="text-[9px] bg-white/10 px-1.5 py-0.5 rounded text-gray-400">Soon</span>
-          </span>
-          <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-500 flex items-center gap-1 cursor-not-allowed">
-            <span>TikTok</span> <span className="text-[9px] bg-white/10 px-1.5 py-0.5 rounded text-gray-400">Soon</span>
-          </span>
         </div>
 
         <div className="flex flex-wrap justify-center gap-6 text-sm font-medium text-gray-400">
-          <a href="#courses" className="hover:text-white transition-colors cursor-pointer">
-            Certification Kits
+          <a href="#platform" className="hover:text-white transition-colors cursor-pointer">
+            Platform
           </a>
+          <a href="#workforce" className="hover:text-white transition-colors cursor-pointer">
+            Workforce Compliance
+          </a>
+          <Link href="/academy" className="hover:text-white transition-colors">
+            Academy
+          </Link>
           <ContactTrigger className="hover:text-white transition-colors cursor-pointer">Contact</ContactTrigger>
           <SignInTrigger className="hover:text-white transition-colors cursor-pointer">Sign In</SignInTrigger>
           <a href="/privacy" className="hover:text-white transition-colors cursor-pointer">

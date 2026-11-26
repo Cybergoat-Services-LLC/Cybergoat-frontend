@@ -14,14 +14,44 @@ import {
   CpuChipIcon,
   CheckIcon,
   XMarkIcon,
+  AcademicCapIcon,
+  ArrowRightIcon,
+  FingerPrintIcon,
+  DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 
-type TabId = 'dashboard' | 'ai-review' | 'evidence' | 'registers';
+type TabId = 'dashboard' | 'ai-review' | 'evidence' | 'registers' | 'workforce';
+
+type WorkpaperDetail = {
+  employee: string;
+  role: string;
+  credential: string;
+  badgeId: string;
+  partnerId: string;
+  mappedControl: string;
+  sha256Hash: string;
+  verifiedAt: string;
+};
 
 export default function SaaSInteractiveDemo() {
   const [activeTab, setActiveTab] = useState<TabId>('dashboard');
   const [reviewStatus, setReviewStatus] = useState<'pending' | 'approved' | 'overridden'>('pending');
   const [activeRiskFilter, setActiveRiskFilter] = useState<'all' | 'high' | 'critical'>('all');
+  const [highlightedRow, setHighlightedRow] = useState<string | null>(null);
+  const [syncToast, setSyncToast] = useState<string | null>(null);
+  const [activeWorkpaper, setActiveWorkpaper] = useState<WorkpaperDetail | null>(null);
+
+  const handleRemediateFromDashboard = () => {
+    setActiveTab('workforce');
+    setHighlightedRow('tariq');
+  };
+
+  const handleSyncCredentials = () => {
+    setSyncToast('3 Verified Credentials Ingested to Evidence Vault (DESC ISR Domain 9 & ISO A.6.3) • 1 Remediation Track Active (CCSE 78%).');
+    setTimeout(() => {
+      setSyncToast(null);
+    }, 6000);
+  };
 
   return (
     <section id="interactive-demo" className="py-20 bg-[#05080F] border-y border-white/5 relative overflow-hidden">
@@ -43,7 +73,7 @@ export default function SaaSInteractiveDemo() {
             </span>
           </h2>
           <p className="mt-3 text-sm sm:text-base text-gray-400">
-            Explore the exact unified compliance views, Corrective RAG review gates, and statutory registers evaluated by GCC enterprise CISOs and regulatory auditors.
+            Explore the exact unified compliance views, Corrective RAG review gates, statutory registers, and accredited workforce competency tracking evaluated by GCC enterprise CISOs and regulatory auditors.
           </p>
         </div>
 
@@ -83,30 +113,39 @@ export default function SaaSInteractiveDemo() {
           {/* Tab Navigation */}
           <div className="bg-[#0A0F1A] px-4 pt-2 border-b border-white/10 flex items-center gap-2 overflow-x-auto text-xs font-medium">
             <button
-              onClick={() => setActiveTab('dashboard')}
-              className={`px-4 py-2.5 rounded-t-lg transition-all flex items-center gap-2 border-b-2 cursor-pointer ${
+              onClick={() => {
+                setActiveTab('dashboard');
+                setHighlightedRow(null);
+              }}
+              className={`px-4 py-2.5 rounded-t-lg transition-all flex items-center gap-2 border-b-2 cursor-pointer shrink-0 ${
                 activeTab === 'dashboard'
                   ? 'border-[#00F0FF] text-[#00F0FF] bg-white/5'
                   : 'border-transparent text-gray-400 hover:text-white'
               }`}
             >
               <TableCellsIcon className="w-4 h-4 text-[#00F0FF]" />
-              1. Executive CISO Dashboard (671 Controls)
+              1. Executive CISO Dashboard
             </button>
             <button
-              onClick={() => setActiveTab('ai-review')}
-              className={`px-4 py-2.5 rounded-t-lg transition-all flex items-center gap-2 border-b-2 cursor-pointer ${
+              onClick={() => {
+                setActiveTab('ai-review');
+                setHighlightedRow(null);
+              }}
+              className={`px-4 py-2.5 rounded-t-lg transition-all flex items-center gap-2 border-b-2 cursor-pointer shrink-0 ${
                 activeTab === 'ai-review'
                   ? 'border-[#C664FF] text-[#C664FF] bg-white/5'
                   : 'border-transparent text-gray-400 hover:text-white'
               }`}
             >
               <SparklesIcon className="w-4 h-4 text-[#C664FF]" />
-              2. Corrective RAG AI Review Gate (HITL)
+              2. Corrective RAG Review Gate (HITL)
             </button>
             <button
-              onClick={() => setActiveTab('evidence')}
-              className={`px-4 py-2.5 rounded-t-lg transition-all flex items-center gap-2 border-b-2 cursor-pointer ${
+              onClick={() => {
+                setActiveTab('evidence');
+                setHighlightedRow(null);
+              }}
+              className={`px-4 py-2.5 rounded-t-lg transition-all flex items-center gap-2 border-b-2 cursor-pointer shrink-0 ${
                 activeTab === 'evidence'
                   ? 'border-[#22D3A8] text-[#22D3A8] bg-white/5'
                   : 'border-transparent text-gray-400 hover:text-white'
@@ -116,8 +155,11 @@ export default function SaaSInteractiveDemo() {
               3. 5&times;5 Dynamic Risk Matrix
             </button>
             <button
-              onClick={() => setActiveTab('registers')}
-              className={`px-4 py-2.5 rounded-t-lg transition-all flex items-center gap-2 border-b-2 cursor-pointer ${
+              onClick={() => {
+                setActiveTab('registers');
+                setHighlightedRow(null);
+              }}
+              className={`px-4 py-2.5 rounded-t-lg transition-all flex items-center gap-2 border-b-2 cursor-pointer shrink-0 ${
                 activeTab === 'registers'
                   ? 'border-[#F5B942] text-[#F5B942] bg-white/5'
                   : 'border-transparent text-gray-400 hover:text-white'
@@ -125,6 +167,20 @@ export default function SaaSInteractiveDemo() {
             >
               <DocumentCheckIcon className="w-4 h-4 text-[#F5B942]" />
               4. UAE PDPL ROPA &amp; Breach Ledger
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('workforce');
+                setHighlightedRow(null);
+              }}
+              className={`px-4 py-2.5 rounded-t-lg transition-all flex items-center gap-2 border-b-2 cursor-pointer shrink-0 ${
+                activeTab === 'workforce'
+                  ? 'border-[#00F0FF] text-[#00F0FF] bg-white/5 shadow-[0_0_15px_rgba(0,240,255,0.15)] font-bold'
+                  : 'border-transparent text-gray-400 hover:text-white'
+              }`}
+            >
+              <AcademicCapIcon className="w-4 h-4 text-[#00F0FF]" />
+              5. Workforce Compliance (ISR Domain 9 &amp; ISO A.6.3)
             </button>
           </div>
 
@@ -135,15 +191,15 @@ export default function SaaSInteractiveDemo() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 rounded-xl bg-[#05080F] border border-white/5">
                   <span className="text-xs text-gray-400">Adopted Controls</span>
-                  <div className="mt-1 text-2xl font-black text-white font-mono">671</div>
+                  <div className="mt-1 text-2xl font-black text-white font-mono">1,671</div>
                   <div className="mt-1 text-[11px] text-[#00F0FF] flex items-center gap-1 font-mono">
-                    <span>&uarr; 5 Frameworks Unified</span>
+                    <span>&uarr; 18 Frameworks Unified</span>
                   </div>
                 </div>
                 <div className="p-4 rounded-xl bg-[#05080F] border border-white/5">
                   <span className="text-xs text-gray-400">Compliance Readiness</span>
                   <div className="mt-1 text-2xl font-black text-[#22D3A8] font-mono">84.2%</div>
-                  <div className="mt-1 text-[11px] text-gray-400">565 of 671 Satisfied</div>
+                  <div className="mt-1 text-[11px] text-gray-400">1,407 of 1,671 Satisfied</div>
                 </div>
                 <div className="p-4 rounded-xl bg-[#05080F] border border-white/5">
                   <span className="text-xs text-gray-400">AI Pending Gate</span>
@@ -155,6 +211,30 @@ export default function SaaSInteractiveDemo() {
                   <div className="mt-1 text-2xl font-black text-[#00F0FF] font-mono">me-central1</div>
                   <div className="mt-1 text-[11px] text-gray-400">Doha, Qatar (&lt;20ms UAE)</div>
                 </div>
+              </div>
+
+              {/* Cross-Tab Remediation Alert Banner */}
+              <div className="p-4 rounded-xl bg-[#FF5C7A]/10 border border-[#FF5C7A]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#FF5C7A]/20 border border-[#FF5C7A]/40 flex items-center justify-center shrink-0">
+                    <ExclamationTriangleIcon className="w-4 h-4 text-[#FF5C7A]" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-white flex items-center gap-2">
+                      <span>1 Open Workforce Competency Gap Detected:</span>
+                      <span className="text-[#FF5C7A] font-mono">DESC ISR Domain 9 / ISO 27001 Clause 7.2</span>
+                    </div>
+                    <p className="text-[11px] text-gray-300 mt-0.5">
+                      Cloud infrastructure defense competence unfulfilled for Cloud Engineering lead (Tariq Mansoor).
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleRemediateFromDashboard}
+                  className="px-4 py-2 bg-[#FF5C7A]/20 hover:bg-[#FF5C7A] text-[#FF5C7A] hover:text-white border border-[#FF5C7A]/40 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
+                >
+                  Remediate in Workforce Vault <ArrowRightIcon className="w-3.5 h-3.5" />
+                </button>
               </div>
 
               {/* Framework Progress Bars */}
@@ -177,7 +257,7 @@ export default function SaaSInteractiveDemo() {
                   </div>
                   <div className="text-[11px] text-gray-400 flex justify-between font-mono">
                     <span>Access Control: 100%</span>
-                    <span>Crypto &amp; Cloud: 82%</span>
+                    <span>HR Roles (Domain 9): 78%</span>
                   </div>
                 </div>
 
@@ -199,7 +279,7 @@ export default function SaaSInteractiveDemo() {
                   </div>
                   <div className="text-[11px] text-gray-400 flex justify-between font-mono">
                     <span>ROPA Article 30: 100%</span>
-                    <span>72-Hr Breach Plan: Satisfied</span>
+                    <span>Breach Readiness (Art. 9): Satisfied</span>
                   </div>
                 </div>
               </div>
@@ -209,7 +289,7 @@ export default function SaaSInteractiveDemo() {
                 <div className="flex items-center gap-3">
                   <SparklesIcon className="w-5 h-5 text-[#00F0FF]" />
                   <span className="text-xs text-gray-300">
-                    <strong>Unified Crosswalk Active:</strong> Satisfying 1 control in DESC ISR automatically resolves matching controls in ISO 27001 and UAE IA simultaneously.
+                    <strong>Unified Crosswalk Active:</strong> Satisfying 1 control in DESC ISR automatically resolves matching controls in ISO/IEC 27001:2022 and UAE IA Regulation v1.1.
                   </span>
                 </div>
                 <button
@@ -247,7 +327,6 @@ export default function SaaSInteractiveDemo() {
 
               {/* Evidence Evaluation Card */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Left: AI Finding & Policy Citation */}
                 <div className="p-5 rounded-xl bg-[#05080F] border border-white/5 space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-mono font-bold text-[#C664FF] flex items-center gap-1.5">
@@ -271,7 +350,6 @@ export default function SaaSInteractiveDemo() {
                   </div>
                 </div>
 
-                {/* Right: Human-In-The-Loop Action Box */}
                 <div className="p-5 rounded-xl bg-[#05080F] border border-white/5 flex flex-col justify-between">
                   <div>
                     <span className="text-xs font-mono font-bold text-white flex items-center gap-1.5 mb-3">
@@ -291,7 +369,6 @@ export default function SaaSInteractiveDemo() {
                     </div>
                   </div>
 
-                  {/* Action Buttons */}
                   <div className="pt-6 flex gap-3">
                     <button
                       onClick={() => setReviewStatus('approved')}
@@ -363,7 +440,6 @@ export default function SaaSInteractiveDemo() {
                 </div>
               </div>
 
-              {/* Matrix Layout */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="p-4 rounded-xl bg-[#05080F] border border-white/5">
                   <div className="grid grid-cols-5 gap-1.5 aspect-square text-center font-mono text-[10px] text-gray-300 font-bold">
@@ -403,7 +479,6 @@ export default function SaaSInteractiveDemo() {
                   </div>
                 </div>
 
-                {/* Sample Risk Records */}
                 <div className="space-y-3">
                   <div className="p-4 rounded-xl bg-[#05080F] border border-[#FF5C7A]/30">
                     <div className="flex items-center justify-between text-xs font-mono mb-1">
@@ -412,7 +487,7 @@ export default function SaaSInteractiveDemo() {
                     </div>
                     <h5 className="text-sm font-bold text-white">Unencrypted Customer Backup in Cross-Border Transfer</h5>
                     <p className="text-xs text-gray-400 mt-1">
-                      Violates UAE PDPL Article 22 &amp; DESC ISR 9.2. Linked to mitigating control ISR-CRY-01.
+                      Violates UAE PDPL Article 22 &amp; DESC ISR Domain 5 Access Control. Linked to mitigating control ISR-CRY-01.
                     </p>
                   </div>
 
@@ -446,7 +521,6 @@ export default function SaaSInteractiveDemo() {
                 </span>
               </div>
 
-              {/* ROPA Table Preview */}
               <div className="overflow-x-auto rounded-xl border border-white/5 bg-[#05080F]">
                 <table className="w-full text-left text-xs text-gray-300 font-sans">
                   <thead className="bg-[#0A0F1A] text-gray-400 font-mono text-[11px] border-b border-white/5">
@@ -485,8 +559,306 @@ export default function SaaSInteractiveDemo() {
               </div>
             </div>
           )}
+
+          {/* TAB 5: WORKFORCE COMPLIANCE (CLOSED-LOOP HUMAN GOVERNANCE) */}
+          {activeTab === 'workforce' && (
+            <div className="p-6 space-y-6">
+              {/* Header & Verification Source Notice */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h4 className="text-base font-bold text-white flex items-center gap-2">
+                    <AcademicCapIcon className="w-5 h-5 text-[#00F0FF]" />
+                    Workforce Compliance &amp; Accredited Role Competency
+                  </h4>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    Continuous monitoring of personnel competence under DESC ISR v3.1 Domain 9, UAE IA v1.1 M3, and ISO/IEC 27001:2022 Annex A.6.3 &amp; Clause 7.2.
+                  </p>
+                </div>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#05080F] border border-white/10 text-[11px] font-mono text-gray-300">
+                  <FingerPrintIcon className="w-4 h-4 text-[#C664FF]" />
+                  <span>EC-Council Authorized Partner (ID: ECRS21832)</span>
+                </div>
+              </div>
+
+              {/* KPI Strip */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="p-4 rounded-xl bg-[#05080F] border border-white/5">
+                  <span className="text-xs text-gray-400">Role Competency Coverage</span>
+                  <div className="mt-1 text-2xl font-black text-[#22D3A8] font-mono">78%</div>
+                  <div className="mt-1 text-[11px] text-gray-400">3 of 4 Core Roles Verified</div>
+                </div>
+                <div className="p-4 rounded-xl bg-[#05080F] border border-white/5">
+                  <span className="text-xs text-gray-400">Expiring Credentials (90d)</span>
+                  <div className="mt-1 text-2xl font-black text-[#F5B942] font-mono">1</div>
+                  <div className="mt-1 text-[11px] text-[#F5B942]">IR Lead (ECIH v2)</div>
+                </div>
+                <div className="p-4 rounded-xl bg-[#05080F] border border-white/5">
+                  <span className="text-xs text-gray-400">Audit Workpapers Linked</span>
+                  <div className="mt-1 text-2xl font-black text-[#00F0FF] font-mono">14 / 18</div>
+                  <div className="mt-1 text-[11px] text-[#00F0FF]">Cryptographic Hash Signed</div>
+                </div>
+                <div className="p-4 rounded-xl bg-[#05080F] border border-white/5">
+                  <span className="text-xs text-gray-400">Active Remediation</span>
+                  <div className="mt-1 text-2xl font-black text-[#FF5C7A] font-mono">1 Track</div>
+                  <div className="mt-1 text-[11px] text-[#FF5C7A]">CCSE Cloud Labs 78%</div>
+                </div>
+              </div>
+
+              {/* Toast Alert */}
+              {syncToast && (
+                <div className="p-3.5 rounded-xl bg-[#22D3A8]/15 border border-[#22D3A8]/40 text-xs text-[#22D3A8] flex items-center justify-between font-mono animate-fadeIn">
+                  <div className="flex items-center gap-2">
+                    <CheckCircleIcon className="w-5 h-5 shrink-0" />
+                    <span>{syncToast}</span>
+                  </div>
+                  <button onClick={() => setSyncToast(null)} className="text-gray-400 hover:text-white">
+                    <XMarkIcon className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* Role-to-Control Evidence Table */}
+              <div className="overflow-x-auto rounded-xl border border-white/5 bg-[#05080F]">
+                <table className="w-full text-left text-xs text-gray-300 font-sans">
+                  <thead className="bg-[#0A0F1A] text-gray-400 font-mono text-[11px] border-b border-white/5">
+                    <tr>
+                      <th className="p-3">Staff Member &amp; Role</th>
+                      <th className="p-3">Statutory Regulatory Control</th>
+                      <th className="p-3">Accredited Pathway</th>
+                      <th className="p-3">Verification ID / State</th>
+                      <th className="p-3">Evidence Vault Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 font-sans">
+                    {/* Row 1: Layla Nasser */}
+                    <tr className="hover:bg-white/[0.02] transition-colors">
+                      <td className="p-3">
+                        <div className="font-bold text-white">Layla Nasser</div>
+                        <div className="text-[11px] text-gray-400">Chief Information Security Officer &amp; DPO</div>
+                      </td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 rounded bg-[#00F0FF]/10 text-[#00F0FF] font-mono text-[10px]">
+                          DESC ISR Domain 1 &amp; 9 &bull; ISO 27001 Clause 7.2 &bull; UAE PDPL Art. 10
+                        </span>
+                      </td>
+                      <td className="p-3 font-semibold text-gray-200">EC-Council C|CISO</td>
+                      <td className="p-3">
+                        <div className="flex items-center gap-1.5 text-[#22D3A8] font-mono text-[11px]">
+                          <CheckCircleIcon className="w-4 h-4 shrink-0" />
+                          <span>Verified (#CC-94812)</span>
+                        </div>
+                      </td>
+                      <td className="p-3">
+                        <button
+                          onClick={() =>
+                            setActiveWorkpaper({
+                              employee: 'Layla Nasser',
+                              role: 'Chief Information Security Officer & DPO',
+                              credential: 'Certified Chief Information Security Officer (C|CISO)',
+                              badgeId: 'CC-94812-ECR',
+                              partnerId: 'ECRS21832',
+                              mappedControl: 'DESC ISR v3.1 Domain 1 (Governance) & Domain 9 (Human Resources) • ISO/IEC 27001:2022 Clause 7.2 (Competence) • UAE PDPL Art. 10 (DPO)',
+                              sha256Hash: '9f8a42b1c83d7e52003ea1489b12cf5081923ab98f12349071258671cbad3b21',
+                              verifiedAt: '2026-10-14 09:15:22 UTC',
+                            })
+                          }
+                          className="px-2.5 py-1 rounded bg-white/5 hover:bg-[#00F0FF]/15 text-[#00F0FF] border border-white/10 text-[11px] font-mono transition-all cursor-pointer flex items-center gap-1"
+                        >
+                          <DocumentTextIcon className="w-3.5 h-3.5" /> View Workpaper
+                        </button>
+                      </td>
+                    </tr>
+
+                    {/* Row 2: Farhan Al-Maktoum */}
+                    <tr className="hover:bg-white/[0.02] transition-colors">
+                      <td className="p-3">
+                        <div className="font-bold text-white">Farhan Al-Maktoum</div>
+                        <div className="text-[11px] text-gray-400">Lead Security Operations Center (SOC) Analyst</div>
+                      </td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 rounded bg-[#00F0FF]/10 text-[#00F0FF] font-mono text-[10px]">
+                          DESC ISR Domain 9 &bull; UAE IA Regulation v1.1 M3
+                        </span>
+                      </td>
+                      <td className="p-3 font-semibold text-gray-200">EC-Council CSA (SOC Analyst)</td>
+                      <td className="p-3">
+                        <div className="flex items-center gap-1.5 text-[#22D3A8] font-mono text-[11px]">
+                          <CheckCircleIcon className="w-4 h-4 shrink-0" />
+                          <span>Verified (#CSA-77104)</span>
+                        </div>
+                      </td>
+                      <td className="p-3">
+                        <button
+                          onClick={() =>
+                            setActiveWorkpaper({
+                              employee: 'Farhan Al-Maktoum',
+                              role: 'Lead SOC Analyst',
+                              credential: 'Certified SOC Analyst (CSA)',
+                              badgeId: 'CSA-77104-ECR',
+                              partnerId: 'ECRS21832',
+                              mappedControl: 'DESC ISR v3.1 Domain 9 (Roles and Responsibilities of HR) • UAE IA Regulation v1.1 M3 (Awareness & Training)',
+                              sha256Hash: '4d12bb590981ca347009ef129038ba4581290472190823904128941728348e09',
+                              verifiedAt: '2026-09-28 14:40:11 UTC',
+                            })
+                          }
+                          className="px-2.5 py-1 rounded bg-white/5 hover:bg-[#00F0FF]/15 text-[#00F0FF] border border-white/10 text-[11px] font-mono transition-all cursor-pointer flex items-center gap-1"
+                        >
+                          <DocumentTextIcon className="w-3.5 h-3.5" /> View Workpaper
+                        </button>
+                      </td>
+                    </tr>
+
+                    {/* Row 3: Tariq Mansoor (Remediation Target) */}
+                    <tr
+                      id="tariq-row"
+                      className={`transition-all ${
+                        highlightedRow === 'tariq'
+                          ? 'bg-[#FF5C7A]/15 border-l-4 border-l-[#FF5C7A] ring-1 ring-[#FF5C7A]/40'
+                          : 'hover:bg-white/[0.02]'
+                      }`}
+                    >
+                      <td className="p-3">
+                        <div className="font-bold text-white flex items-center gap-2">
+                          <span>Tariq Mansoor</span>
+                          {highlightedRow === 'tariq' && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#FF5C7A] text-white font-mono animate-pulse">
+                              Remediation Target
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-[11px] text-gray-400">Cloud Infrastructure Security Engineer</div>
+                      </td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 rounded bg-[#FF5C7A]/10 text-[#FF5C7A] font-mono text-[10px]">
+                          Sovereign Cloud Security &bull; ISO/IEC 27017
+                        </span>
+                      </td>
+                      <td className="p-3 font-semibold text-gray-200">EC-Council CCSE (Cloud Security)</td>
+                      <td className="p-3">
+                        <div className="flex items-center gap-1.5 text-[#F5B942] font-mono text-[11px]">
+                          <ArrowPathIcon className="w-4 h-4 animate-spin shrink-0" />
+                          <span>Enrolled &bull; iLabs 78% Complete</span>
+                        </div>
+                      </td>
+                      <td className="p-3">
+                        <span className="px-2.5 py-1 rounded bg-[#FF5C7A]/20 text-[#FF5C7A] text-[11px] font-mono font-bold">
+                          Gap Active &bull; In Progress
+                        </span>
+                      </td>
+                    </tr>
+
+                    {/* Row 4: Sara Al-Husseini */}
+                    <tr className="hover:bg-white/[0.02] transition-colors">
+                      <td className="p-3">
+                        <div className="font-bold text-white">Sara Al-Husseini</div>
+                        <div className="text-[11px] text-gray-400">Incident Response Team Lead</div>
+                      </td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 rounded bg-[#00F0FF]/10 text-[#00F0FF] font-mono text-[10px]">
+                          DESC ISR Domain 11 (Incidents) &bull; UAE PDPL Art. 9
+                        </span>
+                      </td>
+                      <td className="p-3 font-semibold text-gray-200">EC-Council ECIH v2</td>
+                      <td className="p-3">
+                        <div className="flex items-center gap-1.5 text-[#F5B942] font-mono text-[11px]">
+                          <CheckCircleIcon className="w-4 h-4 shrink-0 text-[#22D3A8]" />
+                          <span>Verified (#ECIH-55219) &bull; Due in 90d</span>
+                        </div>
+                      </td>
+                      <td className="p-3">
+                        <button
+                          onClick={() =>
+                            setActiveWorkpaper({
+                              employee: 'Sara Al-Husseini',
+                              role: 'Incident Response Lead',
+                              credential: 'EC-Council Certified Incident Handler (ECIH v2)',
+                              badgeId: 'ECIH-55219-ECR',
+                              partnerId: 'ECRS21832',
+                              mappedControl: 'DESC ISR v3.1 Domain 11 (Information Security Incident Management) • UAE PDPL Article 9 (Breach Response Readiness)',
+                              sha256Hash: '1a4fa09192837bc4491028374910283471092834710928347109283471097c88',
+                              verifiedAt: '2026-08-11 11:20:00 UTC',
+                            })
+                          }
+                          className="px-2.5 py-1 rounded bg-white/5 hover:bg-[#00F0FF]/15 text-[#00F0FF] border border-white/10 text-[11px] font-mono transition-all cursor-pointer flex items-center gap-1"
+                        >
+                          <DocumentTextIcon className="w-3.5 h-3.5" /> View Workpaper
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Action Bar */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/5">
+                <p className="text-xs text-gray-400">
+                  Certifications awarded by EC-Council are authenticated via Partner ID <strong>ECRS21832</strong> and ingested as tamper-proof SHA-256 evidence workpapers.
+                </p>
+                <button
+                  onClick={handleSyncCredentials}
+                  className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-[#00F0FF] to-[#2F57EF] text-black font-extrabold text-xs uppercase tracking-wider rounded-xl hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all cursor-pointer shrink-0 flex items-center justify-center gap-2"
+                >
+                  <FingerPrintIcon className="w-4 h-4" /> Verify &amp; Ingest EC-Council Credentials to Vault
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Auditor Workpaper Card Modal */}
+      {activeWorkpaper && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fadeIn">
+          <div className="bg-[#0A0F1A] border border-[#00F0FF]/40 rounded-2xl max-w-xl w-full p-6 space-y-5 shadow-2xl relative">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex items-center gap-2">
+                <DocumentTextIcon className="w-5 h-5 text-[#00F0FF]" />
+                <h3 className="text-base font-bold text-white">Auditor Workpaper Evidence Record</h3>
+              </div>
+              <button
+                onClick={() => setActiveWorkpaper(null)}
+                className="text-gray-400 hover:text-white cursor-pointer"
+              >
+                <XMarkIcon className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 font-mono text-xs text-gray-300">
+              <div className="p-3 rounded-lg bg-[#05080F] border border-white/5 space-y-1">
+                <span className="text-[10px] text-gray-500 uppercase">Subject Personnel:</span>
+                <p className="font-bold text-white text-sm">{activeWorkpaper.employee}</p>
+                <p className="text-gray-400">{activeWorkpaper.role}</p>
+              </div>
+
+              <div className="p-3 rounded-lg bg-[#05080F] border border-white/5 space-y-1">
+                <span className="text-[10px] text-gray-500 uppercase">Accredited Credential &amp; Source:</span>
+                <p className="font-bold text-[#00F0FF]">{activeWorkpaper.credential}</p>
+                <p className="text-gray-400">Badge ID: {activeWorkpaper.badgeId} &bull; EC-Council Partner: {activeWorkpaper.partnerId}</p>
+              </div>
+
+              <div className="p-3 rounded-lg bg-[#05080F] border border-white/5 space-y-1">
+                <span className="text-[10px] text-gray-500 uppercase">Mapped Statutory Regulatory Control:</span>
+                <p className="text-[#22D3A8] font-bold">{activeWorkpaper.mappedControl}</p>
+              </div>
+
+              <div className="p-3 rounded-lg bg-[#05080F] border border-white/5 space-y-1">
+                <span className="text-[10px] text-gray-500 uppercase">Tamper-Proof SHA-256 Digest:</span>
+                <p className="text-[11px] text-gray-400 break-all select-all font-mono">{activeWorkpaper.sha256Hash}</p>
+                <p className="text-[10px] text-gray-500">Verified Timestamp: {activeWorkpaper.verifiedAt}</p>
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                onClick={() => setActiveWorkpaper(null)}
+                className="px-5 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold transition-all cursor-pointer"
+              >
+                Close Workpaper
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

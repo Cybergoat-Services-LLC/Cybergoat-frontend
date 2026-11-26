@@ -7,6 +7,8 @@ export type CourseItem = {
   level?: 'Beginner' | 'Intermediate' | 'Advanced' | 'Executive';
   includesVoucher?: boolean;
   category?: 'EC-Council';
+  regulatoryBadge?: string;
+  targetRole?: string;
 };
 
 // CyberGOAT-authored tracks (no EC-Council courseware behind them) intentionally
@@ -23,6 +25,8 @@ export const CERTIFICATIONS: CourseItem[] = [
     level: 'Intermediate',
     includesVoucher: true,
     category: 'EC-Council',
+    regulatoryBadge: 'DESC ISR v3.1 Domain 9 • Technical Vulnerability Assessment',
+    targetRole: 'Penetration Tester / Security Specialist',
   },
   {
     title: 'C|CISO',
@@ -33,6 +37,8 @@ export const CERTIFICATIONS: CourseItem[] = [
     level: 'Executive',
     includesVoucher: true,
     category: 'EC-Council',
+    regulatoryBadge: 'DESC ISR v3.1 Domain 1 • ISO/IEC 27001 Clause 7.2 • UAE PDPL Art. 10',
+    targetRole: 'Chief Information Security Officer / DPO',
   },
   {
     title: 'CHFI v11',
@@ -43,6 +49,8 @@ export const CERTIFICATIONS: CourseItem[] = [
     level: 'Advanced',
     includesVoucher: true,
     category: 'EC-Council',
+    regulatoryBadge: 'DESC ISR v3.1 Domain 11 • Digital Forensics & Chain of Custody',
+    targetRole: 'Digital Forensics Analyst',
   },
   {
     title: 'CND v2',
@@ -53,6 +61,8 @@ export const CERTIFICATIONS: CourseItem[] = [
     level: 'Intermediate',
     includesVoucher: true,
     category: 'EC-Council',
+    regulatoryBadge: 'DESC ISR v3.1 Domain 9 • Perimeter Defense & Traffic Controls',
+    targetRole: 'Network Security Engineer',
   },
   {
     title: 'CPENT / LPT',
@@ -63,6 +73,8 @@ export const CERTIFICATIONS: CourseItem[] = [
     level: 'Advanced',
     includesVoucher: true,
     category: 'EC-Council',
+    regulatoryBadge: 'DESC ISR v3.1 Domain 9 • Advanced Red Team Operations',
+    targetRole: 'Senior Penetration Tester',
   },
   {
     title: 'CSA (SOC Analyst)',
@@ -73,6 +85,8 @@ export const CERTIFICATIONS: CourseItem[] = [
     level: 'Intermediate',
     includesVoucher: true,
     category: 'EC-Council',
+    regulatoryBadge: 'DESC ISR v3.1 Domain 9 • UAE IA v1.1 M3 (SOC Competence)',
+    targetRole: 'SOC Analyst / SIEM Operations',
   },
   {
     title: 'CTIA',
@@ -83,6 +97,8 @@ export const CERTIFICATIONS: CourseItem[] = [
     level: 'Advanced',
     includesVoucher: true,
     category: 'EC-Council',
+    regulatoryBadge: 'DESC ISR v3.1 Domain 11 • Cyber Threat Intelligence',
+    targetRole: 'Threat Intelligence Analyst',
   },
   {
     title: 'CCSE',
@@ -93,6 +109,8 @@ export const CERTIFICATIONS: CourseItem[] = [
     level: 'Advanced',
     includesVoucher: true,
     category: 'EC-Council',
+    regulatoryBadge: 'Sovereign Cloud Security • ISO/IEC 27017 Cloud Controls',
+    targetRole: 'Cloud Security Architect',
   },
   {
     title: 'ECIH v2',
@@ -103,6 +121,8 @@ export const CERTIFICATIONS: CourseItem[] = [
     level: 'Intermediate',
     includesVoucher: true,
     category: 'EC-Council',
+    regulatoryBadge: 'DESC ISR v3.1 Domain 11 • UAE PDPL Article 9 (Breach Response)',
+    targetRole: 'Incident Response Specialist',
   },
   {
     title: 'Ethical Hacking Essentials (EHE)',
@@ -113,5 +133,7 @@ export const CERTIFICATIONS: CourseItem[] = [
     level: 'Beginner',
     includesVoucher: true,
     category: 'EC-Council',
+    regulatoryBadge: 'Entry-Level Fundamentals (Academy Practitioner Track)',
+    targetRole: 'Cybersecurity Junior / Entry-Level',
   },
 ];
